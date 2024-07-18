@@ -371,7 +371,7 @@ input[type="submit"]:hover {
                 </div>
             <?php endif; ?>
     <input type="submit" value="Register">
-    <p>Already registered? <a href="/login">Check here</a></p>
+    <p>Already registered? <a href="/login">Click here</a></p>
     </form>
 </div>
 

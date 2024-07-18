@@ -9,7 +9,7 @@ class NameRule implements RuleInterface{
         $name = $data[$field];
         if(preg_match("/^[A-Z/sa-z]+$/",trim($name))) 
         {
-            $this->nameErr[] = "Your Name Must Contain Only Characters!";
+            $this->nameErr[] = "Must Contain Only Characters!";
         }
         // if(!preg_match("#[A-Z]+#",$name)) 
         // {

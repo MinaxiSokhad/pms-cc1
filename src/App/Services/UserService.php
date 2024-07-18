@@ -62,15 +62,10 @@ class UserService{
            
             $passwordMatch = password_verify(
                 $formData['password'],
-                $user['password'] 
+                $user['password'] ?? ''
             );
             if(!$user || !$passwordMatch){
-                dd([ password_verify(
-                    $formData['password'],
-                    $user['password'] 
-                )] );
-                throw new ValidationException(['password'=>['Invalid Credentials']]);
-                
+                throw new ValidationException(['password'=>['Invalid Credentials']]);     
             }
             session_regenerate_id();
             $_SESSION['user'] = $user['id'];
