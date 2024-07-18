@@ -48,7 +48,7 @@
         <div class="sidebar-logo">
           <!-- Logo Header -->
           <div class="logo-header" data-background-color="dark">
-            <a href="index.html" class="logo">
+            <a href="/" class="logo">
               <img
                 src="assets/img/kaiadmin/logo_light.svg"
                 alt="navbar brand"
@@ -70,13 +70,14 @@
           </div>
           <!-- End Logo Header -->
         </div>
+        
         <div class="sidebar-wrapper scrollbar scrollbar-inner">
           <div class="sidebar-content">
             <ul class="nav nav-secondary">
               <li class="nav-item active">
                 <a
-                  data-bs-toggle="collapse"
-                  href="#dashboard"
+               
+                  href="/dashboard"
                   class="collapsed"
                   aria-expanded="false"
                 >
@@ -84,7 +85,7 @@
                   <p>Dashboard</p>
                   <span class="caret"></span>
                 </a>
-                <div class="collapse" id="dashboard">
+                <!-- <div class="collapse" id="dashboard">
                   <ul class="nav nav-collapse">
                     <li>
                       <a href="../demo1/index.html">
@@ -93,7 +94,7 @@
                     </li>
                   </ul>
                 </div>
-              </li>
+              </li> -->
               <li class="nav-section">
                 <span class="sidebar-mini-icon">
                   <i class="fa fa-ellipsis-h"></i>
@@ -101,12 +102,12 @@
                 <h4 class="text-section">Components</h4>
               </li>
               <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#base">
+                <a href="/projects">
                   <i class="fas fa-layer-group"></i>
-                  <p>Base</p>
+                  <p>Project</p>
                   <span class="caret"></span>
                 </a>
-                <div class="collapse" id="base">
+                <!-- <div class="collapse" id="base">
                   <ul class="nav nav-collapse">
                     <li>
                       <a href="components/avatars.html">
@@ -155,14 +156,14 @@
                     </li>
                   </ul>
                 </div>
-              </li>
+              </li> -->
               <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarLayouts">
+                <a href="/tasks">
                   <i class="fas fa-th-list"></i>
-                  <p>Sidebar Layouts</p>
+                  <p>Tasks</p>
                   <span class="caret"></span>
                 </a>
-                <div class="collapse" id="sidebarLayouts">
+                <!-- <div class="collapse" id="sidebarLayouts">
                   <ul class="nav nav-collapse">
                     <li>
                       <a href="sidebar-style-2.html">
@@ -176,24 +177,29 @@
                     </li>
                   </ul>
                 </div>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#forms">
                   <i class="fas fa-pen-square"></i>
-                  <p>Forms</p>
+                  <p>Attendance</p>
                   <span class="caret"></span>
                 </a>
                 <div class="collapse" id="forms">
                   <ul class="nav nav-collapse">
                     <li>
-                      <a href="forms/forms.html">
-                        <span class="sub-item">Basic Form</span>
+                      <a href="/attendance">
+                        <span class="sub-item">Attendance</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="/leave">
+                        <span class="sub-item">Leave</span>
                       </a>
                     </li>
                   </ul>
                 </div>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#tables">
                   <i class="fas fa-table"></i>
                   <p>Tables</p>
@@ -269,14 +275,14 @@
                   <p>Documentation</p>
                   <span class="badge badge-secondary">1</span>
                 </a>
-              </li>
+              </li> -->
               <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#submenu">
+                <a  href="/logout">
                   <i class="fas fa-bars"></i>
-                  <p>Menu Levels</p>
+                  <p>Logout</p>
                   <span class="caret"></span>
                 </a>
-                <div class="collapse" id="submenu">
+                <!-- <div class="collapse" id="submenu">
                   <ul class="nav nav-collapse">
                     <li>
                       <a data-bs-toggle="collapse" href="#subnav1">
@@ -324,7 +330,7 @@
             </ul>
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- End Sidebar -->
 
       <div class="main-panel">

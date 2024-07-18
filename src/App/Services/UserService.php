@@ -8,7 +8,7 @@ class UserService{
     public function isEmailTaken(string $email)
     {
         $emailCount = $this->db->query(
-            "SELECT COUNT(*) FROM users WHERE email =:email",
+            "SELECT COUNT(*) FROM user WHERE email =:email",
             ['email' => $email ] )->count();
 
         if($emailCount > 0){
@@ -16,13 +16,24 @@ class UserService{
             
         }
     }
+    public function isMobileNoTaken(string $mobileNo)
+    {
+        $mobileNoCount = $this->db->query(
+            "SELECT COUNT(*) FROM user WHERE mobileNo =:mobileNo",
+            ['mobileNo' => $mobileNo ] )->count();
+
+        if($mobileNoCount > 0){
+            throw new ValidationException(['mobileNo'=>"Phone Number Taken"]);
+            
+        }
+    }
     public function create(array $formData){
-        $password = password_hash($formData['password'],PASSWORD_BCRYPT,['cost'=>12]);
+        $password = password_hash($formData['password'],PASSWORD_BCRYPT);
         $formattedDate = "{$formData['dob']} 00:00:00";
         $hireDate = "{$formData['hireDate']} 00:00:00";
         $this->db->query(
             "INSERT INTO user(
-            name,email,password,country,state,city,gender,marital_status,mobile_no,address,date_of_birth,hire_date)
+            name,email,password,country,state,city,gender,maritalStatus,mobileNo,address,dob,hireDate)
             VALUES(:name,:email,:password,:country,:state,:city,:gender,:maritalStatus,:mobileNo,:address,:dob,:hireDate)",
             [
                 'name'=> $formData['name'],
@@ -41,5 +52,42 @@ class UserService{
             );
             session_regenerate_id();
             $_SESSION['user']=$this->db->id();
+    }
+    public function login(array $formData){
+        $user = $this->db->query(
+            "SELECT * FROM user WHERE email=:email",[
+                'email'=>$formData['email']
+            ]
+            )->find();
+           
+            $passwordMatch = password_verify(
+                $formData['password'],
+                $user['password'] 
+            );
+            if(!$user || !$passwordMatch){
+                dd([ password_verify(
+                    $formData['password'],
+                    $user['password'] 
+                )] );
+                throw new ValidationException(['password'=>['Invalid Credentials']]);
+                
+            }
+            session_regenerate_id();
+            $_SESSION['user'] = $user['id'];
+    }
+    public function logout(){
+       // unset($_SESSION['user']);
+       session_destroy();
+       // session_regenerate_id();
+       $params = session_get_cookie_params();
+       setcookie(
+        'PHPSESSID',
+        '',
+        time() - 3600,
+        $params['path'],
+        $params['domain'],
+        $params['secure'],
+        $params['httponly']
+       );
     }
 }

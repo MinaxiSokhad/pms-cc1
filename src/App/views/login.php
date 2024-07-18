@@ -129,6 +129,7 @@ button[type="submit"]:hover {
 <div class="login-container">
     <h2>Login</h2>
     <form id="login" method="POST">
+    <?php include $this->resolve('partials/_csrf.php'); ?>
         <div class="form-group">
             <label for="email">Email</label>
             <input type="email" id="email" name="email">

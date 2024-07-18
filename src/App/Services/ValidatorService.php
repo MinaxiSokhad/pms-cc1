@@ -38,7 +38,7 @@ class ValidatorService{
             'mobileNo'=>['required','mobile'],
             'address'=>['required'],
             'dob'=>['required','date:Y-m-d'],
-            'hireDate'=>['required','hiredate:Y-m-d']
+            'hireDate'=>['required','hiredate:Y-m-d,'. $formData['dob']]
         ]);
     }
     public function validateLogin(array $formData){

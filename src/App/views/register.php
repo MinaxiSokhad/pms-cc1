@@ -157,7 +157,7 @@ input[type="submit"]:hover {
                 }
             }
             function CountryRule(){
-                const namePattern = /^[A-Z][a-z]+$/;
+                const namePattern = /^[A-Z\sa-z]+$/;
                 
                 if(!namePattern.test(country.value)){
                     countryErr.textContent = "Enter Valid Country Name ";
@@ -169,7 +169,7 @@ input[type="submit"]:hover {
                 }   
             }
             function StateRule(){
-                const namePattern = /^[A-Z][a-z]+$/;
+                const namePattern = /^[A-Z\sa-z]+$/;
                 
                 if(!namePattern.test(state.value)){
                     stateErr.textContent = "Enter Valid State Name ";
@@ -181,7 +181,7 @@ input[type="submit"]:hover {
                 }   
             }
             function CityRule(){
-                const namePattern = /^[A-Z][a-z]+$/;
+                const namePattern = /^[A-Z\sa-z]+$/;
                 
                 if(!namePattern.test(city.value)){
                     cityErr.textContent = "Enter Valid City Name ";
@@ -244,6 +244,7 @@ input[type="submit"]:hover {
 <div class="container">
   <h2>User Registration Form</h2>
   <form id="register" method="post">
+  <?php include $this->resolve('partials/_csrf.php'); ?>
     <label for="name">Full Name</label>
     <input type="text" value="<?php echo e($oldFormData['name'] ?? ''); ?>" id="name" name="name" >
     <div id="nameErr" class="mt-2 p-2 text-red-500">
@@ -260,7 +261,7 @@ input[type="submit"]:hover {
            </div>
     <?php if (array_key_exists('email', $errors)) : ?>
                 <div class="bg-gray-100 mt-2 p-2 text-red-500">
-                    <?php echo e($errors['email'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                    <?php echo e($errors['email']); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                     ?>
                 </div>
             <?php endif; ?>
@@ -341,12 +342,12 @@ input[type="submit"]:hover {
            </div>
     <?php if (array_key_exists('mobileNo', $errors)) : ?>
                 <div class="bg-gray-100 mt-2 p-2 text-red-500">
-                    <?php echo e($errors['mobileNo'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                    <?php echo e($errors['mobileNo']); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                     ?>
                 </div>
             <?php endif; ?>
     <label for="address">Address</label>
-    <textarea id="address" value="<?php echo e($oldFormData['address'] ?? ''); ?>" name="address"></textarea>
+    <textarea id="address" name="address"><?php echo e($oldFormData['address'] ?? ''); ?></textarea>
     <?php if (array_key_exists('address', $errors)) : ?>
                 <div class="bg-gray-100 mt-2 p-2 text-red-500">
                     <?php echo e($errors['address'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message

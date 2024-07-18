@@ -7,22 +7,22 @@ class NameRule implements RuleInterface{
     
     public function validate(array $data, string $field, array $params): bool{
         $name = $data[$field];
-        // if(preg_match("/^[A-Za-z]+$/",trim($name))) 
+        if(preg_match("/^[A-Z/sa-z]+$/",trim($name))) 
+        {
+            $this->nameErr[] = "Your Name Must Contain Only Characters!";
+        }
+        // if(!preg_match("#[A-Z]+#",$name)) 
         // {
-        //     $this->nameErr[] = "Your Name Must Contain Only Characters!";
+        //     $this->nameErr[] = " Must Contain Capital Letter!";
         // }
-        if(!preg_match("#[A-Z]+#",$name)) 
-        {
-            $this->nameErr[] = " Must Contain Capital Letter!";
-        }
-        if(!preg_match("#[a-z]+#",$name)) 
-        {
-            $this->nameErr[] = " Must Contain Lowercase Letter!";
-        }
-        if(preg_match("#[0-9]+#",$name)) 
-        {
-            $this->nameErr[] = " Must Not Contain Number!";
-        }
+        // if(!preg_match("#[a-z]+#",$name)) 
+        // {
+        //     $this->nameErr[] = " Must Contain Lowercase Letter!";
+        // }
+        // if(preg_match("#[0-9]+#",$name)) 
+        // {
+        //     $this->nameErr[] = " Must Not Contain Number!";
+        // }
         
         return empty($this->nameErr);
     }

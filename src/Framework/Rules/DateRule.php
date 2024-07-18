@@ -28,11 +28,11 @@ class DateRule implements RuleInterface
        // $maxUnder18BirthDate = (clone $now)->sub(new DateInterval('P18Y'));
 
         // Calculate the minimum birth date for someone older than 5 years
-        $minOver5BirthDate = $now->sub(new DateInterval('P18Y'));
+        $minOver18BirthDate = $now->sub(new DateInterval('P18Y'));
         // dd([$maxUnder18BirthDate, $now, $minOver5BirthDate]);
         // dd($minOver5BirthDate);
         // Compare the user's birth date with the calculated birth dates
-        return  $date < $minOver5BirthDate;
+        return  $date < $minOver18BirthDate;
     }
 
     public function getMessage(array $formData, string $field, array $params): string
