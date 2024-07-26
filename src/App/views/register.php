@@ -28,6 +28,11 @@ h2 {
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+h5{
+  
+  color: red;
+  
+}
 p {
   text-align: center;
   background-color: #fff;
@@ -77,7 +82,7 @@ input[type="submit"]:hover {
 
 </style>
 </head>
-<script>
+<!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             const register = document.getElementById('register');
             const name = document.getElementById('name');
@@ -239,88 +244,110 @@ input[type="submit"]:hover {
                 return isValid;
             }
         });
-    </script>
+    </script> -->
 <body>
 <div class="container">
   <h2>User Registration Form</h2>
+  <hr>
+  <h5> * Indicates required question</h5>
   <form id="register" method="post">
   <?php include $this->resolve('partials/_csrf.php'); ?>
-    <label for="name">Full Name</label>
+  <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
+  <?php $err = [];
+  foreach($errors as $error){
+    if($error["0"] =="This field is required"){
+        $err[] = $error;
+}}
+  
+    if((sizeOf($err)) >= 5  ){
+        
+            echo e ("Please filll all the required fill * ");
+            $errors = [];
+    }
+
+    
+ ?></div>
+  <label for="name">Full Name<span style="color: red;"> * </span></label>
     <input type="text" value="<?php echo e($oldFormData['name'] ?? ''); ?>" id="name" name="name" >
-    <div id="nameErr" class="mt-2 p-2 text-red-500">
+    <div id="nameErr" class="mt-2 p-2 text-red-500" style="color:red">
            </div>
     <?php if (array_key_exists('name', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
+                <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                     <?php echo e($errors['name'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                     ?>
                 </div>
-            <?php endif; ?>
-    <label for="email">Email</label>
-    <input type="email" value="<?php echo e($oldFormData['email'] ?? ''); ?>" id="email" name="email" >
-    <div id="emailErr" class="mt-2 p-2 text-red-500">
+            <?php endif;
+            
+            
+            ?>
+
+            
+    <label for="email">Email <span style="color: red;"> * </span></label>
+    <input type="text" value="<?php echo e($oldFormData['email'] ?? ''); ?>" id="email" name="email" >
+    <div id="emailErr" class="mt-2 p-2 text-red-500" style="color:red">
            </div>
     <?php if (array_key_exists('email', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
-                    <?php echo e($errors['email']); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
+                    <?php echo e($errors['email'][0] === 'E'? $errors['email'] : ''); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                     ?>
                 </div>
             <?php endif; ?>
-    <label for="password">Password</label>
+    <label for="password">Password <span style="color: red;"> * </span></label>
     <input type="password" id="password" name="password" >
-    <div id="passErr" class="mt-2 p-2 text-red-500">
+    <div id="passErr" class="mt-2 p-2 text-red-500" style="color:red">
            </div>
     <?php if (array_key_exists('password', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
+                <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                     <?php echo e($errors['password'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                     ?>
                 </div>
             <?php endif; ?>
-    <label for="country">Country</label>
+    <label for="country">Country <span style="color: red;"> * </span></label>
     <input type="text" value="<?php echo e($oldFormData['country'] ?? ''); ?>" id="country" name="country">
-    <div id="countryErr" class="mt-2 p-2 text-red-500">
+    <div id="countryErr" class="mt-2 p-2 text-red-500" style="color:red">
            </div>
     <?php if (array_key_exists('country', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
+                <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                     <?php echo e($errors['country'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                     ?>
                 </div>
             <?php endif; ?>
-    <label for="state">State</label>
+    <label for="state">State <span style="color: red;"> * </span></label>
     <input type="text" value="<?php echo e($oldFormData['state'] ?? ''); ?>" id="state" name="state">
-    <div id="stateErr" class="mt-2 p-2 text-red-500">
+    <div id="stateErr" class="mt-2 p-2 text-red-500" style="color:red">
            </div>
     <?php if (array_key_exists('state', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
+                <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                     <?php echo e($errors['state'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                     ?>
                 </div>
             <?php endif; ?>
-    <label for="city">City</label>
+    <label for="city">City <span style="color: red;"> * </span></label>
     <input type="text" value="<?php echo e($oldFormData['city'] ?? ''); ?>" id="city" name="city">
-    <div id="cityErr" class="mt-2 p-2 text-red-500">
+    <div id="cityErr" class="mt-2 p-2 text-red-500" style="color:red">
            </div>
     <?php if (array_key_exists('city', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
+                <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                     <?php echo e($errors['city'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                     ?>
                 </div>
             <?php endif; ?>
-    <label for="gender">Gender</label>
+    <label for="gender">Gender <span style="color: red;"> * </span></label>
     <select id="gender" name="gender">
     <option value=""></option>
       <option value="M"<?php echo ($oldFormData['gender'] ?? '') === 'M' ? 'selected' : ''; ?>>Male</option>
       <option value="F"<?php echo ($oldFormData['gender'] ?? '') === 'F' ? 'selected' : ''; ?>>Female</option>
       <option value="O"<?php echo ($oldFormData['gender'] ?? '') === 'O' ? 'selected' : ''; ?>>Others</option>
     </select>
-    <div id="genderErr" class="mt-2 p-2 text-red-500">
+    <div id="genderErr" class="mt-2 p-2 text-red-500" style="color:red">
            </div>
     <?php if (array_key_exists('gender', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
+                <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                     <?php echo e($errors['gender'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                     ?>
                 </div>
             <?php endif; ?>
-    <label for="maritalStatus">Marital Status</label>
+    <label for="maritalStatus">Marital Status <span style="color: red;"> * </span></label>
     <select id="maritalStatus" name="maritalStatus">
     <option value=""></option>
       <option value="S"<?php echo ($oldFormData['maritalStatus'] ?? '') === 'S' ? 'selected' : ''; ?>>Single</option>
@@ -328,51 +355,52 @@ input[type="submit"]:hover {
       <option value="W"<?php echo ($oldFormData['maritalStatus'] ?? '') === 'W' ? 'selected' : ''; ?>>Widowed</option>
       <option value="D"<?php echo ($oldFormData['maritalStatus'] ?? '') === 'D' ? 'selected' : ''; ?>>Divorced</option>
     </select>
-    <div id="maritalStatusErr" class="mt-2 p-2 text-red-500">
+    <div id="maritalStatusErr" class="mt-2 p-2 text-red-500" style="color:red">
            </div>
     <?php if (array_key_exists('maritalStatus', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
+                <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                     <?php echo e($errors['maritalStatus'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                     ?>
                 </div>
             <?php endif; ?>
-    <label for="mobileNo">Mobile Number</label>
-    <input type="tel" value="<?php echo e($oldFormData['mobileNo'] ?? ''); ?>" id="mobileNo" name="mobileNo" pattern="[0-9]{10}" placeholder="Enter 10-digit mobile number">
-    <div id="numErr" class="mt-2 p-2 text-red-500">
+    <label for="mobileNo">Mobile Number <span style="color: red;"> * </span></label>
+    <input type="text" value="<?php echo e($oldFormData['mobileNo'] ?? ''); ?>" id="mobileNo" name="mobileNo"  placeholder="Enter 10-digit mobile number">
+    <div id="numErr" class="mt-2 p-2 text-red-500" style="color:red">
            </div>
     <?php if (array_key_exists('mobileNo', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
-                    <?php echo e($errors['mobileNo']); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
+                    <?php echo e($errors['mobileNo'][0] === 'M' ? $errors['mobileNo'] : ''); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                     ?>
                 </div>
             <?php endif; ?>
-    <label for="address">Address</label>
+    <label for="address">Address <span style="color: red;"> * </span></label>
     <textarea id="address" name="address"><?php echo e($oldFormData['address'] ?? ''); ?></textarea>
     <?php if (array_key_exists('address', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
+                <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                     <?php echo e($errors['address'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                     ?>
                 </div>
             <?php endif; ?>
-    <label for="dob">Date of Birth</label>
+    <label for="dob">Date of Birth <span style="color: red;"> * </span></label>
     <input type="date" value="<?php echo e($oldFormData['dob'] ?? ''); ?>" id="dob" name="dob">
     <?php if (array_key_exists('dob', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
+                <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                     <?php echo e($errors['dob'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                     ?>
                 </div>
             <?php endif; ?>
-    <label for="hire_date">Hire Date</label>
+    <label for="hire_date">Hire Date <span style="color: red;"> * </span></label>
     <input type="date" id="hireDate" value="<?php echo e($oldFormData['hireDate'] ?? ''); ?>" name="hireDate">
     <?php if (array_key_exists('hireDate', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
+                <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                     <?php echo e($errors['hireDate'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                     ?>
                 </div>
             <?php endif; ?>
     <input type="submit" value="Register">
     <p>Already registered? <a href="/login">Click here</a></p>
-    </form>
+        
+</form>
 </div>
 
 </body>

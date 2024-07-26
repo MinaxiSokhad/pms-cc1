@@ -23,7 +23,72 @@ class UserService{
             ['mobileNo' => $mobileNo ] )->count();
 
         if($mobileNoCount > 0){
-            throw new ValidationException(['mobileNo'=>"Phone Number Taken"]);
+            throw new ValidationException(['mobileNo'=>"Mobile Number Taken"]);
+            
+        }
+    }
+    public function isEmailTakenProfile(string $email)
+    {
+        $emailCount = $this->db->query(
+            "SELECT COUNT(*) FROM user WHERE email =:email",
+            ['email' => $email ] )->count();
+
+            $emailFind = $this->db->query(
+                "SELECT * FROM user WHERE email= :email",
+                ['email' => $email]
+            )->find();
+        if($emailCount > 0){
+            if($email !== $emailFind['email']){
+            throw new ValidationException(['email'=>"Email Taken"]);
+            }
+        }
+    }
+    public function isEmailTakenCustomer(string $email)
+    {
+        $emailCount = $this->db->query(
+            "SELECT COUNT(*) FROM customers WHERE email =:email",
+            ['email' => $email ] )->count();
+
+            $emailFind = $this->db->query(
+                "SELECT * FROM customers WHERE email= :email",
+                ['email' => $email]
+            )->find();
+        if($emailCount > 0){
+            if($email !== $emailFind['email']){
+            throw new ValidationException(['email'=>"Email Taken"]);
+            }
+        }
+    }
+    public function isPhoneNoTakenCustomer(string $phone)
+    {
+        $phoneNoCount = $this->db->query(
+            "SELECT COUNT(*) FROM customers WHERE phone =:phone",
+            ['phone' => $phone ] )->count();
+
+        if($phoneNoCount > 0){
+            throw new ValidationException(['phone'=>"Phone Number Taken"]);
+            
+        }
+    }
+    public function isCompanyTakenCustomer(string $company)
+    {
+        $CompanyCount = $this->db->query(
+            "SELECT COUNT(*) FROM customers WHERE company =:company",
+            ['company' => $company ] )->count();
+
+        if($CompanyCount > 0){
+            throw new ValidationException(['company'=>"Company Taken"]);
+            
+        }
+    }
+    public function isWebsiteTakenCustomer(string $website)
+    {
+        $websiteCount = $this->db->query(
+            "SELECT COUNT(*) FROM customers WHERE website =:website",
+            ['website' => $website ] )->count();
+
+        if($websiteCount > 0){
+            throw new ValidationException(['website'=>"Website Taken"]);
             
         }
     }

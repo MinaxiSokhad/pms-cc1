@@ -74,7 +74,7 @@ button[type="submit"]:hover {
 <title>Login Form</title>
 <link rel="stylesheet" href="styles.css">
 </head>
-<script>
+<!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             const login = document.getElementById('login');
             const email = document.getElementById('email');
@@ -124,7 +124,7 @@ button[type="submit"]:hover {
                 return isValid;
             }
         });
-    </script>
+    </script> -->
 <body>
 <div class="login-container">
     <h2>Login</h2>
@@ -133,10 +133,10 @@ button[type="submit"]:hover {
         <div class="form-group">
             <label for="email">Email</label>
             <input type="email" id="email" name="email">
-            <div id="emailErr" class="mt-2 p-2 text-red-500">
+            <div id="emailErr" style="color:red">
       </div>
             <?php if (array_key_exists('email', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
+                <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                     <?php echo e($errors['email'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                     ?>
                 </div>
@@ -145,10 +145,10 @@ button[type="submit"]:hover {
         <div class="form-group">
             <label for="password">Password</label>
             <input type="password" id="password" name="password">
-            <div id="passwordErr" class="mt-2 p-2 text-red-500">
+            <div id="passwordErr" class="mt-2 p-2 text-red-500" style="color:red">
       </div>
             <?php if (array_key_exists('password', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
+                <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                     <?php echo e($errors['password'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                     ?>
                 </div>

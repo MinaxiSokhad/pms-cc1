@@ -10,8 +10,10 @@ class GuestOnlyMiddleware implements MiddlewareInterface
 {
   public function process(callable $next)
   {
-    if(!empty($_SESSION['user'])){ // !empty means user is login
-        redirectTo('/');
+    if(!empty( $_SESSION['user'])){ 
+      // !empty means user is login
+  
+      redirectTo('/');
     }
     $next();
   }

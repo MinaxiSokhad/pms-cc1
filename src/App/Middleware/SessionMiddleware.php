@@ -17,6 +17,8 @@ class SessionMiddleware implements MiddlewareInterface{
             'samesite'=>'lax'
         ]);
         session_start();
+        
+      
         $next();
         session_write_close();
     }

@@ -11,10 +11,10 @@ class Router
     
     public function add(string $method, string $path, array $controller)
     {
+        
         $path = $this->normalizePath($path); //sending the path entered by developer to normalized it
-
+        
         $regexPath = preg_replace('#{[^/]+}#','([^/]+)',$path);
-
         $this->routes[] = [
             'path' => $path,
             'method' => strtoupper($method),
@@ -37,23 +37,27 @@ class Router
        
         $path = $this->normalizePath($path);
         $method = strtoupper($_POST['_METHOD'] ?? $method);
+        //dd($method  );  
         foreach($this->routes as $route){
             if(!preg_match("#^{$route['regexPath']}$#",$path,$paramsValue) || $route['method'] !== $method){
                 continue;
             }
             array_shift($paramsValue);
             preg_match_all('#{([^/]+)}#',$route['path'],$paramsKeys);
-
+            
             $paramsKeys = $paramsKeys[1];
-
+            
             $params = array_combine($paramsKeys,$paramsValue);
             [$class, $function] = $route['controller'];
             
             // $controllerInstance = new $class; //create controller class instance with string
             $controllerInstance = $container ?
-                $container->resolve($class) : new $class;
-                $action = fn () => $controllerInstance->{$function}($params);
-                
+            $container->resolve($class) : new $class;
+
+            
+            $action = fn () => $controllerInstance->{$function}($params);
+            
+        
                 
                 $allMiddleware = [...$route['middlewares'],...$this->middlewares];
                 
@@ -64,7 +68,7 @@ class Router
                     
                     $action =  fn () =>$middlewareInstance->process($action);
                 }
-                
+               
                 $action();
                 return;
         }

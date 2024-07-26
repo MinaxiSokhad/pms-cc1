@@ -2,7 +2,7 @@
 declare(strict_types=1);
 use Framework\{TemplateEngine,Container,Database};
 use App\Config\Paths;
-use App\Services\{ValidatorService,UserService};
+use App\Services\{ValidatorService,UserService,ProfileService,EditProfileService,CustomerService};
 
 
 
@@ -17,5 +17,17 @@ return[
     UserService::class => function(Container $container){
         $db = $container->get(Database::class);
          return new UserService($db);
+    },
+    ProfileService::class => function(Container $container){
+        $db = $container->get(Database::class);
+        return new ProfileService($db);
+    },
+    EditProfileService::class => function(Container $container){
+        $db = $container->get(Database::class);
+        return new EditProfileService($db);
+    },
+    CustomerService::class => function(Container $container){
+        $db = $container->get(Database::class);
+        return new CustomerService($db);
     }
 ];

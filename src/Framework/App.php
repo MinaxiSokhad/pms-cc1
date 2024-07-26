@@ -34,6 +34,11 @@ class App
         $this->router->add('POST', $path, $controller); 
         return $this;
     }
+    public function delete(string $path,array $controller){
+    
+        $this->router->add("DELETE", $path, $controller); 
+        return $this;
+    }
     public function addMiddleware(string $middleware)
     {
         $this->router->addMiddleware($middleware); //add  middleware method in router

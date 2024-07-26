@@ -17,6 +17,7 @@ class CsrfGuardMiddleware implements MiddlewareInterface
         return;
     }
     if($_SESSION['token']!==$_POST['token']){
+      // dd($_SERVER['REQUEST_METHOD']);
         redirectTo('/');
     }
     unset($_SESSION['token']);

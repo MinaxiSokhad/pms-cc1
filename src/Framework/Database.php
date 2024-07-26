@@ -39,5 +39,8 @@ class Database{
          public function findAll(){
            return $this->stmt->fetchAll();
         }
+        public function fetchColumn(){
+            return $this->stmt->fetchColumn();
+         }
         
 }
