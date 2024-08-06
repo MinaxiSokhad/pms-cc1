@@ -7,23 +7,23 @@ namespace Framework;
 class Router
 {
     private array $routes = [];
-    private array $middlewares = []; 
-    
+    private array $middlewares = [];
+
     public function add(string $method, string $path, array $controller)
     {
-        
+
         $path = $this->normalizePath($path); //sending the path entered by developer to normalized it
-        
-        $regexPath = preg_replace('#{[^/]+}#','([^/]+)',$path);
+
+        $regexPath = preg_replace('#{[^/]+}#', '([^/]+)', $path);
         $this->routes[] = [
             'path' => $path,
             'method' => strtoupper($method),
-            'controller' => $controller ,//register the controller
-            'middlewares'=> [],
+            'controller' => $controller,//register the controller
+            'middlewares' => [],
             'regexPath' => $regexPath
         ]; //this will create a multi dimentional array for storing routes 
-       
-        
+
+
     }
     private function normalizePath(string $path): string
     {
@@ -34,43 +34,43 @@ class Router
     }
     public function dispatch(string $path, string $method, Container $container = null)
     { //router dispatch method
-       
+
         $path = $this->normalizePath($path);
         $method = strtoupper($_POST['_METHOD'] ?? $method);
-        //dd($method  );  
-        foreach($this->routes as $route){
-            if(!preg_match("#^{$route['regexPath']}$#",$path,$paramsValue) || $route['method'] !== $method){
+
+        foreach ($this->routes as $route) {
+            if (!preg_match("#^{$route['regexPath']}$#", $path, $paramsValue) || $route['method'] !== $method) {
                 continue;
             }
             array_shift($paramsValue);
-            preg_match_all('#{([^/]+)}#',$route['path'],$paramsKeys);
-            
+            preg_match_all('#{([^/]+)}#', $route['path'], $paramsKeys);
+
             $paramsKeys = $paramsKeys[1];
-            
-            $params = array_combine($paramsKeys,$paramsValue);
+
+            $params = array_combine($paramsKeys, $paramsValue);
             [$class, $function] = $route['controller'];
-            
+
             // $controllerInstance = new $class; //create controller class instance with string
             $controllerInstance = $container ?
-            $container->resolve($class) : new $class;
+                $container->resolve($class) : new $class;
 
-            
-            $action = fn () => $controllerInstance->{$function}($params);
-            
-        
-                
-                $allMiddleware = [...$route['middlewares'],...$this->middlewares];
-                
-                // dd($allMiddleware);
-                foreach($allMiddleware as $middleware){
-                    $middlewareInstance = $container ?
+
+            $action = fn() => $controllerInstance->{$function}($params);
+
+
+
+            $allMiddleware = [...$route['middlewares'], ...$this->middlewares];
+
+            // dd($allMiddleware);
+            foreach ($allMiddleware as $middleware) {
+                $middlewareInstance = $container ?
                     $container->resolve($middleware) : new $middleware();
-                    
-                    $action =  fn () =>$middlewareInstance->process($action);
-                }
-               
-                $action();
-                return;
+
+                $action = fn() => $middlewareInstance->process($action);
+            }
+            // dd([$action, $function]);
+            $action();
+            return;
         }
     }
 
@@ -78,9 +78,10 @@ class Router
     {
         $this->middlewares[] = $middleware; //add this parameter to the middleware array
     }
-    public function addRouteMiddleware(string $middleware){
+    public function addRouteMiddleware(string $middleware)
+    {
         $lastRouteKey = array_key_last($this->routes);
-        $this->routes[$lastRouteKey]['middlewares'][]=$middleware;
+        $this->routes[$lastRouteKey]['middlewares'][] = $middleware;
 
     }
 }

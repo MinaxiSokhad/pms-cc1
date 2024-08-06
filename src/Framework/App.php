@@ -23,27 +23,34 @@ class App
         //echo "Application is running";
         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH); //before router dispatching grab the path
         $method = $_SERVER['REQUEST_METHOD'];
-        $this->router->dispatch($path, $method, $this->container); //call router dispatch method return path like /GET or phpiggy.local/dgdgasfg -> output /dgdgasfg/GET
+        $this->router->dispatch($path, $method, $this->container);
+
+        //call router dispatch method return path like /GET or phpiggy.local/dgdgasfg -> output /dgdgasfg/GET
     }
-    public function get(string $path,array $controller){
-        
+    public function get(string $path, array $controller)
+    {
+
         $this->router->add('GET', $path, $controller); //add http method to our routes -> GET
         return $this;
     }
-    public function post(string $path,array $controller){
-        $this->router->add('POST', $path, $controller); 
+    public function post(string $path, array $controller)
+    {
+
+        $this->router->add('POST', $path, $controller);
         return $this;
     }
-    public function delete(string $path,array $controller){
-    
-        $this->router->add("DELETE", $path, $controller); 
+    public function delete(string $path, array $controller)
+    {
+
+        $this->router->add("DELETE", $path, $controller);
         return $this;
     }
     public function addMiddleware(string $middleware)
     {
         $this->router->addMiddleware($middleware); //add  middleware method in router
     }
-    public function add(string $middleware){
+    public function add(string $middleware)
+    {
         $this->router->addRouteMiddleware($middleware);
     }
 }

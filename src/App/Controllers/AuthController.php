@@ -5,23 +5,25 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use Framework\TemplateEngine;
-use App\Services\{ValidatorService,UserService};
+use App\Services\{ValidatorService, UserService};
+
 class AuthController
 {
-    
+
     public function __construct(
         private TemplateEngine $view,
         private ValidatorService $validatorService,
-        private UserService $userService)
-        {
+        private UserService $userService
+    ) {
 
-        }
+    }
     public function registerView()
     {
         echo $this->view->render("register.php"); //render the register.php file 
     }
-    public function register(){
-        
+    public function register()
+    {
+
         $this->validatorService->validateRegister($_POST);
         $this->userService->isEmailTaken($_POST["email"]);
         $this->userService->isMobileNoTaken($_POST["mobileNo"]);
@@ -33,13 +35,15 @@ class AuthController
     {
         echo $this->view->render("login.php"); //render the register.php file 
     }
-    public function login(){
-        
+    public function login()
+    {
+
         $this->validatorService->validateLogin($_POST);
         $this->userService->login($_POST);//user authentication
         redirectTo("/");
     }
-    public function logout(){
+    public function logout()
+    {
         $this->userService->logout();
         redirectTo("/login");
     }
