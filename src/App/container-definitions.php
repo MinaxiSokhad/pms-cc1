@@ -8,12 +8,16 @@ use App\Services\{ValidatorService, UserService, ProfileService, EditProfileServ
 
 return [
     TemplateEngine::class => fn() => new TemplateEngine(Paths::VIEW),
-    ValidatorService::class => fn() => new ValidatorService(),
+
     Database::class => fn() => new Database($_ENV['DB_DRIVER'], [
         'hostname' => $_ENV['DB_HOST'],
         'port' => $_ENV['DB_PORT'],
         'dbname' => $_ENV['DB_NAME']
     ], $_ENV['DB_USER'], $_ENV['DB_PASS']),
+    ValidatorService::class => function (Container $container) {
+        $db = $container->get(Database::class);
+        return new ValidatorService($db);
+    },
     UserService::class => function (Container $container) {
         $db = $container->get(Database::class);
         return new UserService($db);
@@ -24,14 +28,17 @@ return [
     },
     EditProfileService::class => function (Container $container) {
         $db = $container->get(Database::class);
-        return new EditProfileService($db);
+        $validatorService = $container->get(ValidatorService::class);
+        return new EditProfileService($db, $validatorService);
     },
     CustomerService::class => function (Container $container) {
         $db = $container->get(Database::class);
-        return new CustomerService($db);
+        $validatorService = $container->get(ValidatorService::class);
+        return new CustomerService($db, $validatorService);
     },
     ProjectService::class => function (Container $container) {
         $db = $container->get(Database::class);
-        return new ProjectService($db);
+        $validatorService = $container->get(ValidatorService::class);
+        return new ProjectService($db, $validatorService);
     }
 ];

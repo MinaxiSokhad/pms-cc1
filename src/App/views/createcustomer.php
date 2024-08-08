@@ -92,6 +92,7 @@
         <hr>
         <h5> * Indicates required question</h5>
         <form method="POST">
+            <?php include $this->resolve('partials/_csrf.php'); ?>
             <div class="form-group">
                 <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                     <h5>
@@ -116,7 +117,7 @@
                 <input type="text" id="company" name="company" value="<?php echo e($oldFormData['company'] ?? ''); ?>">
                 <?php if (array_key_exists('company', $errors)): ?>
                     <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
-                        <?php echo e($errors['company']); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                        <?php echo e($errors['company'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                             ?>
                     </div>
                 <?php endif; ?>
@@ -126,7 +127,7 @@
                 <input type="url" id="website" name="website" value="<?php echo e($oldFormData['website'] ?? ''); ?>">
                 <?php if (array_key_exists('website', $errors)): ?>
                     <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
-                        <?php echo e($errors['website']); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                        <?php echo e($errors['website'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                             ?>
                     </div>
                 <?php endif; ?>
@@ -136,7 +137,7 @@
                 <input type="email" id="email" name="email" value="<?php echo e($oldFormData['email'] ?? ''); ?>">
                 <?php if (array_key_exists('email', $errors)): ?>
                     <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
-                        <?php echo e($errors['email']); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                        <?php echo e($errors['email'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                             ?>
                     </div>
                 <?php endif; ?>
@@ -146,7 +147,7 @@
                 <input type="tel" id="phone" name="phone" value="<?php echo e($oldFormData['phone'] ?? ''); ?>">
                 <?php if (array_key_exists('phone', $errors)): ?>
                     <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
-                        <?php echo e($errors['phone']); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                        <?php echo e($errors['phone'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                             ?>
                     </div>
                 <?php endif; ?>
@@ -171,9 +172,7 @@
                     </div>
                 <?php endif; ?>
             </div>
-            <?php include $this->resolve('partials/_csrf.php'); ?>
-
-            <button value="submit" type="submit">Add Customer</button>
+            <button type="submit">Add Customer</button>
         </form>
     </div>
 

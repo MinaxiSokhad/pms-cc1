@@ -4,127 +4,70 @@ namespace App\Services;
 
 use Framework\Database;
 use Framework\Exceptions\ValidationException;
+use App\Services\ValidatorService;
 
 class CustomerService
 {
-    public function __construct(private Database $db)
+    public function __construct(private Database $db, private ValidatorService $validatorService)
     {
-    }
-    public function phonenoAlreadyExists($phone, $id)
-    {
-        $phoneResult = $this->db->query(
-            "SELECT count(*) FROM customers WHERE phone =:phone and id!=:id",
-            [
-                'phone' => $phone,
-                'id' => $id
-            ]
-        )->fetchColumn();
-
-        if ($phoneResult > 0) {
-            throw new ValidationException(['phone' => 'Phone Number already exists']);
-        } else {
-            return false;
-        }
-    }
-    public function emailAlreadyExists($email, $id)
-    {
-        $emailResult = $this->db->query(
-            "SELECT count(*) FROM customers WHERE email =:email and id!=:id",
-            [
-                'email' => $email,
-                'id' => $id
-            ]
-        )->fetchColumn();
-
-        if ($emailResult > 0) {
-            throw new ValidationException(['email' => 'Email already exists']);
-        } else {
-            return false;
-        }
-    }
-    public function companyAlreadyExists($company, $id)
-    {
-        $companyResult = $this->db->query(
-            "SELECT count(*) FROM customers WHERE company =:company and id!=:id",
-            [
-                'company' => $company,
-                'id' => $id
-            ]
-        )->fetchColumn();
-
-        if ($companyResult > 0) {
-            throw new ValidationException(['company' => ['Company already exists']]);
-        } else {
-            return false;
-        }
-    }
-    public function websiteAlreadyExists($website, $id)
-    {
-        $websiteResult = $this->db->query(
-            "SELECT count(*) FROM customers WHERE website =:website and id!=:id",
-            [
-                'website' => $website,
-                'id' => $id
-            ]
-        )->fetchColumn();
-
-        if ($websiteResult > 0) {
-            throw new ValidationException(['website' => 'Website already exists']);
-        } else {
-            return false;
-        }
     }
     public function getCustomer(array $id = [])
     {
 
 
         if (!empty($id)) {
+
             $ids = [];
             foreach ($id as $i) {
                 $ids[] = (int) $i;
             }
             $id = implode(',', $ids);
             $where = " WHERE id IN ($id)";
+            if (count($ids) > 1) {
+                return $this->db->query(
+                    "SELECT * FROM customers " . $where
 
+                )->findAll();
+            } else {
+                return $this->db->query(
+                    "SELECT * FROM customers " . $where
+
+                )->find();
+            }
         } else {
             $where = "";
+            return $this->db->query(
+                "SELECT * FROM customers " . $where
+
+            )->findAll();
+
         }
-
-        return $this->db->query(
-            "SELECT * FROM customers " . $where
-
-        )->findAll();
-
-
-        if (!isset($id)) {
+        if (empty($id)) {
             die("Customer not found.");
         }
     }
-    public function getcreatedCustomer(int $id)
-    {
-        return $this->db->query("SELECT * FROM customers WHERE id=:id", [
-            'id' => $id
-        ])->find();
+    // public function getCustomerSearch()
+    // {
+    //     $searchTerm = addcslashes($_GET['s'] ?? '', '%_'); //search any character or special character like %
+    //     $param = [
 
-        if (!isset($id)) {
-            die("Customer not found.");
-        }
-    }
-    public function getCustomerSearch()
+    //         'company' => "%{$searchTerm}%"
+
+    //     ];
+    //     return $this->db->query(
+    //         "SELECT * FROM customers WHERE company LIKE :company OR website LIKE :company OR email LIKE :company OR phone LIKE :company OR country LIKE :company OR address LIKE :company ",
+    //         $param
+    //     )->findAll();
+    // }
+    public function searchSortCustomer(string $order_by = "id", string $direction = "asc")
     {
         $searchTerm = addcslashes($_GET['s'] ?? '', '%_'); //search any character or special character like %
         $param = [
 
-            'company' => "%{$searchTerm}%"
+            'search' => "%{$searchTerm}%"
 
         ];
-        return $this->db->query(
-            "SELECT * FROM customers WHERE company LIKE :company OR website LIKE :company OR email LIKE :company OR phone LIKE :company OR country LIKE :company OR address LIKE :company ",
-            $param
-        )->findAll();
-    }
-    public function sortCustomer(string $order_by = "id", string $direction = "asc")
-    {
+
         if ($order_by == "company") {
             $order_by = " ORDER BY company " . $direction;
         } else if ($order_by == "website") {
@@ -141,7 +84,8 @@ class CustomerService
             $order_by = " ORDER BY id ASC";
         }
         return $this->db->query(
-            "SELECT * FROM customers " . $order_by
+            "SELECT * FROM customers  WHERE company LIKE :search OR website LIKE :search OR email LIKE :search OR phone LIKE :search OR country LIKE :search OR address LIKE :search " . $order_by,
+            $param
         )->findAll();
     }
     public function create(array $formData)
@@ -164,10 +108,18 @@ class CustomerService
     }
     public function update(array $formData, int $id)
     {
-        $this->companyAlreadyExists($formData['company'], $id);
-        $this->websiteAlreadyExists($formData['website'], $id);
-        $this->emailAlreadyExists($formData['email'], $id);
-        $this->phonenoAlreadyExists($formData['phone'], $id);
+        if ($this->validatorService->isExists('customers', 'company', $formData['company'], 'id !=' . $id)) {
+            throw new ValidationException(['company' => ['Company name already exists']]);
+        }
+        if ($this->validatorService->isExists('customers', 'website', $formData['website'], 'id !=' . $id)) {
+            throw new ValidationException(['website' => ['Website already exists']]);
+        }
+        if ($this->validatorService->isExists('customers', 'email', $formData['email'], 'id !=' . $id)) {
+            throw new ValidationException(['email' => ['Email already exists']]);
+        }
+        if ($this->validatorService->isExists('customers', 'phone', $formData['phone'], 'id !=' . $id)) {
+            throw new ValidationException(['phone' => ['Phone number already exists']]);
+        }
         $this->db->query(
             "UPDATE customers SET company=:company,website=:website,email=:email,phone=:phone,country=:country,address=:address WHERE id=:id",
             [
@@ -190,16 +142,5 @@ class CustomerService
         return $this->db->query($sql, $id);
 
     }
-
-    public function showCustomer(int $id)
-    {
-        dd($this->db->query(
-            "SELECT * FROM customer WHERE id=:id ",
-            [
-                "id" => $id
-            ]
-        )->findAll());
-    }
-
 
 }

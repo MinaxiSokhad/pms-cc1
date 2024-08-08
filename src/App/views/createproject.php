@@ -63,7 +63,7 @@
                                                                     <?php if (array_key_exists('name', $errors)): ?>
                                                                         <div class="bg-gray-100 mt-2 p-2 text-red-500"
                                                                             style="color:red">
-                                                                            <?php echo e($errors['name']); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                                                                            <?php echo e($errors['name'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                                                                                 ?>
                                                                         </div>
                                                                     <?php endif; ?>

@@ -21,16 +21,20 @@
         form.action = "/customer";
       }
       else {
-        <?php $id[0] = [0]; ?>
-        form.action = "/deletecustomer/<?php echo e($id[0][0]); ?>";
-        form.submit();
+        if (confirm('Are you sure you want to delete this customers?')) {
+          <?php $id[0] = [0]; ?>
+          form.action = "/deletecustomer/<?php echo e($id[0][0]); ?>";
+          form.submit();
+        }
       }
 
     }
     function deletecustomer(customerid) {
-      <?php $id[0] = [0]; ?>
-      form.action = "/deletecustomer/" + customerid;
-      form.submit();
+      if (confirm('Are you sure you want to delete this customer?')) {
+        <?php $id[0] = [0]; ?>
+        form.action = "/deletecustomer/" + customerid;
+        form.submit();
+      }
     }
     // function handleDelete(actionType, customerId = null) {
     //   var form = document.getElementById('form');
@@ -69,6 +73,7 @@
               <ul class="navbar-nav w-90">
                 <li class="nav-item w-90">
                   <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search" method="GET">
+
                     <input type="text" name="s" value="<?php echo e((string) $searchTerm); ?>" class="form-control"
                       placeholder="Search...">
                     <button type="submit" style="color: black;">
@@ -78,9 +83,9 @@
                 </li>
               </ul>
             </div>
-
+            <?php //dd($oldFormData); ?>
             <!-- Filter Dropdown -->
-            <form id="filterForm" action="/customer/{customer_sort}" method="GET">
+            <form id="filterForm" action="/customer/<?php echo "AllCustomers"; ?>" method="GET">
               <div class="d-flex justify-content-between align-items-center">
                 <div class="dropdown">
                   <button class="btn btn-outline-primary dropdown-toggle" type="button" id="filterDropdown"
@@ -90,11 +95,18 @@
                   <div class="dropdown-menu" aria-labelledby="filterDropdown">
                     <!-- Parent Item 1 -->
                     <div class="dropdown-item">
-                      <input type="checkbox" name="customers[]" value="cutomers"> Customers
+                      <input type="checkbox" name="company[]" value="cutomers"> Customers
                       <div class="sub-items">
+                        <?php $customer = array_values($oldFormData['company'] ?? []);
+                        ?>
                         <?php foreach ($customers as $p): ?>
-                          <label><input type="checkbox" name="company[]"
-                              value="<?php echo $p['id']; ?>"><?php echo $p['company']; ?></label>
+                          <?php if (in_array($p['id'], $customer)): ?>
+                            <label><input type="checkbox" name="company[]" value="<?php echo $p['id']; ?>"
+                                checked><?php echo $p['company']; ?></label>
+                          <?php else: ?>
+                            <label><input type="checkbox" name="company[]"
+                                value="<?php echo $p['id']; ?>"><?php echo $p['company']; ?></label>
+                          <?php endif; ?>
                         <?php endforeach; ?>
                       </div>
                     </div>
@@ -211,7 +223,7 @@
                             <h4 class="card-title">Customers</h4>
                             <div class="table-responsive">
 
-                              <form id="form" action=" " method="post">
+                              <form id="form" method="POST">
                                 <?php include $this->resolve('partials/_csrf.php'); ?>
                                 <table class="table">
                                   <thead>

@@ -5,27 +5,12 @@ namespace App\Services;
 use Exception;
 use Framework\Database;
 use Framework\Exceptions\ValidationException;
+use App\Services\ValidatorService;
 
 class ProjectService
 {
-    public function __construct(private Database $db)
+    public function __construct(private Database $db, private ValidatorService $validatorService)
     {
-    }
-    public function ProjectNameAlreadyExists($name, $id)
-    {
-        $nameResult = $this->db->query(
-            "SELECT count(*) FROM project WHERE name =:name and id!=:id",
-            [
-                'name' => $name,
-                'id' => $id
-            ]
-        )->fetchColumn();
-
-        if ($nameResult > 0) {
-            throw new ValidationException(['name' => 'Project name already exists']);
-        } else {
-            return false;
-        }
     }
     public function getUser(int $id = 0)
     {
@@ -86,10 +71,6 @@ class ProjectService
                 ]
             );
             $project_id = (int) $this->db->id();
-            // $tag_ids = [];
-            // foreach ($_POST['tags'] as $tags) {
-            //     $tag_ids[] = (int) $tags;
-            // }
             $tag_ids = implode(',', $_POST['tags']);
 
             $this->db->query(
@@ -114,148 +95,133 @@ class ProjectService
             throw new Exception($e->getMessage());
         }
     }
-    public function getProjectSearch(int $id = 0)
+
+    public function getProject(array $id = [])
     {
-        $searchTerm = addcslashes($_GET['s'] ?? '', '%_'); //search any character or special character like %
-        $param = [
+        if (!empty($id)) {
+            $ids = [];
+            foreach ($id as $i) {
+                $ids[] = (int) $i;
+            }
+            $id = implode(",", $ids);
 
-            "search" => "%{$searchTerm}%"
+            $where = "WHERE project.id IN ($id)";
+            if (count($ids) > 1) {
+                return $this->db->query(
+                    "SELECT
+              project.id,
+              project.name,
+              project.description,
+              customers.company as `customer`,
+              project.start_date,
+              project.deadline,
+              CASE 
+                    WHEN project.status = 'S' THEN 'Not Started' 
+                    WHEN project.status = 'P' THEN 'In Progress' 
+                    WHEN project.status = 'H' THEN 'On Hold' 
+                    WHEN project.status = 'C' THEN 'Cancelled' 
+                    WHEN project.status = 'F' THEN 'Finished' 
+                    ELSE project.status 
+                END AS `status`,
+              GROUP_CONCAT(DISTINCT tags.name SEPARATOR ',') as `project_tags_name`,
+              GROUP_CONCAT(DISTINCT `user`.name SEPARATOR ',')as `project_member_name`
+            FROM project
+            JOIN project_tags
+              ON project.id = project_tags.project_id
+              JOIN project_member
+              ON project.id = project_member.project_id
+              JOIN tags 
+              ON project_tags.tags_id = tags.id
+              JOIN user
+              ON project_member.user_id = `user`.id
+              JOIN customers
+              ON project.customer = customers.id
+              $where
+            GROUP BY
+                project.id"
 
-        ];
+                )->findAll();
+            } else {
+                return $this->db->query(
+                    "SELECT
+              project.id,
+              project.name,
+              project.description,
+              customers.company as `customer`,
+              project.start_date,
+              project.deadline,
+              CASE 
+                    WHEN project.status = 'S' THEN 'Not Started' 
+                    WHEN project.status = 'P' THEN 'In Progress' 
+                    WHEN project.status = 'H' THEN 'On Hold' 
+                    WHEN project.status = 'C' THEN 'Cancelled' 
+                    WHEN project.status = 'F' THEN 'Finished' 
+                    ELSE project.status 
+                END AS `status`,
+              GROUP_CONCAT(DISTINCT tags.name SEPARATOR ',') as `project_tags_name`,
+              GROUP_CONCAT(DISTINCT `user`.name SEPARATOR ',')as `project_member_name`
+            FROM project
+            JOIN project_tags
+              ON project.id = project_tags.project_id
+              JOIN project_member
+              ON project.id = project_member.project_id
+              JOIN tags 
+              ON project_tags.tags_id = tags.id
+              JOIN user
+              ON project_member.user_id = `user`.id
+              JOIN customers
+              ON project.customer = customers.id
+              $where
+            GROUP BY
+                project.id"
+                )->find();
+            }
 
-        return $this->db->query("SELECT
-            project.id,
-            project.name,
-            project.description,
-            customers.company as `customer`,
-            project.start_date,
-            project.deadline,
-            CASE 
-                  WHEN project.status = 'S' THEN 'Not Started' 
-                  WHEN project.status = 'P' THEN 'In Progress' 
-                  WHEN project.status = 'H' THEN 'On Hold' 
-                  WHEN project.status = 'C' THEN 'Cancelled' 
-                  WHEN project.status = 'F' THEN 'Finished' 
-                  ELSE project.status 
-              END AS status,
-            GROUP_CONCAT(DISTINCT tags.name SEPARATOR ',') as `project_tags_name`,
-            GROUP_CONCAT(DISTINCT `user`.name SEPARATOR ',')as `project_member_name`
-          FROM project
-          JOIN project_tags
-            ON project.id = project_tags.project_id
-            JOIN project_member
-            ON project.id = project_member.project_id
-            JOIN tags 
-            ON project_tags.tags_id = tags.id
-            JOIN user
-            ON project_member.user_id = `user`.id
-            JOIN customers
-            ON project.customer = customers.id 
-            WHERE project.name LIKE :search 
-            OR project.description LIKE :search
-            OR project.status LIKE :search
-            OR tags.name LIKE :search
-            OR user.name LIKE :search
-          GROUP BY
-              project.id ", $param)->findAll();
-
-    }
-
-    public function getProject(int $id = 0)
-    {
-
-        $params = [];
-        if ($id > 0) {
-            $where = " WHERE project.id=:id";
-            $params["id"] = $id;
         } else {
             $where = "";
+            return $this->db->query(
+                "SELECT
+          project.id,
+          project.name,
+          project.description,
+          customers.company as `customer`,
+          project.start_date,
+          project.deadline,
+          CASE 
+                WHEN project.status = 'S' THEN 'Not Started' 
+                WHEN project.status = 'P' THEN 'In Progress' 
+                WHEN project.status = 'H' THEN 'On Hold' 
+                WHEN project.status = 'C' THEN 'Cancelled' 
+                WHEN project.status = 'F' THEN 'Finished' 
+                ELSE project.status 
+            END AS `status`,
+          GROUP_CONCAT(DISTINCT tags.name SEPARATOR ',') as `project_tags_name`,
+          GROUP_CONCAT(DISTINCT `user`.name SEPARATOR ',')as `project_member_name`
+        FROM project
+        JOIN project_tags
+          ON project.id = project_tags.project_id
+          JOIN project_member
+          ON project.id = project_member.project_id
+          JOIN tags 
+          ON project_tags.tags_id = tags.id
+          JOIN user
+          ON project_member.user_id = `user`.id
+          JOIN customers
+          ON project.customer = customers.id
+          $where
+        GROUP BY
+            project.id"
+            )->findAll();
         }
-
-        return $this->db->query(
-            "SELECT
-  project.id,
-  project.name,
-  project.description,
-  customers.company as `customer`,
-  project.start_date,
-  project.deadline,
-  CASE 
-        WHEN project.status = 'S' THEN 'Not Started' 
-        WHEN project.status = 'P' THEN 'In Progress' 
-        WHEN project.status = 'H' THEN 'On Hold' 
-        WHEN project.status = 'C' THEN 'Cancelled' 
-        WHEN project.status = 'F' THEN 'Finished' 
-        ELSE project.status 
-    END AS `status`,
-  GROUP_CONCAT(DISTINCT tags.name SEPARATOR ',') as `project_tags_name`,
-  GROUP_CONCAT(DISTINCT `user`.name SEPARATOR ',')as `project_member_name`
-FROM project
-JOIN project_tags
-  ON project.id = project_tags.project_id
-  JOIN project_member
-  ON project.id = project_member.project_id
-  JOIN tags 
-  ON project_tags.tags_id = tags.id
-  JOIN user
-  ON project_member.user_id = `user`.id
-  JOIN customers
-  ON project.customer = customers.id
-  $where
-GROUP BY
-	project.id",
-            $params
-        )->findAll();
-
-        if (!isset($id)) {
-            die("Project not found.");
-        }
-    }
-    public function getcreatedProject(int $id)
-    {
-
-
-        return $this->db->query("SELECT
-  project.id,
-  project.name,
-  project.description,
-  customers.company as `customer`,
-  project.start_date,
-  project.deadline,
-  CASE 
-        WHEN project.status = 'S' THEN 'Not Started' 
-        WHEN project.status = 'P' THEN 'In Progress' 
-        WHEN project.status = 'H' THEN 'On Hold' 
-        WHEN project.status = 'C' THEN 'Cancelled' 
-        WHEN project.status = 'F' THEN 'Finished' 
-        ELSE project.status 
-    END AS status,
-  GROUP_CONCAT(DISTINCT tags.name SEPARATOR ',') as `project_tags_name`,
-  GROUP_CONCAT(DISTINCT `user`.name SEPARATOR ',')as `project_member_name`
-FROM project
-JOIN project_tags
-  ON project.id = project_tags.project_id
-  JOIN project_member
-  ON project.id = project_member.project_id
-  JOIN tags 
-  ON project_tags.tags_id = tags.id
-  JOIN user
-  ON project_member.user_id = `user`.id
-  JOIN customers
-  ON project.customer = customers.id 
-  WHERE project.id =:id 
-GROUP BY
-	project.id ", [
-            "id" => $id
-        ])->find();
-
         if (!isset($id)) {
             die("Project not found.");
         }
     }
     public function update(array $formData, int $id)
     {
-        $this->ProjectNameAlreadyExists($formData["name"], $id);
+        if ($this->validatorService->isExists('project', 'name', $formData['name'], 'id !=' . $id)) {
+            throw new ValidationException(['name' => ['Project name already Exists']]);
+        }
         $formattedStartDate = "{$formData['start_date']} 00:00:00";
         $formattedEndDate = "{$formData['deadline']} 00:00:00";
         $this->db->query(
@@ -376,7 +342,12 @@ GROUP BY
     public function sort(string $order_by = "id", string $direction = "asc")
     {
 
+        $searchTerm = addcslashes($_GET['s'] ?? '', '%_'); //search any character or special character like %
+        $param = [
 
+            "search" => "%{$searchTerm}%"
+
+        ];
         if ($order_by == "name") {
             $order_by = " ORDER BY project.name " . $direction;
         } else if ($order_by == "description") {
@@ -425,7 +396,12 @@ GROUP BY
         ON project_member.user_id = `user`.id
         JOIN customers
         ON project.customer = customers.id 
+        WHERE project.name LIKE :search 
+            OR project.description LIKE :search
+            OR project.status LIKE :search
+            OR tags.name LIKE :search
+            OR user.name LIKE :search
       GROUP BY
-          project.id " . $order_by . ";")->findAll();
+          project.id " . $order_by . ";", $param)->findAll();
     }
 }

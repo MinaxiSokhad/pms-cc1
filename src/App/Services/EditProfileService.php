@@ -5,10 +5,11 @@ namespace App\Services;
 use App\Config\Paths;
 use Framework\Database;
 use Framework\Exceptions\ValidationException;
+use App\Services\ValidatorService;
 
 class EditProfileService
 {
-    public function __construct(private Database $db)
+    public function __construct(private Database $db, private ValidatorService $validatorService)
     {
 
     }
@@ -22,7 +23,6 @@ class EditProfileService
 
         }
         $maxFileSizeMB = 3 * 1024 * 1024;
-        // dd($file['size']);
         if ($file['size'] > $maxFileSizeMB) {
 
             throw new ValidationException([
@@ -45,29 +45,7 @@ class EditProfileService
             ]);
 
         }
-        //dd($file);
     }
-    // public function upload(array $file){
-    //     $fileExtension = pathinfo($file['name'],PATHINFO_EXTENSION);
-    //     $newFileName = bin2hex(random_bytes(16)).".".$fileExtension;
-    //     $uploadPath = Paths::STORAGE_UPLOADS."/".$newFileName;
-    //     if(!move_uploaded_file($file['tmp_name'],$uploadPath)){
-    //         throw new ValidationException([
-    //             'image'=>['Failed to upload image']
-    //         ]);   
-    //     }
-    //     $this->db->query(
-    //         "INSERT INTO user (image) 
-    //         VALUES(:image)",
-    //         [
-
-    //             'original_filename' => $file['name'],
-    //             'storage_filename' => $newFileName //,
-    //             // 'media_type' => $file['type']
-    //         ]
-    //     );
-    //   //  dd($newFileName);
-    // }
     public function getUserProfile(int $id)
     {
         return $this->db->query(
@@ -81,61 +59,7 @@ class EditProfileService
             die("User not found.");
         }
     }
-    // public function upload(array $file,int $profile){
-    //     $fileExtension = pathinfo($file['name'],PATHINFO_EXTENSION);
-    //     $newFileName = bin2hex(random_bytes(16)).".".$fileExtension;
-    //     $uploadPath = Paths::STORAGE_UPLOADS."/".$newFileName;
-    //     if(!move_uploaded_file($file['tmp_name'],$uploadPath)){
-    //         throw new ValidationException([
-    //             'image'=>['Failed to upload File']
-    //         ]);   
-    //     }
-    //     $this->db->query(
-    //         "INSERT INTO user (id,image,storage_filename) 
-    //         VALUES(:id,:image,:storage_filename)",
-    //         [
-    //             'id' => $profile,
-    //             'image' => $file['name'],
-    //             'storage_filename' => $newFileName
-
-    //         ]
-    //     );
-    //   //  dd($newFileName);
-    // }
-    public function mobilenoAlreadyExists($mobileNo, $id)
-    {
-        $mobileResult = $this->db->query(
-            "SELECT count(*) FROM user WHERE mobileNo =:mobileNo and id!=:id",
-            [
-                'mobileNo' => $mobileNo,
-                'id' => $id
-            ]
-        )->fetchColumn();
-        //  dd('hii');
-        if ($mobileResult > 0) {
-            throw new ValidationException(['mobileNo' => 'Mobile Number already exists']);
-        } else {
-            return false;
-        }
-    }
-    public function emailAlreadyExists($email, $id)
-    {
-        $emailResult = $this->db->query(
-            "SELECT count(*) FROM user WHERE email =:email and id!=:id",
-            [
-                'email' => $email,
-                'id' => $id
-            ]
-        )->fetchColumn();
-        //  dd('hii');
-        if ($emailResult > 0) {
-            throw new ValidationException(['email' => 'Email already exists']);
-        } else {
-            return false;
-        }
-    }
-
-    public function updateData(array $formData, array $file)
+    public function updateData(array $formData, array $file, int $id)
     {
         $userdata = $this->getUserProfile((int) $_SESSION['user']);
 
@@ -152,10 +76,12 @@ class EditProfileService
             $file['name'] = $userdata['image'];
             $newFileName = $userdata['storage_filename'];
         }
-        $this->mobilenoAlreadyExists($formData['mobileNo'], $_SESSION['user']);
-        $this->emailAlreadyExists($formData['email'], $_SESSION['user']);
-
-        // dd($file);
+        if ($this->validatorService->isExists('user', 'email', $_POST['email'], 'id !=' . $id)) {
+            throw new ValidationException(['email' => ['Email already exists']]);
+        }
+        if ($this->validatorService->isExists('user', 'mobileNo', $_POST['mobileNo'], 'id !=' . $id)) {
+            throw new ValidationException(['mobileNo' => ['Mobile number already exists']]);
+        }
         $formattedDate = "{$formData['dob']} 00:00:00";
         $hireDate = "{$formData['hireDate']} 00:00:00";
         $password = password_hash($formData['password'], PASSWORD_BCRYPT, ['cost' => 12]);
@@ -177,7 +103,7 @@ class EditProfileService
                 'hireDate' => $hireDate,
                 'image' => $file['name'],
                 'storage_filename' => $newFileName,
-                'id' => $_SESSION['user']
+                'id' => $id
 
             ]
         );

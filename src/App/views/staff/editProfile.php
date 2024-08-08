@@ -49,7 +49,8 @@
                                                                 src="<?php echo e($profileImage) ?>" />
                                                             <!-- Profile picture help block-->
                                                             <div class="card-header" style="color:white">
-                                                                <?php echo e($profile['name']); ?></div>
+                                                                <?php echo e($profile['name']); ?>
+                                                            </div>
                                                             <!-- Profile picture upload button-->
                                                             <!-- <button class="btn btn-primary" type="button">Upload new image</button> -->
                                                         </div>
@@ -122,7 +123,7 @@
                                                                             <?php if (array_key_exists('email', $errors)): ?>
                                                                                 <div class="bg-gray-100 mt-2 p-2 text-red-500"
                                                                                     style="color:red">
-                                                                                    <?php echo e($errors['email'][0] === 'E' ? $errors['email'] : ''); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                                                                                    <?php echo e($errors['email'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                                                                                         ?>
                                                                                 </div>
                                                                             <?php endif; ?>

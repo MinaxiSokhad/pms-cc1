@@ -129,13 +129,14 @@
                         </button>
                         <ul class="navbar-nav w-90">
                             <li class="nav-item w-90">
-                                <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search" method="GET">
+                                <form id="search_form" class="nav-link mt-2 mt-md-0 d-none d-lg-flex search"
+                                    method="GET">
                                     <input type="text" value="<?php echo e((string) $searchTerm); ?>"
                                         class="form-control" placeholder="Search..." name="s">
                                     <button type="submit" style="color: black;">
                                         Search
                                     </button>
-                                </form>
+
                             </li>
                         </ul>
                     </div>
@@ -146,10 +147,10 @@
                                 <i class="mdi mdi-filter-variant"></i> Filter
                             </button>
 
-                            <div class="dropdown-menu" aria-labelledby="filterDropdown">
 
+                            <div class="dropdown-menu" aria-labelledby="filterDropdown">
                                 <a class="dropdown-item" href="/projects/<?php echo "AllProjects"; ?>">All</a>
-                                <a class="dropdown-item" href="/projects/<?php echo "S"; ?>">Not
+                                <a onclick="search_project('/S')" class="dropdown-item" s>Not
                                     Started</a>
                                 <a class="dropdown-item" href="/projects/<?php echo "P"; ?>">In
                                     Progress</a>
@@ -159,6 +160,21 @@
                             </div>
                         </div>
                     </div>
+                    <input type="hidden" name="_searched" value="<?php echo e($_GET['s'] ?? ''); ?>">
+
+                    <input type="hidden" name="_filter" value="<?php echo e($oldFormData); ?>">
+
+                    </form>
+                    <script>
+                        function search_project(route) {
+                            const form = document.getElementById('search_form');
+                            form.action = "/project/"
+                            document.write(form.action)
+
+                            form.submit();
+
+                        }
+                    </script>
                     <style>
                         .sort-button {
                             background: transparent;

@@ -293,7 +293,7 @@
             </div>
             <?php if (array_key_exists('email', $errors)): ?>
                 <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
-                    <?php echo e($errors['email'][0] === 'E' ? $errors['email'] : ''); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                    <?php echo e($errors['email'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                         ?>
                 </div>
             <?php endif; ?>
@@ -379,7 +379,7 @@
             </div>
             <?php if (array_key_exists('mobileNo', $errors)): ?>
                 <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
-                    <?php echo e($errors['mobileNo'][0] === 'M' ? $errors['mobileNo'] : ''); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                    <?php echo e($errors['mobileNo'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                         ?>
                 </div>
             <?php endif; ?>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use Framework\Exceptions\ValidationException;
 use Framework\TemplateEngine;
 use App\Services\{ValidatorService, UserService};
 
@@ -25,8 +26,12 @@ class AuthController
     {
 
         $this->validatorService->validateRegister($_POST);
-        $this->userService->isEmailTaken($_POST["email"]);
-        $this->userService->isMobileNoTaken($_POST["mobileNo"]);
+        if ($this->validatorService->isExists('user', 'email', $_POST['email'])) {
+            throw new ValidationException(['email' => ['Email already exists']]);
+        }
+        if ($this->validatorService->isExists('user', 'mobileNo', $_POST['mobileNo'])) {
+            throw new ValidationException(['mobileNo' => ['Mobile number already exists']]);
+        }
         $this->userService->create($_POST);
 
         redirectTo("/");

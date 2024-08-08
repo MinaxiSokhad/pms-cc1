@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 namespace App\Services;
 
+use Framework\Database;
 use Framework\Validator;
 use Framework\Rules\{
     RequiredRule,
@@ -20,7 +21,7 @@ use Framework\Rules\{
 class ValidatorService
 {
     private Validator $validator;
-    public function __construct()
+    public function __construct(private Database $db)
     {
         $this->validator = new Validator();
         $this->validator->add('required', new RequiredRule());
@@ -102,5 +103,16 @@ class ValidatorService
             'status' => ['required'],
             'members' => ['required'],
         ]);
+    }
+    public function isExists($table, $column, $value, $exclude = null)
+    {
+        $sql = "SELECT COUNT(*) FROM  $table  WHERE  $column  =:value " . (($exclude != null) ? " AND " . $exclude : "");
+        $recordCount = $this->db->query(
+            $sql,
+            [
+                "value" => $value
+            ]
+        )->fetchColumn();
+        return boolval($recordCount);
     }
 }
