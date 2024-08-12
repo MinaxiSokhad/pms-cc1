@@ -11,20 +11,19 @@ class AuthRequiredMiddleware implements MiddlewareInterface
 {
   public function process(callable $next)
   {
-    if(empty($_SESSION['user'])){
-      
-        redirectTo('/login');
+    if (empty($_SESSION['user'])) {
+
+      redirectTo('/login');
     }
-    try{
+    try {
 
       $next();
-  }
-  catch(ValidationException $e){
-    
+    } catch (ValidationException $e) {
+
       $_SESSION['errors'] = $e->errors;
       $refer = $_SERVER['HTTP_REFERER'];
       redirectTo($refer);
       $next();
-  }
+    }
   }
 }

@@ -1,1 +1,1 @@
-<input value = "<?php echo e($csrfToken); ?>" name = "token" type="hidden"/>
+<input id="csrf" value="<?php echo e($csrfToken); ?>" name="token" type="hidden" />

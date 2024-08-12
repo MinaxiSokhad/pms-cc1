@@ -50,14 +50,14 @@ class ProjectController
             $viewproject = $this->projectService->getProject();
         } else if (count($name) == 2 && ($name[1] == "asc" || $name[1] = "desc")) {
 
-            $viewproject = $this->projectService->sort($name[0], $name[1]);
+            $viewproject = $this->projectService->searchsort($name[0], $name[1]);
         } else {
 
             $viewproject = $this->projectService->show($params['status']);
 
         }
         if (isset($searchTerm)) {
-            $viewproject = $this->projectService->sort();
+            $viewproject = $this->projectService->searchsort();
         }
 
 

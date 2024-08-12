@@ -28,7 +28,7 @@ class ProjectService
         )->findAll();
 
 
-        if (!isset($id)) {
+        if (empty($id)) {
             die("User not found.");
         }
     }
@@ -48,7 +48,7 @@ class ProjectService
         )->findAll();
 
 
-        if (!isset($id)) {
+        if (empty($id)) {
             die("Tags not found.");
         }
     }
@@ -213,7 +213,7 @@ class ProjectService
             project.id"
             )->findAll();
         }
-        if (!isset($id)) {
+        if (empty($id)) {
             die("Project not found.");
         }
     }
@@ -335,11 +335,11 @@ GROUP BY
             'status' => $status
         ])->findAll();
 
-        if (!isset($id)) {
+        if (empty($status)) {
             die("Project not found.");
         }
     }
-    public function sort(string $order_by = "id", string $direction = "asc")
+    public function searchsort(string $order_by = "id", string $direction = "asc")
     {
 
         $searchTerm = addcslashes($_GET['s'] ?? '', '%_'); //search any character or special character like %

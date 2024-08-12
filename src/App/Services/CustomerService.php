@@ -29,10 +29,11 @@ class CustomerService
 
                 )->findAll();
             } else {
+
                 return $this->db->query(
                     "SELECT * FROM customers " . $where
 
-                )->find();
+                )->findAll();
             }
         } else {
             $where = "";
@@ -59,34 +60,18 @@ class CustomerService
     //         $param
     //     )->findAll();
     // }
-    public function searchSortCustomer(string $order_by = "id", string $direction = "asc")
+    public function searchSortCustomer(string $order_by = 'id', string $direction = 'asc')
     {
-        $searchTerm = addcslashes($_GET['s'] ?? '', '%_'); //search any character or special character like %
-        $param = [
+        $searchTerm = addcslashes($_POST['s'] ?? '', '%_'); //search any character or special character like %
 
-            'search' => "%{$searchTerm}%"
+        $param = ['search' => "%{$searchTerm}%"];
 
-        ];
-
-        if ($order_by == "company") {
-            $order_by = " ORDER BY company " . $direction;
-        } else if ($order_by == "website") {
-            $order_by = " ORDER BY website " . $direction;
-        } else if ($order_by == "email") {
-            $order_by = " ORDER BY email " . $direction;
-        } else if ($order_by == "phone") {
-            $order_by = " ORDER BY phone " . $direction;
-        } else if ($order_by == "country") {
-            $order_by = " ORDER BY country " . $direction;
-        } else if ($order_by == "address") {
-            $order_by = " ORDER BY address " . $direction;
-        } else {
-            $order_by = " ORDER BY id ASC";
-        }
-        return $this->db->query(
-            "SELECT * FROM customers  WHERE company LIKE :search OR website LIKE :search OR email LIKE :search OR phone LIKE :search OR country LIKE :search OR address LIKE :search " . $order_by,
+        return ($this->db->query(
+            "SELECT * FROM customers 
+             WHERE company LIKE :search OR website LIKE :search OR email LIKE :search OR phone LIKE :search OR country LIKE :search OR address LIKE :search 
+             ORDER BY " . $order_by . " " . $direction,
             $param
-        )->findAll();
+        )->findAll());
     }
     public function create(array $formData)
     {

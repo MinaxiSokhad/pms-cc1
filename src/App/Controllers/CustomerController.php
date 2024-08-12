@@ -18,35 +18,54 @@ class CustomerController
     public function customerView(array $params = [])
     {
 
-        $searchTerm = $_GET['s'] ?? '';
-        // $name = explode("_", $params["csort"]);
-        $name = explode("_", $params["csort"]);
-        if (empty($params) || $params['csort'] == "AllCustomers") {
-            $viewcustomer = $this->customerService->getCustomer();
-        } else if ((count($name) == 2) && ($name[1] == "asc" || $name[1] = "desc")) {
+
+        $name = explode("_", $_POST["sort"] ?? '');
+        if ((count($name) == 2) && ($name[1] == "asc" || $name[1] = "desc")) {
             $viewcustomer = $this->customerService->searchSortCustomer($name[0], $name[1]);
+        } else {
+            $viewcustomer = $this->customerService->getCustomer();
         }
 
-        if (array_key_exists("company", $_GET)) {
-            $viewcustomer = $this->customerService->getCustomer($_GET['company']);
+        if (array_key_exists("company", $_POST)) {
+            $viewcustomer = $this->customerService->getCustomer($_POST['company']);
         }
-        if (array_key_exists('country', $_GET)) {
-            $viewcustomer = array_merge($viewcustomer, $this->customerService->getCustomer($_GET['country']));
+        if (array_key_exists('country', $_POST)) {
+            $viewcustomer = array_merge($viewcustomer, $this->customerService->getCustomer($_POST['country']));
         }
-        if ($searchTerm != '') {
+        if ($_POST['s'] != '') {
             $viewcustomer = $this->customerService->searchSortCustomer();
         }
+        // $viewcustomer = [];
+        // $name = explode("_", $_POST["sort"] ?? '');
 
+        // if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        //     if ((count($name) == 2) && ($name[1] == "asc" || $name[1] = "desc")) {
+        //         $viewcustomer = $this->customerService->searchSortCustomer($_POST['s'], $name[0], $name[1]);
+        //     } else {
+        //         $viewcustomer = $this->customerService->getCustomer();
+        //     }
+        //     if ($_POST['s']) {
+        //         $viewcustomer = $this->customerService->searchSortCustomer($_POST['s'], $name[0], $name[1]);
+        //     }
+        //     if (array_key_exists("company", $_POST)) {
+        //         $viewcustomer = $this->customerService->getCustomer($_POST['company']);
+        //     }
+        //     if (array_key_exists("country", $_POST)) {
+        //         $viewcustomer = array_merge($viewcustomer, $this->customerService->getCustomer($_POST['country']));
+        //     }
+        // } else {
+        //     $viewcustomer = $this->customerService->getCustomer();
+
+        // }
         $customers = $this->customerService->getCustomer();
         $country = $this->customerService->getCustomer();
+
         echo $this->view->render("customer.php", [
             'viewcustomer' => $viewcustomer,
             'customers' => $customers,
             'country' => $country,
-            'searchTerm' => $searchTerm
-
-
         ]);
+
     }
     public function customer()
     {
@@ -69,7 +88,7 @@ class CustomerController
                 throw new ValidationException(['phone' => ['Phone number already exists']]);
             }
             $this->customerService->create($_POST);
-            redirectTo('/customer/AllCustomers');
+            redirectTo('/customer');
         }
     }
     public function updateCustomer(array $params = [])
@@ -86,9 +105,8 @@ class CustomerController
             ]);
         } else {
             $this->validatorService->validateCustomer($_POST);
-
             $this->customerService->update($_POST, (int) $params['customer']);
-            redirectTo('/customer/AllCustomers');
+            redirectTo('/customer');
         }
     }
     public function deleteCustomer(array $id)
@@ -96,10 +114,10 @@ class CustomerController
 
         if ($id['customer'] === "0") {
             $this->customerService->delete($_POST['ids']);
-            redirectTo('/customer/AllCustomers');
+            redirectTo('/customer');
         } else {
             $this->customerService->delete([$id['customer']]);//'customer' -> route parameter
-            redirectTo('/customer/AllCustomers');
+            redirectTo('/customer');
         }
 
 

@@ -58,110 +58,108 @@
 
 
                                     ?>
-                                  </div>
-                                  <div class="mb-3">
-                                    <label class="small mb-1" for="company">Company Name<span style="color: red;"> *
-                                      </span></label>
 
-                                    <input class="form-control" type="text"
-                                      value="<?php echo e($editcustomer['company'] ?? ''); ?>" id="company"
-                                      name="company">
-                                    <div id="nameErr" class="mt-2 p-2 text-red-500" style="color:red">
+                                    <?php foreach ($editcustomer as $e): ?>
                                     </div>
-                                    <?php if (array_key_exists('company', $errors)): ?>
-                                      <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
-                                        <?php echo e($errors['company'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
-                                          ?>
+                                    <div class="mb-3">
+                                      <label class="small mb-1" for="company">Company Name<span style="color: red;"> *
+                                        </span></label>
+
+                                      <input class="form-control" type="text"
+                                        value="<?php echo e($e['company'] ?? ''); ?>" id="company" name="company">
+                                      <div id="nameErr" class="mt-2 p-2 text-red-500" style="color:red">
                                       </div>
-                                    <?php endif;
+                                      <?php if (array_key_exists('company', $errors)): ?>
+                                        <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
+                                          <?php echo e($errors['company'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                                              ?>
+                                        </div>
+                                      <?php endif;
 
 
-                                    ?>
-                                  </div>
-                                  <div class="mb-3">
-                                    <label class="small mb-1" for="website">Website<span style="color: red;"> *
-                                      </span></label>
-                                    <input class="form-control" type="text"
-                                      value="<?php echo e($editcustomer['website'] ?? ''); ?>" id="website"
-                                      name="website">
-                                    <div id="nameErr" class="mt-2 p-2 text-red-500" style="color:red">
+                                      ?>
                                     </div>
-                                    <?php if (array_key_exists('website', $errors)): ?>
-                                      <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
-                                        <?php echo e($errors['website'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
-                                          ?>
+                                    <div class="mb-3">
+                                      <label class="small mb-1" for="website">Website<span style="color: red;"> *
+                                        </span></label>
+                                      <input class="form-control" type="text"
+                                        value="<?php echo e($e['website'] ?? ''); ?>" id="website" name="website">
+                                      <div id="nameErr" class="mt-2 p-2 text-red-500" style="color:red">
                                       </div>
-                                    <?php endif;
+                                      <?php if (array_key_exists('website', $errors)): ?>
+                                        <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
+                                          <?php echo e($errors['website'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                                              ?>
+                                        </div>
+                                      <?php endif;
 
 
-                                    ?>
-                                  </div>
-                                  <div class="mb-3">
-                                    <label class="small mb-1" for="email">Email<span style="color: red;"> *
-                                      </span></label>
-                                    <input class="form-control" type="text"
-                                      value="<?php echo e($editcustomer['email'] ?? ''); ?>" id="email" name="email">
-                                    <div id="nameErr" class="mt-2 p-2 text-red-500" style="color:red">
+                                      ?>
                                     </div>
-                                    <?php if (array_key_exists('email', $errors)): ?>
-                                      <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
-                                        <?php echo e($errors['email'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
-                                          ?>
+                                    <div class="mb-3">
+                                      <label class="small mb-1" for="email">Email<span style="color: red;"> *
+                                        </span></label>
+                                      <input class="form-control" type="text" value="<?php echo e($e['email'] ?? ''); ?>"
+                                        id="email" name="email">
+                                      <div id="nameErr" class="mt-2 p-2 text-red-500" style="color:red">
                                       </div>
-                                    <?php endif;
+                                      <?php if (array_key_exists('email', $errors)): ?>
+                                        <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
+                                          <?php echo e($errors['email'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                                              ?>
+                                        </div>
+                                      <?php endif;
 
 
-                                    ?>
-                                  </div>
-                                  <div class="mb-3">
-                                    <label class="small mb-1" for="phone">Phone Number<span style="color: red;"> *
-                                      </span></label>
-                                    <input class="form-control" type="text"
-                                      value="<?php echo e($editcustomer['phone'] ?? ''); ?>" id="phone" name="phone">
-                                    <div id="nameErr" class="mt-2 p-2 text-red-500" style="color:red">
+                                      ?>
                                     </div>
-                                    <?php if (array_key_exists('phone', $errors)): ?>
-                                      <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
-                                        <?php echo e($errors['phone'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
-                                          ?>
+                                    <div class="mb-3">
+                                      <label class="small mb-1" for="phone">Phone Number<span style="color: red;"> *
+                                        </span></label>
+                                      <input class="form-control" type="text" value="<?php echo e($e['phone'] ?? ''); ?>"
+                                        id="phone" name="phone">
+                                      <div id="nameErr" class="mt-2 p-2 text-red-500" style="color:red">
                                       </div>
-                                    <?php endif;
+                                      <?php if (array_key_exists('phone', $errors)): ?>
+                                        <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
+                                          <?php echo e($errors['phone'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                                              ?>
+                                        </div>
+                                      <?php endif;
 
 
-                                    ?>
-                                  </div>
-                                  <div class="mb-3">
-                                    <label class="small mb-1" for="country">Country<span style="color: red;"> *
-                                      </span></label>
-                                    <input class="form-control" type="text"
-                                      value="<?php echo e($editcustomer['country'] ?? ''); ?>" id="country"
-                                      name="country">
-                                    <div id="nameErr" class="mt-2 p-2 text-red-500" style="color:red">
+                                      ?>
                                     </div>
-                                    <?php if (array_key_exists('country', $errors)): ?>
-                                      <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
-                                        <?php echo e($errors['country'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
-                                          ?>
+                                    <div class="mb-3">
+                                      <label class="small mb-1" for="country">Country<span style="color: red;"> *
+                                        </span></label>
+                                      <input class="form-control" type="text"
+                                        value="<?php echo e($e['country'] ?? ''); ?>" id="country" name="country">
+                                      <div id="nameErr" class="mt-2 p-2 text-red-500" style="color:red">
                                       </div>
-                                    <?php endif;
+                                      <?php if (array_key_exists('country', $errors)): ?>
+                                        <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
+                                          <?php echo e($errors['country'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                                              ?>
+                                        </div>
+                                      <?php endif;
 
 
-                                    ?>
-                                  </div>
-                                  <div class="mb-3">
-                                    <label for="address">Address <span style="color: red;"> * </span></label>
-                                    <textarea id="address"
-                                      name="address"><?php echo e($editcustomer['address'] ?? ''); ?></textarea>
-                                    <?php if (array_key_exists('address', $errors)): ?>
-                                      <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
-                                        <?php echo e($errors['address'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
-                                          ?>
-                                      </div>
-                                    <?php endif;
+                                      ?>
+                                    </div>
+                                    <div class="mb-3">
+                                      <label for="address">Address <span style="color: red;"> * </span></label>
+                                      <textarea id="address"
+                                        name="address"><?php echo e($e['address'] ?? ''); ?></textarea>
+                                      <?php if (array_key_exists('address', $errors)): ?>
+                                        <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
+                                          <?php echo e($errors['address'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                                              ?>
+                                        </div>
+                                      <?php endif; ?>
+                                    </div>
+                                  <?php endforeach; ?>
 
-
-                                    ?>
-                                  </div>
                                   <button class="btn btn-primary" type="submit">Save Changes</button>
                                   <?php // dd($errors); ?>
                                 </form>
