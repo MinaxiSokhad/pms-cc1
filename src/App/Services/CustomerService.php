@@ -11,67 +11,94 @@ class CustomerService
     public function __construct(private Database $db, private ValidatorService $validatorService)
     {
     }
-    public function getCustomer(array $id = [])
+    public function getCustomer(array $id = [], string $searchTerm = '', string $order_by = 'id', string $direction = 'desc', int $limit = 3, int $offset = 0)
     {
-
-
+        $param = [];
         if (!empty($id)) {
 
             $ids = [];
             foreach ($id as $i) {
-                $ids[] = (int) $i;
+                $ids[] = (string) $i;
             }
-            $id = implode(',', $ids);
-            $where = " WHERE id IN ($id)";
-            if (count($ids) > 1) {
-                return $this->db->query(
-                    "SELECT * FROM customers " . $where
+            $id = implode("','", $ids);
+
+
+            $searched_query = " `company` IN (SELECT `company` FROM `customers` WHERE `company` LIKE :search)
+            OR 
+            `country` IN (SELECT `country` FROM `customers` WHERE `country` LIKE :search)	";
+
+            $where = " WHERE `company` IN ('$id')";
+            if ($searchTerm != '') {
+                $where .= " AND  ($searched_query)";
+                $param = ['search' => "%{$searchTerm}%"];
+            }
+
+            if (count($ids) >= 1) {
+
+                // dd($where);
+                $viewcustomer = $this->db->query(
+                    "SELECT * FROM customers " . $where . " ORDER BY " . $order_by . " " . $direction . " LIMIT " . $limit . " OFFSET " . $offset,
+                    $param
 
                 )->findAll();
+
             } else {
 
-                return $this->db->query(
-                    "SELECT * FROM customers " . $where
+                $viewcustomer = $this->db->query(
+                    "SELECT * FROM customers " . $where . " ORDER BY " . $order_by . " " . $direction . " LIMIT " . $limit . " OFFSET " . $offset,
+                    $param
 
                 )->findAll();
             }
         } else {
-            $where = "";
-            return $this->db->query(
-                "SELECT * FROM customers " . $where
 
-            )->findAll();
+            $where = "";
+
+            $viewcustomer = ($this->db->query(
+                "SELECT * FROM customers " . $where . " ORDER BY " . $order_by . " " . $direction . " LIMIT " . $limit . " OFFSET " . $offset,
+                $param
+
+            )->findAll());
 
         }
+        $count = $this->db->query("SELECT COUNT(*) FROM customers")->count();
+        return [$viewcustomer, $count];
         if (empty($id)) {
             die("Customer not found.");
         }
     }
-    // public function getCustomerSearch()
-    // {
-    //     $searchTerm = addcslashes($_GET['s'] ?? '', '%_'); //search any character or special character like %
-    //     $param = [
-
-    //         'company' => "%{$searchTerm}%"
-
-    //     ];
-    //     return $this->db->query(
-    //         "SELECT * FROM customers WHERE company LIKE :company OR website LIKE :company OR email LIKE :company OR phone LIKE :company OR country LIKE :company OR address LIKE :company ",
-    //         $param
-    //     )->findAll();
-    // }
-    public function searchSortCustomer(string $order_by = 'id', string $direction = 'asc')
+    public function getcustomers(array $id = [])
     {
-        $searchTerm = addcslashes($_POST['s'] ?? '', '%_'); //search any character or special character like %
+        if (!empty($id)) {
+            $ids = [];
+            foreach ($id as $i) {
+                $ids[] = (INT) $i;
+            }
+            $id = implode(",", $ids);
+            $where = " WHERE id IN ($id) ";
+            return $this->db->query("SELECT * FROM customers" . $where)->findAll();
+        } else {
+            $where = "";
+            return $this->db->query("SELECT * FROM customers" . $where)->findAll();
+        }
+    }
 
+    public function searchSortCustomer(string $searchTerm, string $order_by = 'id', string $direction = 'desc', int $limit = 3, int $offset = 0)
+    {
+        // $searchTerm = addcslashes($_POST['s'] ?? '', '%_'); //search any character or special character like %
+        $param = [];
+        $viewcustomer = [];
         $param = ['search' => "%{$searchTerm}%"];
-
-        return ($this->db->query(
+        // $pagination = "";
+        $pagination = " LIMIT " . $limit . " OFFSET " . $offset;
+        $viewcustomer = ($this->db->query(
             "SELECT * FROM customers 
              WHERE company LIKE :search OR website LIKE :search OR email LIKE :search OR phone LIKE :search OR country LIKE :search OR address LIKE :search 
-             ORDER BY " . $order_by . " " . $direction,
+             ORDER BY " . $order_by . " " . $direction . $pagination,
             $param
         )->findAll());
+        $count = $this->db->query("SELECT COUNT(*) FROM customers")->count();
+        return [$viewcustomer, $count];
     }
     public function create(array $formData)
     {

@@ -20,6 +20,9 @@ class CsrfGuardMiddleware implements MiddlewareInterface
     if ($_SERVER['REQUEST_URI'] == "/customer" || $_SERVER['REQUEST_METHOD'] == "POST") {
       $_POST['token'] = $_SESSION['token'];
     }
+    // if ($_SERVER['REQUEST_URI'] == "/projects" || $_SERVER['REQUEST_METHOD'] == "POST") {
+    //   $_POST['token'] = $_SESSION['token'];
+    // }
     if ($_SESSION['token'] !== $_POST['token']) {
       // dd($_SERVER['REQUEST_METHOD']);
       redirectTo('/');

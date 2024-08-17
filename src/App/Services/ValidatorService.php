@@ -42,7 +42,7 @@ class ValidatorService
             'name' => ['required', 'name'],
             'email' => ['required', 'email'],
             'password' => ['required', 'password'],
-            'country' => ['required', 'name'],
+            'country' => ['required', 'in:USA,Canada,Mexico,India,Russia'],
             'state' => ['required', 'name'],
             'city' => ['required', 'name'],
             'gender' => ['required', 'in:M,F,O'],
@@ -66,7 +66,7 @@ class ValidatorService
             'name' => ['required', 'name'],
             'email' => ['required', 'email'],
             'password' => ['required', 'password'],
-            'country' => ['required', 'name'],
+            'country' => ['required', 'in:USA,Canada,Mexico,India,Russia'],
             'state' => ['required', 'name'],
             'city' => ['required', 'name'],
             'gender' => ['required', 'in:M,F,O'],
@@ -87,7 +87,7 @@ class ValidatorService
             'website' => ['required', 'url'],
             'email' => ['required', 'email'],
             'phone' => ['required', 'mobile'],
-            'country' => ['required', 'name'],
+            'country' => ['required', 'in:USA,Canada,Mexico,India,Russia'],
             'address' => ['required'],
         ]);
     }
@@ -114,5 +114,15 @@ class ValidatorService
             ]
         )->fetchColumn();
         return boolval($recordCount);
+    }
+    public function searchsort(string $searchTerm = '', $fields, $table, $join = null, $exclude = null, $groupby = null, string $order_by = "id", string $direction = "desc")
+    {
+        $param = [];
+        $param = ["search" => "%{$searchTerm}%"];
+        $sql = "SELECT $fields FROM $table " . (($join != null) ? $join : "") .
+            (($exclude != null) ? $exclude : "") . (($groupby != null) ? $groupby : "") . " ORDER BY " . $order_by . " " . $direction;
+        $searchsort = $this->db->query($sql, $param)->findAll();
+        return boolval($searchsort);
+
     }
 }

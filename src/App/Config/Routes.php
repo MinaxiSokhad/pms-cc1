@@ -33,11 +33,13 @@ function registerRoutes(App $app) //register the route and then autoload files
     $app->get('/editcustomer/{customer}', [CustomerController::class, 'updateCustomer'])->add(AuthRequiredMiddleware::class);
     $app->post('/editcustomer/{customer}', [CustomerController::class, 'updateCustomer'])->add(AuthRequiredMiddleware::class);
     $app->delete('/deletecustomer/{customer}', [CustomerController::class, 'deleteCustomer'])->add(AuthRequiredMiddleware::class);
-    $app->get('/projects/{status}', [ProjectController::class, 'projectView'])->add(AuthRequiredMiddleware::class);
+    $app->get('/projects', [ProjectController::class, 'projectView'])->add(AuthRequiredMiddleware::class);
+    $app->post('/projects', [ProjectController::class, 'projectView'])->add(AuthRequiredMiddleware::class);
     // $app->get('/project/{sort}/{s}', [ProjectController::class, 'projectSort'])->add(AuthRequiredMiddleware::class);
     $app->get('/createproject', [ProjectController::class, 'project'])->add(AuthRequiredMiddleware::class);
     $app->post('/createproject', [ProjectController::class, 'project'])->add(AuthRequiredMiddleware::class);
     $app->get('/editproject/{project}', [ProjectController::class, 'updateProject'])->add(AuthRequiredMiddleware::class);
     $app->post('/editproject/{project}', [ProjectController::class, 'updateProject'])->add(AuthRequiredMiddleware::class);
     $app->delete('/deleteproject/{project}', [ProjectController::class, 'deleteProject'])->add(AuthRequiredMiddleware::class);
+    $app->get('/page', [ProjectController::class, 'page'])->add(AuthRequiredMiddleware::class);
 }

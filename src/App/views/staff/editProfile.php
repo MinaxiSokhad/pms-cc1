@@ -156,9 +156,21 @@
                                                                                 for="country">Country <span
                                                                                     style="color: red;"> *
                                                                                 </span></label>
-                                                                            <input class="form-control" type="text"
-                                                                                value="<?php echo e($editProfile['country'] ?? ''); ?>"
-                                                                                id="country" name="country">
+                                                                            <select id="country" name="country"
+                                                                                class="form-control">
+                                                                                <option value="USA" <?php echo ($editProfile['country'] ?? '') === 'USA' ? 'selected' : ''; ?>>
+                                                                                    USA</option>
+                                                                                <option value="Canada" <?php echo ($editProfile['country'] ?? '') === 'Canada' ? 'selected' : ''; ?>>
+                                                                                    Canada</option>
+                                                                                <option value="India" <?php echo ($editProfile['country'] ?? '') === 'India' ? 'selected' : ''; ?>>
+                                                                                    India</option>
+                                                                                <option value="Russia" <?php echo ($editProfile['country'] ?? '') === 'Russia' ? 'selected' : ''; ?>>
+                                                                                    Russia</option>
+                                                                                <option value="Mexico" <?php echo ($editProfile['country'] ?? '') === 'Mexico' ? 'selected' : ''; ?>>
+                                                                                    Mexico</option>
+                                                                                <option value="Invalid">Invalid Country
+                                                                                </option>
+                                                                            </select>
                                                                             <div id="countryErr"
                                                                                 class="mt-2 p-2 text-red-500"
                                                                                 style="color:red">

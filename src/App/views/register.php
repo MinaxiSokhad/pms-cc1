@@ -308,7 +308,19 @@
                 </div>
             <?php endif; ?>
             <label for="country">Country <span style="color: red;"> * </span></label>
-            <input type="text" value="<?php echo e($oldFormData['country'] ?? ''); ?>" id="country" name="country">
+            <select id="country" name="country"
+                class="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                <option value="USA">USA</option>
+                <option value="Canada" <?php echo ($oldFormData['country'] ?? '') === 'Canada' ? 'selected' : ''; ?>>
+                    Canada</option>
+                <option value="India" <?php echo ($oldFormData['country'] ?? '') === 'India' ? 'selected' : ''; ?>>
+                    India</option>
+                <option value="Russia" <?php echo ($oldFormData['country'] ?? '') === 'Russia' ? 'selected' : ''; ?>>
+                    Russia</option>
+                <option value="Mexico" <?php echo ($oldFormData['country'] ?? '') === 'Mexico' ? 'selected' : ''; ?>>
+                    Mexico</option>
+                <option value="Invalid">Invalid Country</option>
+            </select>
             <div id="countryErr" class="mt-2 p-2 text-red-500" style="color:red">
             </div>
             <?php if (array_key_exists('country', $errors)): ?>
@@ -340,9 +352,12 @@
             <label for="gender">Gender <span style="color: red;"> * </span></label>
             <select id="gender" name="gender">
                 <option value=""></option>
-                <option value="M" <?php echo ($oldFormData['gender'] ?? '') === 'M' ? 'selected' : ''; ?>>Male</option>
-                <option value="F" <?php echo ($oldFormData['gender'] ?? '') === 'F' ? 'selected' : ''; ?>>Female</option>
-                <option value="O" <?php echo ($oldFormData['gender'] ?? '') === 'O' ? 'selected' : ''; ?>>Others</option>
+                <option value="M" <?php echo ($oldFormData['gender'] ?? '') === 'M' ? 'selected' : ''; ?>>Male
+                </option>
+                <option value="F" <?php echo ($oldFormData['gender'] ?? '') === 'F' ? 'selected' : ''; ?>>Female
+                </option>
+                <option value="O" <?php echo ($oldFormData['gender'] ?? '') === 'O' ? 'selected' : ''; ?>>Others
+                </option>
             </select>
             <div id="genderErr" class="mt-2 p-2 text-red-500" style="color:red">
             </div>
@@ -355,13 +370,17 @@
             <label for="maritalStatus">Marital Status <span style="color: red;"> * </span></label>
             <select id="maritalStatus" name="maritalStatus">
                 <option value=""></option>
-                <option value="S" <?php echo ($oldFormData['maritalStatus'] ?? '') === 'S' ? 'selected' : ''; ?>>Single
+                <option value="S" <?php echo ($oldFormData['maritalStatus'] ?? '') === 'S' ? 'selected' : ''; ?>>
+                    Single
                 </option>
-                <option value="M" <?php echo ($oldFormData['maritalStatus'] ?? '') === 'M' ? 'selected' : ''; ?>>Married
+                <option value="M" <?php echo ($oldFormData['maritalStatus'] ?? '') === 'M' ? 'selected' : ''; ?>>
+                    Married
                 </option>
-                <option value="W" <?php echo ($oldFormData['maritalStatus'] ?? '') === 'W' ? 'selected' : ''; ?>>Widowed
+                <option value="W" <?php echo ($oldFormData['maritalStatus'] ?? '') === 'W' ? 'selected' : ''; ?>>
+                    Widowed
                 </option>
-                <option value="D" <?php echo ($oldFormData['maritalStatus'] ?? '') === 'D' ? 'selected' : ''; ?>>Divorced
+                <option value="D" <?php echo ($oldFormData['maritalStatus'] ?? '') === 'D' ? 'selected' : ''; ?>>
+                    Divorced
                 </option>
             </select>
             <div id="maritalStatusErr" class="mt-2 p-2 text-red-500" style="color:red">

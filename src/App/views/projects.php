@@ -6,35 +6,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#selectAll").click(function () {
-                $("input[type='checkbox']").prop('checked', this.checked);
-            });
-        });
-
-        function deleteSelectedProjects() {
-            var form = document.getElementById('form');
-            var selectedCheckboxes = document.querySelectorAll("input[name^='ids']:checked");
-            if (selectedCheckboxes.length === 0) {
-                alert("No projects selected");
-
-                form.action = "/projects";
-            }
-            else {
-                <?php $id[0] = [0]; ?>
-                form.action = "/deleteproject/<?php echo e($id[0][0]); ?>";
-                form.submit();
-            }
-
-        }
-        function deleteproject(projectid) {
-            <?php $id[0] = [0]; ?>
-            form.action = "/deleteproject/" + projectid;
-            form.submit();
-        }
-    </script>
 </head>
 
 <body>
@@ -121,71 +92,69 @@
                 </div>
 
                 <div class="row">
+                    <!-- Filter Dropdown -->
+                    <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search" action="/projects" id="filterform"
+                        method="POST">
+                        <?php include $this->resolve('partials/_csrf.php'); ?>
 
-                    <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
-                        <button class="navbar-toggler navbar-toggler align-self-center" type="button"
-                            data-toggle="minimize">
-                            <span class="mdi mdi-menu"></span>
+                        <input type="text" name="s" value="<?php echo e($_POST['s'] ?? ''); ?>" class="form-control"
+                            placeholder="Search...">
+                        <button type="button" onclick="onSearch()" style="color: black;">
+                            Search
                         </button>
-                        <ul class="navbar-nav w-90">
-                            <li class="nav-item w-90">
-                                <form id="search_form" class="nav-link mt-2 mt-md-0 d-none d-lg-flex search"
-                                    method="GET">
-                                    <input type="text" value="<?php echo e((string) $searchTerm); ?>"
-                                        class="form-control" placeholder="Search..." name="s">
-                                    <button type="submit" style="color: black;">
-                                        Search
-                                    </button>
+                        <?php
+                        // dd($viewproject);
+                        $statusfilter = [];
+                        if (array_key_exists('status', $_POST)) {
+                            $status = array_merge($statusfilter, $_POST['status']);
+                        }
+                        ?>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="dropdown">
+                                <button class="btn btn-outline-primary dropdown-toggle" type="button"
+                                    id="filterDropdown" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    <i class="mdi mdi-filter-variant"></i> Filter
+                                </button>
 
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center" style="margin-right:10%">
-                        <div class="dropdown">
-                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="filterDropdown"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="mdi mdi-filter-variant"></i> Filter
-                            </button>
+                                <div class="dropdown-menu" aria-labelledby="filterDropdown">
 
+                                    <div class="sub-items">
+                                        <?php
+                                        $status = ['S' => 'Not Started', 'H' => 'On Hold', 'P' => 'In Progress', 'C' => 'Cancelled', 'F' => 'Finished'];
+                                        ?>
+                                        <?php foreach ($status as $s => $value):
+                                            ?>
+                                            <?php if ($_SERVER['REQUEST_METHOD'] == "POST" && in_array($s, $statusfilter)): ?>
+                                                <label><input type="checkbox" name="status[]" value="<?php echo (string) $s;
+                                                ?>" checked><?php echo (string) $value; ?></label>
 
-                            <div class="dropdown-menu" aria-labelledby="filterDropdown">
-                                <a class="dropdown-item" href="/projects/<?php echo "AllProjects"; ?>">All</a>
-                                <a onclick="search_project('/S')" class="dropdown-item" s>Not
-                                    Started</a>
-                                <a class="dropdown-item" href="/projects/<?php echo "P"; ?>">In
-                                    Progress</a>
-                                <a class="dropdown-item" href="/projects/<?php echo "H"; ?>">On Hold</a>
-                                <a class="dropdown-item" href="/projects/<?php echo "C"; ?>">Cancelled</a>
-                                <a class="dropdown-item" href="/projects/<?php echo "F"; ?>">Finished</a>
+                                            <?php else: ?>
+                                                <label><input type="checkbox" name="status[]" value="<?php echo (string) $s;
+                                                ?>">
+                                                    <?php echo (string) $value; ?></label>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    </div>
+
+                                    <!-- Add more items and sub-items as needed -->
+                                    <button type="button" onclick="onFilter()" class="submit-btn">Apply Filters</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <input type="hidden" name="_searched" value="<?php echo e($_GET['s'] ?? ''); ?>">
-
-                    <input type="hidden" name="_filter" value="<?php echo e($oldFormData); ?>">
+                        <input type="hidden" id="search_input" name="search_input"
+                            value="<?php echo e($_POST['s'] ?? ''); ?>" />
+                        <input type="hidden" id="order_by" name="order_by" value="id" />
+                        <input type="hidden" id="direction" name="direction" value="desc" />
+                        <?php if (array_key_exists('status', $_POST)):
+                            foreach ($_POST['status'] as $statusfilter): ?>
+                                <input type="hidden" id="_filter_status_[]" name="_filter_status_[]"
+                                    value="<?php echo e($status ?? ''); ?>">
+                            <?php endforeach; ?>
+                        <?php endif; ?>
 
                     </form>
-                    <script>
-                        function search_project(route) {
-                            const form = document.getElementById('search_form');
-                            form.action = "/project/"
-                            document.write(form.action)
-
-                            form.submit();
-
-                        }
-                    </script>
-                    <style>
-                        .sort-button {
-                            background: transparent;
-                            color: white;
-                            border: none;
-                            cursor: pointer;
-                            padding: 0;
-                            margin: 0;
-                            font-size: 16px;
-                        }
-                    </style>
+                    <?php //dd($viewproject); ?>
                     <div class="col-xl-11 col-sm-6 col-9 grid-margin stretch-card">
                         <div class="card corona-gradient-card">
                             <div class="card-body py-0 px-0 px-sm-3" style="background-color:#191C24;">
@@ -200,7 +169,7 @@
                                                     <div class="table-responsive">
 
 
-                                                        <?php ?>
+
                                                         <form id="form" action="" method="POST">
                                                             <?php include $this->resolve('partials/_csrf.php'); ?>
                                                             <table class="table">
@@ -218,78 +187,62 @@
                                                                             </div>
                                                                         </th>
                                                                         <th>
-                                                                            <a href="/projects/name_asc"
-                                                                                class="sort-button" type="submit"
-                                                                                name="sort" value="name_asc">▲</a>
+                                                                            <a a href="#" class="sort-button"
+                                                                                onclick="sortBy('name','asc')">▲</a>
                                                                             Project Name
-                                                                            <a href="/projects/name_desc"
-                                                                                class="sort-button" type="submit"
-                                                                                name="sort" value="name_desc">▼</a>
+                                                                            <a a href="#" class="sort-button"
+                                                                                onclick="sortBy('name','desc')">▼</a>
                                                                         </th>
                                                                         <th>
-                                                                            <a href="/projects/description_asc"
-                                                                                class="sort-button" type="submit"
-                                                                                name="sort"
-                                                                                value="description_asc">▲</a>
+                                                                            <a href="#" class="sort-button"
+                                                                                onclick="sortBy('description','asc')">
+                                                                                ▲</a>
                                                                             Description
-                                                                            <a href="/projects/description_desc"
-                                                                                class="sort-button" type="submit"
-                                                                                name="sort"
-                                                                                value="description_desc">▼</a>
+                                                                            <a a href="#" class="sort-button"
+                                                                                onclick="sortBy('description','desc')">▼</a>
                                                                         </th>
                                                                         <th>
-                                                                            <a href="/projects/customer_asc"
-                                                                                class="sort-button" type="submit"
-                                                                                name="sort" value="customer_asc">▲</a>
+                                                                            <a a href="#" class="sort-button"
+                                                                                onclick="sortBy('customer','asc')">▲</a>
                                                                             Customer
-                                                                            <a href="/projects/customer_desc"
-                                                                                class="sort-button" type="submit"
-                                                                                name="sort" value="customer_desc">▼</a>
+                                                                            <a a href="#" class="sort-button"
+                                                                                onclick="sortBy('customer','desc')">▼</a>
                                                                         </th>
                                                                         <th>
-                                                                            <a href="/projects/tags_asc"
-                                                                                class="sort-button" type="submit"
-                                                                                name="sort" value="tags_asc">▲</a>
+                                                                            <a a href="#" class="sort-button"
+                                                                                onclick="sortBy('project_tags_name','asc')">▲</a>
                                                                             Tags
-                                                                            <a href="/projects/tags_desc"
-                                                                                class="sort-button" type="submit"
-                                                                                name="sort" value="tags_desc">▼</a>
+                                                                            <a a href="#" class="sort-button"
+                                                                                onclick="sortBy('project_tags_name','desc')">▼</a>
                                                                         </th>
                                                                         <th>
-                                                                            <a href="/projects/startdate_asc"
-                                                                                class="sort-button" type="submit"
-                                                                                name="sort" value="startdate_asc">▲</a>
+                                                                            <a a href="#" class="sort-button"
+                                                                                onclick="sortBy('start_date','asc')">▲</a>
                                                                             Start Date
-                                                                            <a href="/projects/startdate_desc"
-                                                                                class="sort-button" type="submit"
-                                                                                name="sort" value="startdate_desc">▼</a>
+                                                                            <a a href="#" class="sort-button"
+                                                                                onclick="sortBy('start_date','desc')">▼</a>
                                                                         </th>
                                                                         <th>
-                                                                            <a href="/projects/deadline_asc"
-                                                                                class="sort-button" type="submit"
-                                                                                name="sort" value="deadline_asc">▲</a>
+                                                                            <a a href="#" class="sort-button"
+                                                                                onclick="sortBy('deadline','asc')">▲</a>
                                                                             Deadline
-                                                                            <a href="/projects/deadline_desc"
-                                                                                class="sort-button" type="submit"
-                                                                                name="sort" value="deadline_desc">▼</a>
+                                                                            <aa href="#" class="sort-button"
+                                                                                onclick="sortBy('deadline','desc')">
+                                                                                ▼</a>
                                                                         </th>
                                                                         <th>
-                                                                            <a href="/projects/status_asc"
-                                                                                class="sort-button" type="submit"
-                                                                                name="sort" value="status_asc">▲</a>
+                                                                            <a a href="#" class="sort-button"
+                                                                                onclick="sortBy('status','asc')">▲</a>
                                                                             Status
-                                                                            <a href="/projects/status_desc"
-                                                                                class="sort-button" type="submit"
-                                                                                name="sort" value="status_desc">▼</a>
+                                                                            <a a href="#" class="sort-button"
+                                                                                onclick="sortBy('status','desc')">▼</a>
                                                                         </th>
                                                                         <th>
-                                                                            <a href="/projects/members_asc"
-                                                                                class="sort-button" type="submit"
-                                                                                name="sort" value="members_asc">▲</a>
+                                                                            <a a href="#" class="sort-button"
+                                                                                onclick="sortBy('project_member_name','asc')">▲</a>
                                                                             Members
-                                                                            <a href="/projects/members_desc"
-                                                                                class="sort-button" type="submit"
-                                                                                name="sort" value="members_desc">▼</a>
+                                                                            <a a href="#" class="sort-button"
+                                                                                onclick="sortBy('project_member_name','desc')">▼</a>
                                                                         </th>
                                                                         <th>Edit</th>
                                                                         <th>Delete</th>
@@ -350,6 +303,10 @@
                                                                     style="background-color:transparent;">Delete
                                                                     Selected Projects</button>
                                                             <?php endif; ?>
+
+                                                            <br /><br />
+                                                            <?php include $this->resolve("partials/_pagination.php") ?>
+                                                            <?php //dd($nextPageQuery); ?>
                                                         </form>
 
                                                     </div>
@@ -362,19 +319,7 @@
                         </div>
                     </div>
                 </div>
-
-
-                <footer class="footer">
-                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
-                        <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright ©
-                            bootstrapdash.com
-                            2020</span>
-                        <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a
-                                href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap
-                                admin
-                                templates</a> from Bootstrapdash.com</span>
-                    </div>
-                </footer>
+                <?php include $this->resolve("partials/_footer.php"); ?>
             </div>
         </div>
     </div>
@@ -392,5 +337,68 @@
     <script src="/assets/js/todolist.js"></script>
     <script src="/assets/js/dashboard.js"></script>
 </body>
+<style>
+    .sort-button {
+        background: transparent;
+        color: white;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin: 0;
+        font-size: 16px;
+    }
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#selectAll").click(function () {
+            $("input[type='checkbox']").prop('checked', this.checked);
+        });
+    });
+
+    function deleteSelectedProjects() {
+        var form = document.getElementById('form');
+        var selectedCheckboxes = document.querySelectorAll("input[name^='ids']:checked");
+        if (selectedCheckboxes.length === 0) {
+            alert("No projects selected");
+
+            form.action = "/projects";
+        }
+        else {
+            if (confirm('Are you sure you want to delete selected projects?')) {
+                <?php $id[0] = [0]; ?>
+                form.action = "/deleteproject/<?php echo e($id[0][0]); ?>";
+                form.submit();
+            }
+        }
+
+    }
+    function deleteproject(projectid) {
+        if (confirm('Are you sure you want to delete this project ?')) {
+            <?php $id[0] = [0]; ?>
+            form.action = "/deleteproject/" + projectid;
+            form.submit();
+        }
+    }
+
+    const filterform = document.getElementById('filterform');
+
+    function sortBy(order_by = 'id', direction = 'desc') {
+        const field_order_by = document.getElementById('order_by');
+        const field_direction = document.getElementById('direction');
+        field_order_by.value = order_by;
+        field_direction.value = direction;
+        console.log(order_by, direction);
+        filterform.submit();
+    }
+    function onSearch() {
+        filterform.submit();
+    }
+    function onFilter() {
+        filterform.submit();
+    }
+
+</script>
 
 </html>

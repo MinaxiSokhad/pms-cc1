@@ -96,18 +96,33 @@ class ProjectService
         }
     }
 
-    public function getProject(array $id = [])
+    public function getProject(array $id = [], string $searchTerm = '', string $order_by = 'id', string $direction = 'desc', int $limit = 3, int $offset = 0)
     {
+
+        // dd($_POST);
+        $param = [];
         if (!empty($id)) {
             $ids = [];
             foreach ($id as $i) {
-                $ids[] = (int) $i;
+                $ids[] = (string) $i;
             }
-            $id = implode(",", $ids);
+            $id = implode("','", $ids);
 
-            $where = "WHERE project.id IN ($id)";
-            if (count($ids) > 1) {
-                return $this->db->query(
+            $searched_query = " `project`.`status` IN (SELECT `project`.`status` FROM `project`
+             WHERE project.name LIKE :search 
+            OR project.description LIKE :search
+            OR project.status LIKE :search
+            OR tags.name LIKE :search
+            OR user.name LIKE :search)";
+            $where = "WHERE `project`.`status` IN ('$id')";
+            // dd([$where, $searchTerm, $order_by, $direction]);
+            if ($searchTerm != '') {
+                $where .= " AND  ($searched_query)";
+                $param = ['search' => "%{$searchTerm}%"];
+            }
+            if (count($ids) >= 1) {
+
+                $viewproject = $this->db->query(
                     "SELECT
               project.id,
               project.name,
@@ -136,13 +151,15 @@ class ProjectService
               ON project_member.user_id = `user`.id
               JOIN customers
               ON project.customer = customers.id
-              $where
+              $where 
             GROUP BY
-                project.id"
+                project.id  ORDER BY " . $order_by . " " . $direction . " LIMIT " . $limit . " OFFSET " . $offset,//(($limit != null) ? $limit : "") . " OFFSET " . (($offset!=null)?$offset:"")
+                    $param
 
                 )->findAll();
             } else {
-                return $this->db->query(
+
+                $viewproject = ($this->db->query(
                     "SELECT
               project.id,
               project.name,
@@ -171,15 +188,17 @@ class ProjectService
               ON project_member.user_id = `user`.id
               JOIN customers
               ON project.customer = customers.id
-              $where
+              $where  
             GROUP BY
-                project.id"
-                )->find();
+                project.id ORDER BY " . $order_by . " " . $direction . " LIMIT " . $limit . " OFFSET " . $offset,
+                    $param
+                )->find());
             }
 
         } else {
             $where = "";
-            return $this->db->query(
+
+            $viewproject = $this->db->query(
                 "SELECT
           project.id,
           project.name,
@@ -208,14 +227,59 @@ class ProjectService
           ON project_member.user_id = `user`.id
           JOIN customers
           ON project.customer = customers.id
-          $where
+          $where  
         GROUP BY
-            project.id"
+            project.id ORDER BY " . $order_by . " " . $direction . " LIMIT " . $limit . " OFFSET " . $offset,
+                $param
             )->findAll();
         }
+        $recordCount = $this->db->query(
+            "SELECT COUNT(*) FROM project WHERE name LIKE :search ",
+            ['search' => "%{$searchTerm}%"]
+        )->count();
+        return [$viewproject, $recordCount];
         if (empty($id)) {
             die("Project not found.");
         }
+    }
+    public function getoneproject($id)
+    {
+
+        $where = "WHERE `project`.`id` IN ($id)";
+        return $this->db->query(
+            "SELECT
+      project.id,
+      project.name,
+      project.description,
+      customers.company as `customer`,
+      project.start_date,
+      project.deadline,
+      CASE 
+            WHEN project.status = 'S' THEN 'Not Started' 
+            WHEN project.status = 'P' THEN 'In Progress' 
+            WHEN project.status = 'H' THEN 'On Hold' 
+            WHEN project.status = 'C' THEN 'Cancelled' 
+            WHEN project.status = 'F' THEN 'Finished' 
+            ELSE project.status 
+        END AS `status`,
+      GROUP_CONCAT(DISTINCT tags.name SEPARATOR ',') as `project_tags_name`,
+      GROUP_CONCAT(DISTINCT `user`.name SEPARATOR ',')as `project_member_name`
+    FROM project
+    JOIN project_tags
+      ON project.id = project_tags.project_id
+      JOIN project_member
+      ON project.id = project_member.project_id
+      JOIN tags 
+      ON project_tags.tags_id = tags.id
+      JOIN user
+      ON project_member.user_id = `user`.id
+      JOIN customers
+      ON project.customer = customers.id
+      $where 
+    GROUP BY
+        project.id "
+        )->find();
+
     }
     public function update(array $formData, int $id)
     {
@@ -339,36 +403,15 @@ GROUP BY
             die("Project not found.");
         }
     }
-    public function searchsort(string $order_by = "id", string $direction = "asc")
+    public function searchsort(string $searchTerm = '', string $order_by = "id", string $direction = "desc", int $limit = 3, int $offset = 0)
     {
-
-        $searchTerm = addcslashes($_GET['s'] ?? '', '%_'); //search any character or special character like %
+        $param = [];
         $param = [
-
-            "search" => "%{$searchTerm}%"
+            "search" => "%{$searchTerm}%",
 
         ];
-        if ($order_by == "name") {
-            $order_by = " ORDER BY project.name " . $direction;
-        } else if ($order_by == "description") {
-            $order_by = " ORDER BY project.description " . $direction;
-        } else if ($order_by == "customer") {
-            $order_by = " ORDER BY customers.company " . $direction;
-        } else if ($order_by == "startdate") {
-            $order_by = " ORDER BY project.start_date " . $direction;
-        } else if ($order_by == "deadline") {
-            $order_by = " ORDER BY project.deadline " . $direction;
-        } else if ($order_by == "status") {
-            $order_by = " ORDER BY project.status " . $direction;
-        } else if ($order_by == "tags") {
-            $order_by = " ORDER BY tags.name " . $direction;
-        } else if ($order_by == "members") {
-            $order_by = " ORDER BY user.name " . $direction;
-        } else {
-            $order_by = " ORDER BY project.id ASC";
-        }
 
-        return $this->db->query("SELECT
+        $viewproject = $this->db->query("SELECT
         project.id,
         project.name,
         project.description,
@@ -402,6 +445,13 @@ GROUP BY
             OR tags.name LIKE :search
             OR user.name LIKE :search
       GROUP BY
-          project.id " . $order_by . ";", $param)->findAll();
+          project.id ORDER BY " . $order_by . " " . $direction . " LIMIT " . $limit . " OFFSET " . $offset . ";",
+            $param
+        )->findAll();
+        $recordCount = $this->db->query(
+            "SELECT COUNT(*) FROM project WHERE name LIKE :search ",
+            $param
+        )->count();
+        return [$viewproject, $recordCount];
     }
 }

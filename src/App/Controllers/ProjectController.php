@@ -34,46 +34,63 @@ class ProjectController
                 throw new ValidationException(['name' => ['Project Name Already Exists']]);
             }
             $this->projectService->create($_POST);
-            redirectTo('/projects/AllProjects');
+            redirectTo('/projects');
         }
     }
     public function projectView(array $params = [])
     {
+        $page = isset($_GET['p']) ? (int) $_GET['p'] : 1;
+        $limit = 3;
+        $offset = (int) ($page - 1) * $limit;
+        $order_by = 'id';
+        $direction = 'desc';
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (array_key_exists('order_by', $_POST)) {
+                $order_by = $_POST['order_by'];
+                $direction = $_POST['direction'];
+            }
+            if ($_POST['s']) {
+                [$viewproject, $count] = $this->projectService->searchsort($_POST['s'], $order_by, $direction, (int) $limit, (int) $offset);
+            } else {
+                [$viewproject, $count] = $this->projectService->searchsort(order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
+            }
+            if (array_key_exists('status', $_POST)) {
+                if ($_POST['s']) {
+                    [$viewproject, $count] = $this->projectService->getProject($_POST['status'], $_POST['s'], $order_by, $direction, (int) $limit, (int) $offset);
+                } else {
+                    [$viewproject, $count] = $this->projectService->getProject($_POST['status'], '', $order_by, $direction, (int) $limit, (int) $offset);
+                }
 
-
-        $searchTerm = $_GET['s'] ?? null;
-
-        $name = explode("_", $params["status"]);
-
-        if (empty($params) || $params['status'] == "AllProjects") {
-
-            $viewproject = $this->projectService->getProject();
-        } else if (count($name) == 2 && ($name[1] == "asc" || $name[1] = "desc")) {
-
-            $viewproject = $this->projectService->searchsort($name[0], $name[1]);
+            }
         } else {
-
-            $viewproject = $this->projectService->show($params['status']);
-
-        }
-        if (isset($searchTerm)) {
-            $viewproject = $this->projectService->searchsort();
+            [$viewproject, $count] = $this->projectService->getProject([], '', order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
         }
 
+        $lastPage = ceil($count / $limit);//Find total page
 
         echo $this->view->render("projects.php", [
             'viewproject' => $viewproject,
-            'searchTerm' => $searchTerm,
-            'oldFormData' => $params['status'] ?? []
+            'currentPage' => $page,
+            'previousPageQuery' => http_build_query([
+                'p' => $page - 1
+            ]),
+            'lastPage' => $lastPage,
+            'nextPageQuery' => http_build_query([
+                'p' => $page + 1
+            ])
 
         ]);
+    }
+    public function page()
+    {
+        echo $this->view->render('page.php');
     }
     public function updateProject(array $params = [])
     {
 
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            $editproject = $this->projectService->getProject([$params["project"]]);
-            $viewcustomer = $this->customerService->getCustomer();
+            $editproject = $this->projectService->getoneproject($params["project"]);
+            $viewcustomer = $this->customerService->getcustomers();
             $users = $this->projectService->getUser();
             $viewtags = $this->projectService->getTags();
             if (!$editproject) {
@@ -89,7 +106,7 @@ class ProjectController
         } else {
             $this->validatorService->validateProject($_POST);
             $this->projectService->update($_POST, (int) $params['project']);
-            redirectTo('/projects/AllProjects');
+            redirectTo('/projects');
         }
     }
     public function deleteProject(array $id)
@@ -97,10 +114,10 @@ class ProjectController
 
         if ($id['project'] === "0") {
             $this->projectService->delete($_POST['ids']);
-            redirectTo('/projects/AllProjects');
+            redirectTo('/projects');
         } else {
             $this->projectService->delete([$id['project']]);//'customer' -> route parameter
-            redirectTo('/projects/AllProjects');
+            redirectTo('/projects');
         }
     }
 

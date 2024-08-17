@@ -43,6 +43,7 @@
 
 
     .form-group input,
+    .form-group select,
     .form-group textarea {
         width: 100%;
         padding: 0.5rem;
@@ -154,7 +155,19 @@
             </div>
             <div class="form-group">
                 <label for="phone">Country<span style="color: red;"> * </span></label>
-                <input type="text" id="country" name="country" value="<?php echo e($oldFormData['country'] ?? ''); ?>">
+                <select id="country" name="country"
+                    class="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                    <option value="USA">USA</option>
+                    <option value="Canada" <?php echo ($oldFormData['country'] ?? '') === 'Canada' ? 'selected' : ''; ?>>
+                        Canada</option>
+                    <option value="India" <?php echo ($oldFormData['country'] ?? '') === 'India' ? 'selected' : ''; ?>>
+                        India</option>
+                    <option value="Russia" <?php echo ($oldFormData['country'] ?? '') === 'Russia' ? 'selected' : ''; ?>>
+                        Russia</option>
+                    <option value="Mexico" <?php echo ($oldFormData['country'] ?? '') === 'Mexico' ? 'selected' : ''; ?>>
+                        Mexico</option>
+                    <option value="Invalid">Invalid Country</option>
+                </select>
                 <?php if (array_key_exists('country', $errors)): ?>
                     <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                         <?php echo e($errors['country'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
