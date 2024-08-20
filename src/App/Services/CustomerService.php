@@ -11,59 +11,37 @@ class CustomerService
     public function __construct(private Database $db, private ValidatorService $validatorService)
     {
     }
-    public function getCustomer(array $id = [], string $searchTerm = '', string $order_by = 'id', string $direction = 'desc', int $limit = 3, int $offset = 0)
+    public function getCustomer(array $name = [], string $column = "company", string $searchTerm = '', string $order_by = 'id', string $direction = 'desc', int $limit = 3, int $offset = 0)
     {
+        $query = "SELECT * FROM customers";
+        $where = " WHERE id > 0";
+        $filter = isset($filter) ? $filter : '';
+        $search = "";
+        $order = " ORDER BY " . $order_by . " " . $direction . " LIMIT " . $limit . " OFFSET " . $offset;
+
         $param = [];
-        if (!empty($id)) {
-
-            $ids = [];
-            foreach ($id as $i) {
-                $ids[] = (string) $i;
+        if ($name) {
+            $names = [];
+            foreach ($name as $i) {
+                $names[] = (string) $i;
             }
-            $id = implode("','", $ids);
+            $name = implode("','", $names);
+            $filter .= " AND $column IN ('$name')";
 
+        } else if ($searchTerm != '') {
 
-            $searched_query = " `company` IN (SELECT `company` FROM `customers` WHERE `company` LIKE :search)
-            OR 
-            `country` IN (SELECT `country` FROM `customers` WHERE `country` LIKE :search)	";
-
-            $where = " WHERE `company` IN ('$id')";
-            if ($searchTerm != '') {
-                $where .= " AND  ($searched_query)";
-                $param = ['search' => "%{$searchTerm}%"];
-            }
-
-            if (count($ids) >= 1) {
-
-                // dd($where);
-                $viewcustomer = $this->db->query(
-                    "SELECT * FROM customers " . $where . " ORDER BY " . $order_by . " " . $direction . " LIMIT " . $limit . " OFFSET " . $offset,
-                    $param
-
-                )->findAll();
-
-            } else {
-
-                $viewcustomer = $this->db->query(
-                    "SELECT * FROM customers " . $where . " ORDER BY " . $order_by . " " . $direction . " LIMIT " . $limit . " OFFSET " . $offset,
-                    $param
-
-                )->findAll();
-            }
-        } else {
-
-            $where = "";
-
-            $viewcustomer = ($this->db->query(
-                "SELECT * FROM customers " . $where . " ORDER BY " . $order_by . " " . $direction . " LIMIT " . $limit . " OFFSET " . $offset,
-                $param
-
-            )->findAll());
-
+            $search .= " AND website LIKE :search OR email LIKE :search OR phone LIKE :search  OR address LIKE :search ";
+            $param = ['search' => "%{$searchTerm}%"];
         }
+
+        $viewcustomer = $this->db->query(
+            $query . $where . $filter . $search . $order,
+            $param
+        )->findAll();
+
         $count = $this->db->query("SELECT COUNT(*) FROM customers")->count();
         return [$viewcustomer, $count];
-        if (empty($id)) {
+        if (empty($name)) {
             die("Customer not found.");
         }
     }

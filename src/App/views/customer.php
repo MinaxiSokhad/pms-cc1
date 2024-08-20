@@ -25,9 +25,16 @@
               Search
             </button>
             <?php
+            $companies = [];
+            if (array_key_exists('company', $_POST)) {
+              $companies = $_POST['company']; // Use companies from POST if available
+            }
 
-            // dd($companies);
-            ?>
+            $countries = [];
+            if (array_key_exists('country', $_POST)) {
+              $country = array_merge($countries, $_POST['country']);
+            } ?>
+
 
             <div class="d-flex justify-content-between align-items-center">
               <div class="dropdown">
@@ -42,19 +49,10 @@
                     <input type="checkbox" name="customers[]" value="cutomers"> Customers
                     <div class="sub-items">
 
-                      <?php foreach ($customers as $c):
-                        ?>   <?php $companies = [];
-                           if (array_key_exists('company', $_POST)) {
-                             $customers = array_merge($companies, $_POST['company']);
-                           }
-                           $countries = [];
-                           if (array_key_exists('country', $_POST)) {
-                             $country = array_merge($countries, $_POST['country']);
-                           } ?>
-                        <?php if ($_SERVER['REQUEST_METHOD'] == "POST" && in_array($c['company'], $companies)): ?>
+                      <?php foreach ($customers as $c): ?>
+                        <?php if (in_array($c['company'], $companies)): ?>
                           <label><input type="checkbox" name="company[]" value="<?php echo $c['company']; ?>"
                               checked><?php echo $c['company']; ?></label>
-
                         <?php else: ?>
                           <label><input type="checkbox" name="company[]"
                               value="<?php echo $c['company']; ?>"><?php echo $c['company']; ?></label>
@@ -359,7 +357,7 @@
     border-radius: 5px;
   }
 
-  .submit-btn:hover {
+  .submit-btn {
     background-color: #2980b9;
   }
 </style>
