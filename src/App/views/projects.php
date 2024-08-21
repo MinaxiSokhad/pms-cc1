@@ -90,20 +90,17 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row">
                     <!-- Filter Dropdown -->
                     <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search" action="/projects" id="filterform"
                         method="POST">
                         <?php include $this->resolve('partials/_csrf.php'); ?>
-
                         <input type="text" name="s" value="<?php echo e($_POST['s'] ?? ''); ?>" class="form-control"
                             placeholder="Search...">
                         <button type="button" onclick="onSearch()" style="color: black;">
                             Search
                         </button>
                         <?php
-                        // dd($viewproject);
                         $statusfilter = [];
                         if (array_key_exists('status', $_POST)) {
                             $status = array_merge($statusfilter, $_POST['status']);
@@ -116,9 +113,7 @@
                                     aria-expanded="false">
                                     <i class="mdi mdi-filter-variant"></i> Filter
                                 </button>
-
                                 <div class="dropdown-menu" aria-labelledby="filterDropdown">
-
                                     <div class="sub-items">
                                         <?php
                                         $status = ['S' => 'Not Started', 'H' => 'On Hold', 'P' => 'In Progress', 'C' => 'Cancelled', 'F' => 'Finished'];
@@ -152,24 +147,18 @@
                                     value="<?php echo e($status ?? ''); ?>">
                             <?php endforeach; ?>
                         <?php endif; ?>
-
                     </form>
                     <?php //dd($viewproject); ?>
                     <div class="col-xl-11 col-sm-6 col-9 grid-margin stretch-card">
                         <div class="card corona-gradient-card">
                             <div class="card-body py-0 px-0 px-sm-3" style="background-color:#191C24;">
                                 <div class="row align-items-center">
-
                                     <div class="row">
                                         <div class="col-12 grid-margin">
                                             <div class="card">
                                                 <div class="card-body">
-
                                                     <h4 class="card-title">Projects</h4>
                                                     <div class="table-responsive">
-
-
-
                                                         <form id="form" action="" method="POST">
                                                             <?php include $this->resolve('partials/_csrf.php'); ?>
                                                             <table class="table">
@@ -306,7 +295,7 @@
 
                                                             <br /><br />
                                                             <?php include $this->resolve("partials/_pagination.php") ?>
-                                                            <?php //dd($nextPageQuery); ?>
+
                                                         </form>
 
                                                     </div>
@@ -323,19 +312,6 @@
             </div>
         </div>
     </div>
-    </div>
-    <script src="/assets/vendors/js/vendor.bundle.base.js"></script>
-    <script src="/assets/vendors/chart.js/Chart.min.js"></script>
-    <script src="/assets/vendors/progressbar.js/progressbar.min.js"></script>
-    <script src="/assets/vendors/jvectormap/jquery-jvectormap.min.js"></script>
-    <script src="/assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-    <script src="/assets/vendors/owl-carousel-2/owl.carousel.min.js"></script>
-    <script src="/assets/js/off-canvas.js"></script>
-    <script src="/assets/js/hoverable-collapse.js"></script>
-    <script src="/assets/js/misc.js"></script>
-    <script src="/assets/js/settings.js"></script>
-    <script src="/assets/js/todolist.js"></script>
-    <script src="/assets/js/dashboard.js"></script>
 </body>
 <style>
     .sort-button {
@@ -398,7 +374,6 @@
     function onFilter() {
         filterform.submit();
     }
-
 </script>
 
 </html>

@@ -20,7 +20,7 @@ class ProjectController
     public function project()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            $viewcustomer = $this->customerService->getCustomer();
+            $viewcustomer = $this->customerService->getcustomers();
             $users = $this->projectService->getUser();
             $viewtags = $this->projectService->getTags();
             echo $this->view->render("createproject.php", [
@@ -39,6 +39,7 @@ class ProjectController
     }
     public function projectView(array $params = [])
     {
+
         $page = isset($_GET['p']) ? (int) $_GET['p'] : 1;
         $limit = 3;
         $offset = (int) ($page - 1) * $limit;
@@ -50,17 +51,13 @@ class ProjectController
                 $direction = $_POST['direction'];
             }
             if ($_POST['s']) {
-                [$viewproject, $count] = $this->projectService->searchsort($_POST['s'], $order_by, $direction, (int) $limit, (int) $offset);
-            } else {
-                [$viewproject, $count] = $this->projectService->searchsort(order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
+                [$viewproject, $count] = $this->projectService->getProject(searchTerm: $_POST['s'], order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
             }
             if (array_key_exists('status', $_POST)) {
-                if ($_POST['s']) {
-                    [$viewproject, $count] = $this->projectService->getProject($_POST['status'], $_POST['s'], $order_by, $direction, (int) $limit, (int) $offset);
-                } else {
-                    [$viewproject, $count] = $this->projectService->getProject($_POST['status'], '', $order_by, $direction, (int) $limit, (int) $offset);
-                }
-
+                [$viewproject, $count] = $this->projectService->getProject($_POST['status'], '', $order_by, $direction, (int) $limit, (int) $offset);
+            }
+            if ($_POST['s'] == '' && !array_key_exists('status', $_POST)) {
+                [$viewproject, $count] = $this->projectService->getProject(order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
             }
         } else {
             [$viewproject, $count] = $this->projectService->getProject([], '', order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);

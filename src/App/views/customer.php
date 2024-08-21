@@ -32,7 +32,7 @@
 
             $countries = [];
             if (array_key_exists('country', $_POST)) {
-              $country = array_merge($countries, $_POST['country']);
+              $countries = $_POST['country'];
             } ?>
 
 
@@ -46,7 +46,7 @@
                 <div class="dropdown-menu" aria-labelledby="filterDropdown">
                   <!-- Parent Item 1 -->
                   <div class="dropdown-item">
-                    <input type="checkbox" name="customers[]" value="cutomers"> Customers
+                    <input type="checkbox" name="selectCustomers[]" value="cutomers"> Customers
                     <div class="sub-items">
 
                       <?php foreach ($customers as $c): ?>
@@ -64,7 +64,7 @@
                   <!-- Parent Item 2 -->
 
                   <div class="dropdown-item">
-                    <input type="checkbox" name="countries[]" value="country"> Country
+                    <input type="checkbox" name="selectCountries[]" value="country"> Country
                     <div class="sub-items">
                       <?php $country = ['India', 'USA', 'Canada', 'Russia', 'Maxico']; ?>
                       <?php foreach ($country as $o): ?>
@@ -100,9 +100,7 @@
               <?php endforeach; ?>
             <?php endif; ?>
           </form>
-
-          <?php //dd($countries); ?>
-
+          <?php //dd(1===01); ?>
           <div class="col-12 grid-margin stretch-card">
             <div class="card corona-gradient-card position-relative">
               <div class="card-body py-0 px-0 px-sm-3" style="background-color:#191C24;">
@@ -113,11 +111,7 @@
                         <div class="card-body">
                           <h4 class="card-title">Customers</h4>
                           <div class="table-responsive">
-
-
-
                             <form id="form" method="POST">
-
                               <?php include $this->resolve('partials/_csrf.php'); ?>
                               <table class="table">
                                 <thead>
@@ -161,7 +155,6 @@
                                 </thead>
                                 <tbody>
                                   <?php foreach ($viewcustomer as $p): ?>
-
                                     <tr>
                                       <td>
                                         <div class="form-check form-check-muted m-0">
@@ -173,7 +166,6 @@
                                       </td>
                                       <?php foreach ($p as $field => $value): ?>
                                         <?php if ($field != "id" && $field != "created_at" && $field != "updated_at"): ?>
-
                                           <td><?php echo e($value); ?></td>
                                         <?php endif; ?>
                                       <?php endforeach; ?>
@@ -219,24 +211,23 @@
       </div>
     </div>
   </div>
-  </div>
-  <script src="/assets/vendors/js/vendor.bundle.base.js"></script>
-  <script src="/assets/vendors/chart.js/Chart.min.js"></script>
-  <script src="/assets/vendors/progressbar.js/progressbar.min.js"></script>
-  <script src="/assets/vendors/jvectormap/jquery-jvectormap.min.js"></script>
-  <script src="/assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-  <script src="/assets/vendors/owl-carousel-2/owl.carousel.min.js"></script>
-  <script src="/assets/js/off-canvas.js"></script>
-  <script src="/assets/js/hoverable-collapse.js"></script>
-  <script src="/assets/js/misc.js"></script>
-  <script src="/assets/js/settings.js"></script>
-  <script src="/assets/js/todolist.js"></script>
-  <script src="/assets/js/dashboard.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
   <script>
     $(document).ready(function () {
+      // Select/Deselect all checkboxes
       $("#selectAll").click(function () {
-        $("input[type='checkbox']").prop('checked', this.checked);
+        $("input[name='ids[]']").prop('checked', this.checked);
+      });
+
+      // Select/Deselect checkboxes in the Customers group
+      $("input[name='selectCustomers[]']").click(function () {
+        $("input[name='company[]']").prop('checked', this.checked);
+      });
+
+      // Select/Deselect checkboxes in the Countries group
+      $("input[name='selectCountries[]']").click(function () {
+        $("input[name='country[]']").prop('checked', this.checked);
       });
     });
 
@@ -292,6 +283,7 @@
 <style>
   body {
     font-family: Arial, sans-serif;
+    color: white;
   }
 
   .dropdown {
@@ -327,16 +319,19 @@
     color: white;
   }
 
+  .dropdown-item:hover {
+    color: #3498db;
+    /* Change this to your desired hover color */
+    background-color: #444;
+    /* Optional: Change background color on hover */
+  }
+
   .sub-items {
     display: none;
     margin-left: 20px;
     background-color: #333;
     padding: 5px;
     border-radius: 5px;
-  }
-
-  .dropdown-item:hover .sub-items {
-    display: block;
   }
 
   .sub-items label {
@@ -356,10 +351,38 @@
     width: 100%;
     border-radius: 5px;
   }
-
-  .submit-btn {
-    background-color: #2980b9;
-  }
 </style>
+<script>document.addEventListener('DOMContentLoaded', function () {
+    // Toggle the sub-items when a dropdown-item is clicked
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+    dropdownItems.forEach(item => {
+      item.addEventListener('click', function (e) {
+        e.stopPropagation(); // Prevent the event from bubbling up
+        const subItems = this.querySelector('.sub-items');
+        if (subItems) {
+          // Toggle the visibility of sub-items
+          const isVisible = subItems.style.display === 'block';
+          subItems.style.display = isVisible ? 'none' : 'block';
+        }
+      });
+    });
+
+    // Close the dropdown menu when clicking outside
+    window.addEventListener('click', function (e) {
+      dropdownItems.forEach(item => {
+        const subItems = item.querySelector('.sub-items');
+        if (subItems) {
+          subItems.style.display = 'none';
+        }
+      });
+    });
+
+    // Prevent the dropdown from closing when clicking inside it
+    document.querySelector('.dropdown-menu').addEventListener('click', function (e) {
+      e.stopPropagation();
+    });
+  });
+</script>
 
 </html>

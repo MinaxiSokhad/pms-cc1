@@ -69,16 +69,15 @@ class CustomerController
     // }
     public function customerView(array $params = [])
     {
-        // echo "<pre>";
-        // print_r($_REQUEST);
-        // die();
-        $page = isset($_GET['p']) ? (int) $_GET['p'] : 1;
-        // $page = (int) $page;
+
+
+        $page = isset($_POST['p']) ? (int) $_POST['p'] : 1;
         $limit = 3;
         $offset = (int) ($page - 1) * $limit;
         $name = explode("_", $_POST["sort"] ?? 'id_desc');
         $viewcustomer = [];
         $count = 0;
+        // dd($_POST['p']);
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             if ($_POST['s']) {
@@ -90,7 +89,7 @@ class CustomerController
                 [$viewcustomer, $count] = $this->customerService->getCustomer($_POST['company'], 'company', '', $name[0], $name[1], (int) $limit, (int) $offset);
 
             }
-            if (array_key_exists('country', $_POST)) {
+            if (array_key_exists("country", $_POST)) {
 
                 [$viewcustomer, $count] = $this->customerService->getCustomer($_POST['country'], 'country', '', $name[0], $name[1], (int) $limit, (int) $offset);
 

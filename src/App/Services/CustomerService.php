@@ -26,7 +26,13 @@ class CustomerService
                 $names[] = (string) $i;
             }
             $name = implode("','", $names);
-            $filter .= " AND $column IN ('$name')";
+            if ($_POST['company']) {
+                $filter .= " AND $column IN ('$name')";
+            }
+            if ($_POST['country']) {
+                $filter .= " AND $column IN ('$name')";
+            }
+
 
         } else if ($searchTerm != '') {
 
@@ -38,7 +44,7 @@ class CustomerService
             $query . $where . $filter . $search . $order,
             $param
         )->findAll();
-
+        // dd($query . $where . $filter . $search . $order);
         $count = $this->db->query("SELECT COUNT(*) FROM customers")->count();
         return [$viewcustomer, $count];
         if (empty($name)) {
@@ -59,24 +65,6 @@ class CustomerService
             $where = "";
             return $this->db->query("SELECT * FROM customers" . $where)->findAll();
         }
-    }
-
-    public function searchSortCustomer(string $searchTerm, string $order_by = 'id', string $direction = 'desc', int $limit = 3, int $offset = 0)
-    {
-        // $searchTerm = addcslashes($_POST['s'] ?? '', '%_'); //search any character or special character like %
-        $param = [];
-        $viewcustomer = [];
-        $param = ['search' => "%{$searchTerm}%"];
-        // $pagination = "";
-        $pagination = " LIMIT " . $limit . " OFFSET " . $offset;
-        $viewcustomer = ($this->db->query(
-            "SELECT * FROM customers 
-             WHERE company LIKE :search OR website LIKE :search OR email LIKE :search OR phone LIKE :search OR country LIKE :search OR address LIKE :search 
-             ORDER BY " . $order_by . " " . $direction . $pagination,
-            $param
-        )->findAll());
-        $count = $this->db->query("SELECT COUNT(*) FROM customers")->count();
-        return [$viewcustomer, $count];
     }
     public function create(array $formData)
     {
