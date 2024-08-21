@@ -1,8 +1,10 @@
 <!-- Previous Page Link -->
 <div style="text-align: center;">
-    <form action="" method="POST" class="mt-2">
+    <form action="" method="GET" class="mt-2">
         <!-- Preserve other query parameters in the form action -->
-        <input type="hidden" name="<?php echo e($_POST); ?>" value="<?php echo e($_POST['p'] ?? 1); ?>">
+
+        <input type="hidden" name="<?php echo e($_GET); ?>" value="<?php echo e($_GET['p'] ?? 1); ?>">
+
 
         <?php if ($currentPage > 1): ?>
             <a href="?p=<?php echo $currentPage - 1; ?>"
@@ -42,5 +44,5 @@
             <?php endfor; ?>
         </select>
     </form>
-    <?php //dd($_POST['p']); ?>
+    <?php //dd($_GET['p']); ?>
 </div>
