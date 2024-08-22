@@ -16,91 +16,87 @@
       <div class="main-panel">
         <div class="content-wrapper">
           <!-- Filter Dropdown -->
-          <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search" action="/customer" id="filterform" method="POST">
-            <?php include $this->resolve('partials/_csrf.php'); ?>
+          <?php include $this->resolve("partials/_search.php"); ?>
+          <?php
+          $companies = [];
+          if (array_key_exists('company', $_POST)) {
+            $companies = $_POST['company']; // Use companies from POST if available
+          }
 
-            <input type="text" name="s" value="<?php echo e($_POST['s'] ?? ''); ?>" class="form-control"
-              placeholder="Search...">
-            <button type="button" onclick="onSearch()" style="color: black;">
-              Search
-            </button>
-            <?php
-            $companies = [];
-            if (array_key_exists('company', $_POST)) {
-              $companies = $_POST['company']; // Use companies from POST if available
-            }
-
-            $countries = [];
-            if (array_key_exists('country', $_POST)) {
-              $countries = $_POST['country'];
-            } ?>
+          $countries = [];
+          if (array_key_exists('country', $_POST)) {
+            $countries = $_POST['country'];
+          } ?>
 
 
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="dropdown">
-                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="filterDropdown"
-                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="mdi mdi-filter-variant"></i> Filter
-                </button>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="dropdown">
+              <button class="btn btn-outline-primary dropdown-toggle" type="button" id="filterDropdown"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="mdi mdi-filter-variant"></i> Filter
+              </button>
 
-                <div class="dropdown-menu" aria-labelledby="filterDropdown">
-                  <!-- Parent Item 1 -->
-                  <div class="dropdown-item">
-                    <input type="checkbox" name="selectCustomers[]" value="cutomers"> Customers
-                    <div class="sub-items">
+              <div class="dropdown-menu" aria-labelledby="filterDropdown">
+                <!-- Parent Item 1 -->
+                <div class="dropdown-item">
+                  <input type="checkbox" name="selectCustomers[]" value="cutomers"> Customers
+                  <div class="sub-items">
 
-                      <?php foreach ($customers as $c): ?>
-                        <?php if (in_array($c['company'], $companies)): ?>
-                          <label><input type="checkbox" name="company[]" value="<?php echo $c['company']; ?>"
-                              checked><?php echo $c['company']; ?></label>
-                        <?php else: ?>
-                          <label><input type="checkbox" name="company[]"
-                              value="<?php echo $c['company']; ?>"><?php echo $c['company']; ?></label>
-                        <?php endif; ?>
-                      <?php endforeach; ?>
-                    </div>
+                    <?php foreach ($customers as $c): ?>
+                      <?php if (in_array($c['company'], $companies)): ?>
+                        <label><input type="checkbox" name="company[]" value="<?php echo $c['company']; ?>"
+                            checked><?php echo $c['company']; ?></label>
+                      <?php else: ?>
+                        <label><input type="checkbox" name="company[]"
+                            value="<?php echo $c['company']; ?>"><?php echo $c['company']; ?></label>
+                      <?php endif; ?>
+                    <?php endforeach; ?>
                   </div>
-
-                  <!-- Parent Item 2 -->
-
-                  <div class="dropdown-item">
-                    <input type="checkbox" name="selectCountries[]" value="country"> Country
-                    <div class="sub-items">
-                      <?php $country = ['India', 'USA', 'Canada', 'Russia', 'Maxico']; ?>
-                      <?php foreach ($country as $o): ?>
-                        <?php if ($_SERVER['REQUEST_METHOD'] == "POST" && in_array($o, $countries)): ?>
-
-                          <label><input type="checkbox" name="country[]" value="<?php echo (string) $o; ?>"
-                              checked><?php echo (string) $o; ?></label>
-                        <?php else: ?>
-                          <label><input type="checkbox" name="country[]"
-                              value="<?php echo (string) $o; ?>"><?php echo (string) $o; ?></label>
-                        <?php endif; ?>
-                      <?php endforeach; ?>
-                    </div>
-                  </div>
-
-                  <!-- Add more items and sub-items as needed -->
-                  <button type="button" onclick="onFilter()" class="submit-btn">Apply Filters</button>
                 </div>
+
+                <!-- Parent Item 2 -->
+
+                <div class="dropdown-item">
+                  <input type="checkbox" name="selectCountries[]" value="country"> Country
+                  <div class="sub-items">
+                    <?php $country = ['India', 'USA', 'Canada', 'Russia', 'Maxico']; ?>
+                    <?php foreach ($country as $o): ?>
+                      <?php if ($_SERVER['REQUEST_METHOD'] == "POST" && in_array($o, $countries)): ?>
+
+                        <label><input type="checkbox" name="country[]" value="<?php echo (string) $o; ?>"
+                            checked><?php echo (string) $o; ?></label>
+                      <?php else: ?>
+                        <label><input type="checkbox" name="country[]"
+                            value="<?php echo (string) $o; ?>"><?php echo (string) $o; ?></label>
+                      <?php endif; ?>
+                    <?php endforeach; ?>
+                  </div>
+                </div>
+
+                <!-- Add more items and sub-items as needed -->
+                <button type="button" onclick="form_submit()" class="submit-btn">Apply Filters</button>
               </div>
             </div>
-            <input type="hidden" id="search_input" name="search_input" value="<?php echo e($_POST['s'] ?? ''); ?>" />
-            <input type="hidden" id="sortinput" name="sort" value="<?php echo e($_POST['sort'] ?? 'id_desc') ?>" />
-            <?php if (array_key_exists('company', $_POST)):
-              foreach ($_POST['company'] as $companies): ?>
-                <input type="hidden" id="_filter_company_[]" name="_filter_company_[]"
-                  value="<?php echo e($companies ?? ''); ?>">
-              <?php endforeach; ?>
-            <?php endif; ?>
-            <?php if (array_key_exists('country', $_POST)):
-              foreach ($_POST['country'] as $countries): ?>
-                <input type="hidden" id="_filter_country_[]" name="_filter_country_[]"
-                  value="<?php echo e($countries ?? ''); ?>">
-              <?php endforeach; ?>
-            <?php endif; ?>
+          </div>
+          <input type="hidden" id="p" name="p" value="<?php echo e($_POST['p'] ?? 1); ?>">
+          <input type="hidden" id="s" name="s" value="<?php echo e($_POST['s'] ?? ''); ?>" />
+          <input type="hidden" id="order_by" name="order_by" value="<?php echo e($_POST['order_by'] ?? 'id') ?>" />
+          <input type="hidden" id="direction" name="direction" value="<?php echo e($_POST['direction'] ?? 'desc') ?>" />
+          <?php if (array_key_exists('company', $_POST)):
+            foreach ($_POST['company'] as $companies): ?>
+              <input type="hidden" id="_filter_company_[]" name="_filter_company_[]"
+                value="<?php echo e($companies ?? ''); ?>">
+            <?php endforeach; ?>
+          <?php endif; ?>
+          <?php if (array_key_exists('country', $_POST)):
+            foreach ($_POST['country'] as $countries): ?>
+              <input type="hidden" id="_filter_country_[]" name="_filter_country_[]"
+                value="<?php echo e($countries ?? ''); ?>">
+            <?php endforeach; ?>
+          <?php endif; ?>
           </form>
-          <?php //dd(1===01); ?>
+          <?php //dd(1===01); 
+          //dd($_POST['p']); ?>
           <div class="col-12 grid-margin stretch-card">
             <div class="card corona-gradient-card position-relative">
               <div class="card-body py-0 px-0 px-sm-3" style="background-color:#191C24;">
@@ -125,29 +121,29 @@
                                       </div>
                                     </th>
                                     <th>
-                                      <a href="#" class="sort-button" onclick="sortBy('company_asc')">▲</a>
+                                      <a href="#" class="sort-button" onclick="sortBy('company','asc')">▲</a>
                                       Company Name
-                                      <a href="#" class="sort-button" onclick="sortBy('company_desc')">▼</a>
+                                      <a href="#" class="sort-button" onclick="sortBy('company','desc')">▼</a>
                                     </th>
-                                    <th> <a href="#" class="sort-button" onclick="sortBy('website_asc')">▲</a>
+                                    <th> <a href="#" class="sort-button" onclick="sortBy('website','asc')">▲</a>
                                       Website
-                                      <a href="#" class="sort-button" onclick="sortBy('website_desc')">▼</a>
+                                      <a href="#" class="sort-button" onclick="sortBy('website','desc')">▼</a>
                                     </th>
-                                    <th><a href="#" class="sort-button" onclick="sortBy('email_asc')">▲</a>
+                                    <th><a href="#" class="sort-button" onclick="sortBy('email','asc')">▲</a>
                                       Email
-                                      <a href="#" class="sort-button" onclick="sortBy('email_desc')">▼</a>
+                                      <a href="#" class="sort-button" onclick="sortBy('email','desc')">▼</a>
                                     </th>
-                                    <th><a href="#" class="sort-button" onclick="sortBy('phone_asc')">▲</a>
+                                    <th><a href="#" class="sort-button" onclick="sortBy('phone','asc')">▲</a>
                                       Phone
-                                      <a href="#" class="sort-button" onclick="sortBy('phone_desc')">▼</a>
+                                      <a href="#" class="sort-button" onclick="sortBy('phone','desc')">▼</a>
                                     </th>
-                                    <th><a href="#" class="sort-button" onclick="sortBy('country_asc')">▲</a>
+                                    <th><a href="#" class="sort-button" onclick="sortBy('country','asc')">▲</a>
                                       Country
-                                      <a href="#" class="sort-button" onclick="sortBy('country_desc')">▼</a>
+                                      <a href="#" class="sort-button" onclick="sortBy('country','desc')">▼</a>
                                     </th>
-                                    <th><a href="#" class="sort-button" onclick="sortBy('address_asc')">▲</a>
+                                    <th><a href="#" class="sort-button" onclick="sortBy('address','asc')">▲</a>
                                       Address
-                                      <a href="#" class="sort-button" onclick="sortBy('address_desc')">▼</a>
+                                      <a href="#" class="sort-button" onclick="sortBy('address','desc')">▼</a>
                                     </th>
                                     <th>Edit</th>
                                     <th>Delete</th>
@@ -253,18 +249,6 @@
         form.action = "/deletecustomer/" + customerid;
         form.submit();
       }
-    }
-    const filterform = document.getElementById('filterform');
-
-    function sortBy(sortValue = 'id_asc') {
-      document.getElementById('sortinput').value = sortValue;
-      filterform.submit();
-    }
-    function onSearch() {
-      filterform.submit();
-    }
-    function onFilter() {
-      filterform.submit();
     }
   </script>
 

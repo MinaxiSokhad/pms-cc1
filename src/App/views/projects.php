@@ -92,61 +92,53 @@
                 </div>
                 <div class="row">
                     <!-- Filter Dropdown -->
-                    <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search" action="/projects" id="filterform"
-                        method="POST">
-                        <?php include $this->resolve('partials/_csrf.php'); ?>
-                        <input type="text" name="s" value="<?php echo e($_POST['s'] ?? ''); ?>" class="form-control"
-                            placeholder="Search...">
-                        <button type="button" onclick="onSearch()" style="color: black;">
-                            Search
-                        </button>
-                        <?php
-                        $statusfilter = [];
-                        if (array_key_exists('status', $_POST)) {
-                            $status = array_merge($statusfilter, $_POST['status']);
-                        }
-                        ?>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="dropdown">
-                                <button class="btn btn-outline-primary dropdown-toggle" type="button"
-                                    id="filterDropdown" data-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    <i class="mdi mdi-filter-variant"></i> Filter
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="filterDropdown">
-                                    <div class="sub-items">
-                                        <?php
-                                        $status = ['S' => 'Not Started', 'H' => 'On Hold', 'P' => 'In Progress', 'C' => 'Cancelled', 'F' => 'Finished'];
+                    <?php include $this->resolve("partials/_search.php"); ?>
+                    <?php
+                    $statusfilter = [];
+                    if (array_key_exists('status', $_POST)) {
+                        $status = array_merge($statusfilter, $_POST['status']);
+                    }
+                    ?>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="filterDropdown"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="mdi mdi-filter-variant"></i> Filter
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="filterDropdown">
+                                <div class="sub-items">
+                                    <?php
+                                    $status = ['S' => 'Not Started', 'H' => 'On Hold', 'P' => 'In Progress', 'C' => 'Cancelled', 'F' => 'Finished'];
+                                    ?>
+                                    <?php foreach ($status as $s => $value):
                                         ?>
-                                        <?php foreach ($status as $s => $value):
-                                            ?>
-                                            <?php if ($_SERVER['REQUEST_METHOD'] == "POST" && in_array($s, $statusfilter)): ?>
-                                                <label><input type="checkbox" name="status[]" value="<?php echo (string) $s;
-                                                ?>" checked><?php echo (string) $value; ?></label>
+                                        <?php if ($_SERVER['REQUEST_METHOD'] == "POST" && in_array($s, $statusfilter)): ?>
+                                            <label><input type="checkbox" name="status[]" value="<?php echo (string) $s;
+                                            ?>" checked><?php echo (string) $value; ?></label>
 
-                                            <?php else: ?>
-                                                <label><input type="checkbox" name="status[]" value="<?php echo (string) $s;
-                                                ?>">
-                                                    <?php echo (string) $value; ?></label>
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
-                                    </div>
-
-                                    <!-- Add more items and sub-items as needed -->
-                                    <button type="button" onclick="onFilter()" class="submit-btn">Apply Filters</button>
+                                        <?php else: ?>
+                                            <label><input type="checkbox" name="status[]" value="<?php echo (string) $s;
+                                            ?>">
+                                                <?php echo (string) $value; ?></label>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
                                 </div>
+
+                                <!-- Add more items and sub-items as needed -->
+                                <button type="button" onclick="form_submit()" class="submit-btn">Apply Filters</button>
                             </div>
                         </div>
-                        <input type="hidden" id="search_input" name="search_input"
-                            value="<?php echo e($_POST['s'] ?? ''); ?>" />
-                        <input type="hidden" id="order_by" name="order_by" value="id" />
-                        <input type="hidden" id="direction" name="direction" value="desc" />
-                        <?php if (array_key_exists('status', $_POST)):
-                            foreach ($_POST['status'] as $statusfilter): ?>
-                                <input type="hidden" id="_filter_status_[]" name="_filter_status_[]"
-                                    value="<?php echo e($status ?? ''); ?>">
-                            <?php endforeach; ?>
-                        <?php endif; ?>
+                    </div>
+                    <input type="hidden" id="search_input" name="search_input"
+                        value="<?php echo e($_POST['s'] ?? ''); ?>" />
+                    <input type="hidden" id="order_by" name="order_by" value="id" />
+                    <input type="hidden" id="direction" name="direction" value="desc" />
+                    <?php if (array_key_exists('status', $_POST)):
+                        foreach ($_POST['status'] as $statusfilter): ?>
+                            <input type="hidden" id="_filter_status_[]" name="_filter_status_[]"
+                                value="<?php echo e($status ?? ''); ?>">
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                     </form>
                     <?php //dd($viewproject); ?>
                     <div class="col-xl-11 col-sm-6 col-9 grid-margin stretch-card">
@@ -358,22 +350,8 @@
         }
     }
 
-    const filterform = document.getElementById('filterform');
 
-    function sortBy(order_by = 'id', direction = 'desc') {
-        const field_order_by = document.getElementById('order_by');
-        const field_direction = document.getElementById('direction');
-        field_order_by.value = order_by;
-        field_direction.value = direction;
-        console.log(order_by, direction);
-        filterform.submit();
-    }
-    function onSearch() {
-        filterform.submit();
-    }
-    function onFilter() {
-        filterform.submit();
-    }
+
 </script>
 
 </html>
