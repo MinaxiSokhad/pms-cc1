@@ -41,7 +41,7 @@ class CustomerService
         }
 
         $viewcustomer = $this->db->query(
-            $query . $where . $filter . $search . $order,
+            $query . $where . $search . $filter . $order,
             $param
         )->findAll();
         // dd($query . $where . $filter . $search . $order);

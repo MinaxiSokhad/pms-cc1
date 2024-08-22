@@ -16,6 +16,7 @@
             <?php include $this->resolve("partials/_navbar.php"); ?>
             <?php include $this->resolve('partials/_csrf.php'); ?>
             <div class="main-panel">
+
                 <br />
                 <h2>Project Summary</h2>
                 <div class="row">
@@ -90,7 +91,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="content-wrapper">
                     <!-- Filter Dropdown -->
                     <?php include $this->resolve("partials/_search.php"); ?>
                     <?php
@@ -106,26 +107,28 @@
                                 <i class="mdi mdi-filter-variant"></i> Filter
                             </button>
                             <div class="dropdown-menu" aria-labelledby="filterDropdown">
-                                <div class="sub-items">
-                                    <?php
-                                    $status = ['S' => 'Not Started', 'H' => 'On Hold', 'P' => 'In Progress', 'C' => 'Cancelled', 'F' => 'Finished'];
-                                    ?>
-                                    <?php foreach ($status as $s => $value):
-                                        ?>
-                                        <?php if ($_SERVER['REQUEST_METHOD'] == "POST" && in_array($s, $statusfilter)): ?>
-                                            <label><input type="checkbox" name="status[]" value="<?php echo (string) $s;
-                                            ?>" checked><?php echo (string) $value; ?></label>
+                                <div class="dropdown-item">
+                                    <input type="checkbox" name="selectStatus[]" value="status"> Status
+                                    <div class="sub-items">
+                                        <?php $status = ['S' => 'Not Started', 'H' => 'On Hold', 'P' => 'In Progress', 'C' => 'Cancelled', 'F' => 'Finished']; ?>
+                                        <?php foreach ($status as $s => $value):
+                                            ?>
+                                            <?php if ($_SERVER['REQUEST_METHOD'] == "POST" && in_array($s, $statusfilter)): ?>
+                                                <label><input type="checkbox" name="status[]" value="<?php echo (string) $s;
+                                                ?>" checked><?php echo (string) $value; ?></label>
 
-                                        <?php else: ?>
-                                            <label><input type="checkbox" name="status[]" value="<?php echo (string) $s;
-                                            ?>">
-                                                <?php echo (string) $value; ?></label>
-                                        <?php endif; ?>
-                                    <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <label><input type="checkbox" name="status[]" value="<?php echo (string) $s;
+                                                ?>">
+                                                    <?php echo (string) $value; ?></label>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    </div>
                                 </div>
 
                                 <!-- Add more items and sub-items as needed -->
-                                <button type="button" onclick="form_submit()" class="submit-btn">Apply Filters</button>
+                                <button type="button" onclick="form_submit()" class="submit-btn">Apply
+                                    Filters</button>
                             </div>
                         </div>
                     </div>
@@ -297,7 +300,9 @@
                         </div>
                     </div>
                 </div>
+
                 <?php include $this->resolve("partials/_footer.php"); ?>
+
             </div>
         </div>
     </div>
@@ -313,12 +318,121 @@
         font-size: 16px;
     }
 </style>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        color: white;
+    }
 
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-toggle {
+        background-color: #3498db;
+        color: white;
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        background-color: black;
+        min-width: 220px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+    .dropdown-item {
+        display: block;
+        padding: 8px 0;
+        cursor: pointer;
+        color: white;
+    }
+
+    .dropdown-item:hover {
+        color: #3498db;
+        /* Change this to your desired hover color */
+        background-color: #444;
+        /* Optional: Change background color on hover */
+    }
+
+    .sub-items {
+        display: none;
+        margin-left: 20px;
+        background-color: #333;
+        padding: 5px;
+        border-radius: 5px;
+    }
+
+    .sub-items label {
+        display: block;
+        padding: 5px 0;
+        cursor: pointer;
+        color: white;
+    }
+
+    .submit-btn {
+        background-color: #3498db;
+        color: white;
+        padding: 8px;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+        width: 100%;
+        border-radius: 5px;
+    }
+</style>
+<script>document.addEventListener('DOMContentLoaded', function () {
+        // Toggle the sub-items when a dropdown-item is clicked
+        const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', function (e) {
+                e.stopPropagation(); // Prevent the event from bubbling up
+                const subItems = this.querySelector('.sub-items');
+                if (subItems) {
+                    // Toggle the visibility of sub-items
+                    const isVisible = subItems.style.display === 'block';
+                    subItems.style.display = isVisible ? 'none' : 'block';
+                }
+            });
+        });
+
+        // Close the dropdown menu when clicking outside
+        window.addEventListener('click', function (e) {
+            dropdownItems.forEach(item => {
+                const subItems = item.querySelector('.sub-items');
+                if (subItems) {
+                    subItems.style.display = 'none';
+                }
+            });
+        });
+
+        // Prevent the dropdown from closing when clicking inside it
+        document.querySelector('.dropdown-menu').addEventListener('click', function (e) {
+            e.stopPropagation();
+        });
+    });
+</script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
+        // Select/Deselect all checkboxes
         $("#selectAll").click(function () {
-            $("input[type='checkbox']").prop('checked', this.checked);
+            $("input[name='ids[]']").prop('checked', this.checked);
+        });
+
+        // Select/Deselect checkboxes in the Customers group
+        $("input[name='selectStatus[]']").click(function () {
+            $("input[name='status[]']").prop('checked', this.checked);
         });
     });
 

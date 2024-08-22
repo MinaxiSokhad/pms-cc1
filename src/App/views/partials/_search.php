@@ -1,7 +1,7 @@
 <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search" action="" id="filterform" method="POST">
     <?php include $this->resolve('partials/_csrf.php'); ?>
 
-    <input type="text" name="s" value="<?php echo e($_POST['s'] ?? ''); ?>" class="form-control"
+    <input type="text" name="s" style="color:white;" value="<?php echo e($_POST['s'] ?? ''); ?>" class="form-control"
         placeholder="Search...">
     <button type="button" onclick="form_submit()" style="color: black;">
         Search

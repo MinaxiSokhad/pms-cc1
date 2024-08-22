@@ -148,6 +148,9 @@ class ProjectService
             OR user.name LIKE :search";
             $param = ['search' => "%{$searchTerm}%"];
         }
+        // if (!empty($status) && $searchTerm != '') {
+        //     $search .= $search . $filter;
+        // }
         $viewproject = $this->db->query(
             $query . $where . $search . $filter . $group_by . $order,
             $param

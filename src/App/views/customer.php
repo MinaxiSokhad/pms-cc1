@@ -27,8 +27,6 @@
           if (array_key_exists('country', $_POST)) {
             $countries = $_POST['country'];
           } ?>
-
-
           <div class="d-flex justify-content-between align-items-center">
             <div class="dropdown">
               <button class="btn btn-outline-primary dropdown-toggle" type="button" id="filterDropdown"
@@ -86,11 +84,7 @@
             value="<?php echo e($_POST['company'] ?? ''); ?>">
           <input type="hidden" id="filter_country" name="filter_country"
             value="<?php echo e($_POST['country'] ?? ''); ?>">
-
-
           </form>
-          <?php //dd(1===01); 
-          // dd($_POST['company']); ?>
           <div class="col-12 grid-margin stretch-card">
             <div class="card corona-gradient-card position-relative">
               <div class="card-body py-0 px-0 px-sm-3" style="background-color:#191C24;">
