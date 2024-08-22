@@ -18,16 +18,18 @@ class CustomerController
     public function customerView(array $params = [])
     {
 
-        $page = isset($_POST['p']) ? (int) $_POST['p'] : 1;
+        $page = 1;
         $limit = 3;
-        $offset = (int) ($page - 1) * $limit;
+        $offset = 0;
         $viewcustomer = [];
         $count = 0;
 
         $order_by = 'id';
         $direction = 'desc';
-        // dd($_POST['p']);
+
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $page = isset($_POST['p']) ? (int) $_POST['p'] : 1;
+            $offset = (int) ($page - 1) * $limit;
             if (array_key_exists('order_by', $_POST)) {
                 $order_by = $_POST['order_by'];
                 $direction = $_POST['direction'];
