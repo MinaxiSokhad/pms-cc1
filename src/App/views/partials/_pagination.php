@@ -39,10 +39,5 @@
 </form>
 </div>
 <script>
-    function setPageAndSubmit(page) {
-        // Set the hidden input's value to the selected page
-        document.getElementById('p').value = page;
-        // Submit the form
-        document.getElementById('filterform').submit();
-    }
+
 </script>

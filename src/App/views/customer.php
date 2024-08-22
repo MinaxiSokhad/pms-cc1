@@ -79,24 +79,18 @@
             </div>
           </div>
           <input type="hidden" id="p" name="p" value="<?php echo e($_POST['p'] ?? 1); ?>">
-          <input type="hidden" id="s" name="s" value="<?php echo e($_POST['s'] ?? ''); ?>" />
+          <input type="hidden" id="search_input" name="search_input" value="<?php echo e($_POST['s'] ?? ''); ?>" />
           <input type="hidden" id="order_by" name="order_by" value="<?php echo e($_POST['order_by'] ?? 'id') ?>" />
           <input type="hidden" id="direction" name="direction" value="<?php echo e($_POST['direction'] ?? 'desc') ?>" />
-          <?php if (array_key_exists('company', $_POST)):
-            foreach ($_POST['company'] as $companies): ?>
-              <input type="hidden" id="_filter_company_[]" name="_filter_company_[]"
-                value="<?php echo e($companies ?? ''); ?>">
-            <?php endforeach; ?>
-          <?php endif; ?>
-          <?php if (array_key_exists('country', $_POST)):
-            foreach ($_POST['country'] as $countries): ?>
-              <input type="hidden" id="_filter_country_[]" name="_filter_country_[]"
-                value="<?php echo e($countries ?? ''); ?>">
-            <?php endforeach; ?>
-          <?php endif; ?>
+          <input type="hidden" id="filter_company" name="filter_company"
+            value="<?php echo e($_POST['company'] ?? ''); ?>">
+          <input type="hidden" id="filter_country" name="filter_country"
+            value="<?php echo e($_POST['country'] ?? ''); ?>">
+
+
           </form>
           <?php //dd(1===01); 
-          //dd($_POST['p']); ?>
+          // dd($_POST['company']); ?>
           <div class="col-12 grid-margin stretch-card">
             <div class="card corona-gradient-card position-relative">
               <div class="card-body py-0 px-0 px-sm-3" style="background-color:#191C24;">

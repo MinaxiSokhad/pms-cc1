@@ -129,16 +129,13 @@
                             </div>
                         </div>
                     </div>
+                    <input type="hidden" id="p" name="p" value="<?php echo e($_POST['p'] ?? 1); ?>">
                     <input type="hidden" id="search_input" name="search_input"
                         value="<?php echo e($_POST['s'] ?? ''); ?>" />
                     <input type="hidden" id="order_by" name="order_by" value="id" />
                     <input type="hidden" id="direction" name="direction" value="desc" />
-                    <?php if (array_key_exists('status', $_POST)):
-                        foreach ($_POST['status'] as $statusfilter): ?>
-                            <input type="hidden" id="_filter_status_[]" name="_filter_status_[]"
-                                value="<?php echo e($status ?? ''); ?>">
-                        <?php endforeach; ?>
-                    <?php endif; ?>
+                    <input type="hidden" id="filter_status" name="filter_status"
+                        value="<?php echo e($_POST['status'] ?? ''); ?>">
                     </form>
                     <?php //dd($viewproject); ?>
                     <div class="col-xl-11 col-sm-6 col-9 grid-margin stretch-card">

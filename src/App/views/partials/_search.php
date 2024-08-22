@@ -11,6 +11,12 @@
         function form_submit() {
             filterform.submit();
         }
+        function setPageAndSubmit(page) {
+            // Set the hidden input's value to the selected page
+            document.getElementById('p').value = page;
+            // Submit the form
+            filterform.submit();
+        }
         function sortBy(order_by = 'id', direction = 'desc') {
             const field_order_by = document.getElementById('order_by');
             const field_direction = document.getElementById('direction');

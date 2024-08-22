@@ -28,8 +28,10 @@ class CustomerController
         $direction = 'desc';
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
             $page = isset($_POST['p']) ? (int) $_POST['p'] : 1;
             $offset = (int) ($page - 1) * $limit;
+
             if (array_key_exists('order_by', $_POST)) {
                 $order_by = $_POST['order_by'];
                 $direction = $_POST['direction'];

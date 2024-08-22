@@ -40,17 +40,20 @@ class ProjectController
     public function projectView(array $params = [])
     {
 
-        $page = isset($_GET['p']) ? (int) $_GET['p'] : 1;
+        $page = 1;
         $limit = 3;
-        $offset = (int) ($page - 1) * $limit;
+        $offset = 0;
         $order_by = 'id';
         $direction = 'desc';
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $page = isset($_POST['p']) ? (int) $_POST['p'] : 1;
+            $offset = (int) ($page - 1) * $limit;
             if (array_key_exists('order_by', $_POST)) {
                 $order_by = $_POST['order_by'];
                 $direction = $_POST['direction'];
             }
             if ($_POST['s']) {
+
                 [$viewproject, $count] = $this->projectService->getProject(searchTerm: $_POST['s'], order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
             }
             if (array_key_exists('status', $_POST)) {
