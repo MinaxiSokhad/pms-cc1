@@ -52,7 +52,7 @@
                                                                               </h5>
                                                                         </div>
                 <label for="company">Company<span style="color: red;"> * </span></label>
-                <input class="form-control" style="color:white;" type="text" id="company" name="company" value="<?php echo e($oldFormData['company'] ?? ''); ?>">
+                <input class="form-control" style="background-color:black;color:white;" type="text" id="company" name="company" value="<?php echo e($oldFormData['company'] ?? ''); ?>">
                 <?php if (array_key_exists('company', $errors)): ?>
                     <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                         <?php echo e($errors['company'][0]); ?>
@@ -61,7 +61,7 @@
             </div>
             <div class="form-group">
                 <label for="website">Website<span style="color: red;"> * </span></label>
-                <input class="form-control" style="color:white;" type="url" id="website" name="website" value="<?php echo e($oldFormData['website'] ?? ''); ?>">
+                <input class="form-control" style="background-color:black;color:white;" type="url" id="website" name="website" value="<?php echo e($oldFormData['website'] ?? ''); ?>">
                 <?php if (array_key_exists('website', $errors)): ?>
                     <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                         <?php echo e($errors['website'][0]); ?>
@@ -70,7 +70,7 @@
             </div>
             <div class="form-group">
                 <label for="email">Email<span style="color: red;"> * </span></label>
-                <input class="form-control" style="color:white;" type="email" id="email" name="email" value="<?php echo e($oldFormData['email'] ?? ''); ?>">
+                <input class="form-control" style="background-color:black;color:white;" type="email" id="email" name="email" value="<?php echo e($oldFormData['email'] ?? ''); ?>">
                 <?php if (array_key_exists('email', $errors)): ?>
                     <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                         <?php echo e($errors['email'][0]);?>
@@ -79,7 +79,7 @@
             </div>
             <div class="form-group">
                 <label for="phone">Phone<span style="color: red;"> * </span></label>
-                <input class="form-control" style="color:white;" type="tel" id="phone" name="phone" value="<?php echo e($oldFormData['phone'] ?? ''); ?>">
+                <input class="form-control" style="background-color:black;color:white;" type="tel" id="phone" name="phone" value="<?php echo e($oldFormData['phone'] ?? ''); ?>">
                 <?php if (array_key_exists('phone', $errors)): ?>
                     <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                         <?php echo e($errors['phone'][0]);?>
@@ -88,7 +88,7 @@
             </div>
             <div class="form-group">
                 <label for="phone">Country<span style="color: red;"> * </span></label>
-                <select style="color:white;" class="form-control" id="country" name="country"
+                <select style="background-color:black;color:white;" class="form-control" id="country" name="country"
                     class="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                     <option value="USA">USA</option>
                     <option value="Canada" <?php echo ($oldFormData['country'] ?? '') === 'Canada' ? 'selected' : ''; ?>>
@@ -109,7 +109,7 @@
             </div>
             <div class="form-group">
                 <label for="address">Address <span style="color: red;"> * </span></label>
-                <textarea style="color:white;" class="form-control" id="address" name="address"><?php echo e($oldFormData['address'] ?? ''); ?></textarea>
+                <textarea style="background-color:black;color:white;" class="form-control" id="address" name="address"><?php echo e($oldFormData['address'] ?? ''); ?></textarea>
                 <?php if (array_key_exists('address', $errors)): ?>
                     <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
                         <?php echo e($errors['address'][0]);?>

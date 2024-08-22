@@ -4,7 +4,6 @@
         color: red;
     }
 </style>
-
 <body>
     <div class="container-scroller">
         <!-- partial:partials/_sidebar.html -->

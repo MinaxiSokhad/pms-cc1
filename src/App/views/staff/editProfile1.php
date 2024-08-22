@@ -16,44 +16,43 @@
                             <div class="card corona-gradient-card">
                                 <div class="card-body py-0 px-0 px-sm-3" style="background-color:#191C24; ">
                                     <div class="row align-items-center">
-                                        <div class="container">
-                                            <div class="main-body">
-                                                <div class="card-body">
-                                                    <h2 style="color:white">User Profile</h2>
-                                                </div>
+                                        <div class="container-xl px-4 mt-4">
+                                            <hr class="mt-0 mb-4">
+                                            <div class="row" style="color:white">
+                                                <div class="col-xl-4">
+                                                    <!-- Profile picture card-->
+                                                    <div class="card mb-4 mb-xl-0">
+                                                        <div class="card-header">Profile Picture</div>
+                                                        <?php
+                                                        //   $defaultImage = "https://bootdey.com/img/Content/avatar/avatar7.png";
+                                                        $storage = "/storage/uploads/";
+                                                        $defaultImage = "/storage/uploads/download.png";
+                                                        // $url = "http://192.168.1.30/storage/uploads/";   
+                                                        $profileImage = !empty($profile['image']) ? $storage . $profile['storage_filename'] : $defaultImage;
+                                                        ?>
 
-                                                <div class="row gutters-sm">
-                                                    <div class="col-md-4 mb-3">
-
-                                                        <div class="card" style="color:white">
-                                                            <div class="card-header">Profile Picture</div>
-                                                            <div class="card-body">
-
-                                                                <?php
-                                                                //   $defaultImage = "https://bootdey.com/img/Content/avatar/avatar7.png";
-                                                                $storage = "/storage/uploads/";
-                                                                $defaultImage = "/storage/uploads/download.png";
-                                                                // $url = "http://192.168.1.30/storage/uploads/";   
-                                                                $profileImage = !empty($profile['image']) ? $storage . $profile['storage_filename'] : $defaultImage;
-
-                                                                ?>
-                                                                <div
-                                                                    class="d-flex flex-column align-items-center text-center">
-                                                                    <img src="<?php echo e($profileImage) ?>"
-                                                                        alt="Admin" class="rounded-circle" width="150">
-                                                                    <div class="mt-3">
-                                                                        <h4><?php echo e($profile['name']); ?></h4>
-                                                                    </div>
-                                                                </div>
+                                                        <div class="card-body text-center">
+                                                            <!-- Profile picture image-->
+                                                            <img class="img-account-profile rounded-circle mb-2"
+                                                                src="<?php echo e($profileImage) ?>" />
+                                                            <!-- Profile picture help block-->
+                                                            <div class="card-header" style="color:white">
+                                                                <?php echo e($profile['name']); ?>
                                                             </div>
+                                                            <!-- Profile picture upload button-->
+                                                            <!-- <button class="btn btn-primary" type="button">Upload new image</button> -->
                                                         </div>
-
                                                     </div>
+                                                </div>
+                                                <div class="col-xl-8">
+                                                    <!-- Account details card-->
+                                                    <div class="card mb-4">
+                                                        <div class="card-header">Account Details</div>
+                                                        <div class="card-body">
+                                                            <!-- Profile 2 form data -->
 
-                                                    <div class="col-md-8" style="color:white">
-                                                        <div class="card mb-3">
-                                                            <div class="card-header">Account Details</div>
-                                                            <div class="card-body">
+
+                                                            <div class="col-xl-8">
                                                                 <form id="profile" method="post"
                                                                     enctype="multipart/form-data">
                                                                     <?php include $this->resolve('partials/_csrf.php'); ?>
@@ -75,42 +74,35 @@
 
                                                                         ?>
                                                                     </div>
-                                                                    <div class="row">
-                                                                        <div class="col-sm-3">
-                                                                            <h6 class="mb-0">Full Name<span
-                                                                                    style="color: red;"> *
-                                                                                </span></h6>
+                                                                    <div class="mb-3">
+                                                                        <label class="small mb-1" for="name">Full
+                                                                            Name<span style="color: red;"> *
+                                                                            </span></label>
+                                                                        <input
+                                                                            style="background-color:#2A3038; color:white;"
+                                                                            class="form-control" type="text"
+                                                                            value="<?php echo e($editProfile['name'] ?? ''); ?>"
+                                                                            id="name" name="name">
+                                                                        <div id="nameErr" class="mt-2 p-2 text-red-500"
+                                                                            style="color:red">
                                                                         </div>
-                                                                        <div class="col-sm-9 text-secondary">
-                                                                            <input
-                                                                                style="background-color:#2A3038; color:white;"
-                                                                                class="form-control" type="text"
-                                                                                value="<?php echo e($editProfile['name'] ?? ''); ?>"
-                                                                                id="name" name="name">
-                                                                            <div id="nameErr"
-                                                                                class="mt-2 p-2 text-red-500"
+                                                                        <?php if (array_key_exists('name', $errors)): ?>
+                                                                            <div class="bg-gray-100 mt-2 p-2 text-red-500"
                                                                                 style="color:red">
+                                                                                <?php echo e($errors['name'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                                                                                    ?>
                                                                             </div>
-                                                                            <?php if (array_key_exists('name', $errors)): ?>
-                                                                                <div class="bg-gray-100 mt-2 p-2 text-red-500"
-                                                                                    style="color:red">
-                                                                                    <?php echo e($errors['name'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
-                                                                                        ?>
-                                                                                </div>
-                                                                            <?php endif;
+                                                                        <?php endif;
 
 
-                                                                            ?>
-                                                                        </div>
+                                                                        ?>
                                                                     </div>
-
-                                                                    <div class="row">
-                                                                        <div class="col-sm-3">
-                                                                            <h6 class="mb-0">Email<span
-                                                                                    style="color: red;"> *
-                                                                                </span></h6>
-                                                                        </div>
-                                                                        <div class="col-sm-9 text-secondary">
+                                                                    <!-- Form Row-->
+                                                                    <div class="row gx-3 mb-3">
+                                                                        <div class="col-md-6">
+                                                                            <label class="small mb-1" for="email">Email
+                                                                                <span style="color: red;"> *
+                                                                                </span></label>
                                                                             <input
                                                                                 style="background-color:#2A3038; color:white;"
                                                                                 class="form-control" type="text"
@@ -128,15 +120,11 @@
                                                                                 </div>
                                                                             <?php endif; ?>
                                                                         </div>
-                                                                    </div>
-
-                                                                    <div class="row">
-                                                                        <div class="col-sm-3">
-                                                                            <h6 class="mb-0">Password<span
+                                                                        <div class="col-md-6">
+                                                                            <label class="small mb-1"
+                                                                                for="password">Password <span
                                                                                     style="color: red;"> *
-                                                                                </span></h6>
-                                                                        </div>
-                                                                        <div class="col-sm-9 text-secondary">
+                                                                                </span></label>
                                                                             <input
                                                                                 style="background-color:#2A3038; color:white;"
                                                                                 class="form-control" type="password"
@@ -155,14 +143,13 @@
                                                                             <?php endif; ?>
                                                                         </div>
                                                                     </div>
-
-                                                                    <div class="row">
-                                                                        <div class="col-sm-3">
-                                                                            <h6 class="mb-0">Country<span
+                                                                    <!-- Form Row        -->
+                                                                    <div class="row gx-3 mb-3">
+                                                                        <div class="col-md-6">
+                                                                            <label class="small mb-1"
+                                                                                for="country">Country <span
                                                                                     style="color: red;"> *
-                                                                                </span></h6>
-                                                                        </div>
-                                                                        <div class="col-sm-9 text-secondary">
+                                                                                </span></label>
                                                                             <select
                                                                                 style="background-color:#2A3038; color:white;"
                                                                                 id="country" name="country"
@@ -192,15 +179,10 @@
                                                                                 </div>
                                                                             <?php endif; ?>
                                                                         </div>
-                                                                    </div>
-
-                                                                    <div class="row">
-                                                                        <div class="col-sm-3">
-                                                                            <h6 class="mb-0">State<span
-                                                                                    style="color: red;"> *
-                                                                                </span></h6>
-                                                                        </div>
-                                                                        <div class="col-sm-9 text-secondary">
+                                                                        <div class="col-md-6">
+                                                                            <label class="small mb-1" for="state">State
+                                                                                <span style="color: red;"> *
+                                                                                </span></label>
                                                                             <input
                                                                                 style="background-color:#2A3038; color:white;"
                                                                                 class="form-control" type="text"
@@ -219,14 +201,11 @@
                                                                             <?php endif; ?>
                                                                         </div>
                                                                     </div>
-
-                                                                    <div class="row">
-                                                                        <div class="col-sm-3">
-                                                                            <h6 class="mb-0">City<span
-                                                                                    style="color: red;"> *
-                                                                                </span></h6>
-                                                                        </div>
-                                                                        <div class="col-sm-9 text-secondary">
+                                                                    <div class="row gx-3 mb-3">
+                                                                        <div class="col-md-6">
+                                                                            <label class="small mb-1" for="city">City
+                                                                                <span style="color: red;"> *
+                                                                                </span></label>
                                                                             <input
                                                                                 style="background-color:#2A3038; color:white;"
                                                                                 class="form-control" type="text"
@@ -244,15 +223,11 @@
                                                                                 </div>
                                                                             <?php endif; ?>
                                                                         </div>
-                                                                    </div>
-
-                                                                    <div class="row">
-                                                                        <div class="col-sm-3">
-                                                                            <h6 class="mb-0">Address<span
+                                                                        <div class="col-md-6">
+                                                                            <label class="small mb-1"
+                                                                                for="address">Address <span
                                                                                     style="color: red;"> *
-                                                                                </span></h6>
-                                                                        </div>
-                                                                        <div class="col-sm-9 text-secondary">
+                                                                                </span></label>
                                                                             <textarea
                                                                                 style="background-color:#2A3038; color:white;"
                                                                                 class="form-control" id="address"
@@ -266,14 +241,12 @@
                                                                             <?php endif; ?>
                                                                         </div>
                                                                     </div>
-                                                                    <br>
-                                                                    <div class="row">
-                                                                        <div class="col-sm-3">
-                                                                            <h6 class="mb-0">Gender<span
+                                                                    <div class="row gx-3 mb-3">
+                                                                        <div class="col-md-6">
+                                                                            <label class="small mb-1"
+                                                                                for="gender">Gender <span
                                                                                     style="color: red;"> *
-                                                                                </span></h6>
-                                                                        </div>
-                                                                        <div class="col-sm-9 text-secondary">
+                                                                                </span></label>
                                                                             <select
                                                                                 style="background-color:#2A3038; color:white;"
                                                                                 class="form-control" id="gender"
@@ -297,15 +270,11 @@
                                                                                 </div>
                                                                             <?php endif; ?>
                                                                         </div>
-                                                                    </div>
-
-                                                                    <div class="row">
-                                                                        <div class="col-sm-3">
-                                                                            <h6 class="mb-0">Marital Status<span
+                                                                        <div class="col-md-6">
+                                                                            <label class="small mb-1"
+                                                                                for="maritalStatus">Marital Status <span
                                                                                     style="color: red;"> *
-                                                                                </span></h6>
-                                                                        </div>
-                                                                        <div class="col-sm-9 text-secondary">
+                                                                                </span></label>
                                                                             <select
                                                                                 style="background-color:#2A3038; color:white;"
                                                                                 class="form-control" id="maritalStatus"
@@ -333,14 +302,13 @@
                                                                             <?php endif; ?>
                                                                         </div>
                                                                     </div>
-
-                                                                    <div class="row">
-                                                                        <div class="col-sm-3">
-                                                                            <h6 class="mb-0">Mobile Number<span
+                                                                    <!-- Form Row        -->
+                                                                    <div class="row gx-3 mb-3">
+                                                                        <div class="col-md-6">
+                                                                            <label class="small mb-1"
+                                                                                for="mobileNo">Mobile Number <span
                                                                                     style="color: red;"> *
-                                                                                </span></h6>
-                                                                        </div>
-                                                                        <div class="col-sm-9 text-secondary">
+                                                                                </span></label>
                                                                             <input
                                                                                 style="background-color:#2A3038; color:white;"
                                                                                 class="form-control" type="text"
@@ -359,15 +327,13 @@
                                                                                 </div>
                                                                             <?php endif; ?>
                                                                         </div>
-                                                                    </div>
 
-                                                                    <div class="row">
-                                                                        <div class="col-sm-3">
-                                                                            <h6 class="mb-0">Date Of Birth<span
-                                                                                    style="color: red;"> *
-                                                                                </span></h6>
-                                                                        </div>
-                                                                        <div class="col-sm-9 text-secondary">
+                                                                    </div>
+                                                                    <div class="row gx-3 mb-3">
+                                                                        <div class="col-md-6">
+                                                                            <label class="small mb-1" for="dob">Date of
+                                                                                Birth <span style="color: red;"> *
+                                                                                </span></label>
                                                                             <input
                                                                                 style="background-color:#2A3038; color:white;"
                                                                                 class="form-control" type="date"
@@ -381,15 +347,11 @@
                                                                                 </div>
                                                                             <?php endif; ?>
                                                                         </div>
-                                                                    </div>
-                                                                    <br>
-                                                                    <div class="row">
-                                                                        <div class="col-sm-3">
-                                                                            <h6 class="mb-0">Hire Date<span
+                                                                        <div class="col-md-6">
+                                                                            <label class="small mb-1"
+                                                                                for="hire_date">Hire Date <span
                                                                                     style="color: red;"> *
-                                                                                </span></h6>
-                                                                        </div>
-                                                                        <div class="col-sm-9 text-secondary">
+                                                                                </span></label>
                                                                             <input
                                                                                 style="background-color:#2A3038; color:white;"
                                                                                 class="form-control" type="date"
@@ -405,35 +367,29 @@
                                                                             <?php endif; ?>
                                                                         </div>
                                                                     </div>
-                                                                    <br>
-                                                                    <div class="row">
-                                                                        <div class="col-sm-3">
-                                                                            <h6 class="mb-0">Upload
-                                                                                Image<span style="color: red;"> *
-                                                                                </span></h6>
-                                                                        </div>
-                                                                        <div class="col-sm-9 text-secondary">
-                                                                            <input
-                                                                                style="background-color:#2A3038; color:white;"
-                                                                                class="form-control" type="file"
-                                                                                id="image" name="image">
-                                                                            <?php if (array_key_exists('image', $errors)): ?>
-                                                                                <div class="bg-gray-100 mt-2 p-2 text-red-500"
-                                                                                    style="color:red">
-                                                                                    <?php echo e($errors['image'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
-                                                                                        ?>
-                                                                                </div>
-                                                                            <?php endif; ?>
-                                                                        </div>
-                                                                    </div>
+                                                                    <div class="mb-3">
 
-                                                                    <div class="row">
-                                                                        <div class="col-sm-12">
-                                                                            <button class="btn btn-primary"
-                                                                                type="submit">Save
-                                                                                Changes</button>
-                                                                        </div>
+                                                                        <label class="small mb-1" for="image">Upload
+                                                                            Image <span style="color: red;"> *
+                                                                            </span></label>
+                                                                        <input
+                                                                            style="background-color:#2A3038; color:white;"
+                                                                            class="form-control" type="file" id="image"
+                                                                            name="image">
+                                                                        <?php if (array_key_exists('image', $errors)): ?>
+                                                                            <div class="bg-gray-100 mt-2 p-2 text-red-500"
+                                                                                style="color:red">
+                                                                                <?php echo e($errors['image'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                                                                                    ?>
+                                                                            </div>
+                                                                        <?php endif; ?>
+
                                                                     </div>
+                                                                    <button class="btn btn-primary" type="submit">Save
+                                                                        Changes</button>
+
+                                                                </form>
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -445,18 +401,17 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->
                 <footer class="footer">
                     <div class="d-sm-flex justify-content-center justify-content-sm-between">
                         <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright ©
-                            bootstrapdash.com
-                            2020</span>
+                            bootstrapdash.com 2020</span>
                         <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a
                                 href="https://www.bootstrapdash.com/bootstrap-admin-template/" target="_blank">Bootstrap
-                                admin
-                                templates</a> from Bootstrapdash.com</span>
+                                admin templates</a> from Bootstrapdash.com</span>
                     </div>
                 </footer>
                 <!-- partial -->
@@ -489,3 +444,75 @@
 </body>
 
 </html>
+
+<style>
+    body {
+        margin-top: 20px;
+        background-color: #f2f6fc;
+        color: #69707a;
+    }
+
+    .img-account-profile {
+        height: 10rem;
+    }
+
+    .rounded-circle {
+        border-radius: 50% !important;
+    }
+
+    .card {
+        box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+    }
+
+    .card .card-header {
+        font-weight: 500;
+    }
+
+    .card-header:first-child {
+        border-radius: 0.35rem 0.35rem 0 0;
+    }
+
+    .card-header {
+        padding: 1rem 1.35rem;
+        margin-bottom: 0;
+        background-color: rgba(33, 40, 50, 0.03);
+        border-bottom: 1px solid rgba(33, 40, 50, 0.125);
+    }
+
+    .form-control,
+    .dataTable-input {
+        display: block;
+        width: 100%;
+        padding: 0.875rem 1.125rem;
+        font-size: 0.875rem;
+        font-weight: 400;
+        line-height: 1;
+        color: #69707a;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #c5ccd6;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border-radius: 0.35rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .nav-borders .nav-link.active {
+        color: #0061f2;
+        border-bottom-color: #0061f2;
+    }
+
+    .nav-borders .nav-link {
+        color: #69707a;
+        border-bottom-width: 0.125rem;
+        border-bottom-style: solid;
+        border-bottom-color: transparent;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+</style>
