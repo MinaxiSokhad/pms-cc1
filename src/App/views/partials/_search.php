@@ -11,13 +11,24 @@
         function form_submit() {
             filterform.submit();
         }
-        function setPageAndSubmit(page) {
+        function setPageAndSubmit(page = 1) {
             // Set the hidden input's value to the selected page
-            document.getElementById('p').value = page;
+            // document.getElementById('p').value = page;
             // Submit the form
+            // Select all hidden elements
+            const hiddenElements = document.querySelectorAll('input[type="hidden"]');
+            // Log all hidden element values to the console
+            hiddenElements.forEach(element => {
+                if (element.name == "p") {
+                    element.value = page;
+                } else {
+                    console.log(element.name + ": " + element.value);
+                }
+            });
             filterform.submit();
         }
         function sortBy(order_by = 'id', direction = 'desc') {
+            document.getElementById('p').value = 1;
             const field_order_by = document.getElementById('order_by');
             const field_direction = document.getElementById('direction');
             field_order_by.value = order_by;

@@ -9,6 +9,7 @@ function createArray($value)
 }
 $value = range(1, 100);
 $array = createArray($value);
+$count = count($value);
 foreach ($array as $v) {
 }
 ?>
@@ -23,7 +24,10 @@ foreach ($array as $v) {
                     <?php if ($currentPage - $r >= 1): ?>
                         <a href=?p=<?php echo ($currentPage - $r); ?>><?php echo ($currentPage - $r); ?></a>
                     <?php endif; endforeach; ?>
-
+                <?php foreach (range(2, 1, -1) as $r): ?>
+                    <a href=?p=<?php echo (rand($currentPage + 2, $count)); ?>
+                        style="font-weight: bold;"><?php echo (rand($currentPage + 2, ($count))); ?></a>
+                <?php endforeach; ?>
                 <a href=?p=<?php echo ($currentPage); ?>><?php echo ($currentPage); ?></a>
                 <?php if ($currentPage + 8 < $v): ?>
                     <a href=?p=<?php echo ($currentPage + 7);

@@ -37,24 +37,30 @@ class CustomerController
                 $direction = $_POST['direction'];
             }
             if ($_POST['s']) {
-
-                [$viewcustomer, $count] = $this->customerService->getCustomer(searchTerm: $_POST['s'], order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
+                if (array_key_exists("company", $_POST)) {
+                    [$viewcustomer, $count] = $this->customerService->getCustomer(companyFilter: $_POST['company'], searchTerm: $_POST['s'], order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
+                } else if (array_key_exists("country", $_POST)) {
+                    [$viewcustomer, $count] = $this->customerService->getCustomer(countryFilter: $_POST['country'], searchTerm: $_POST['s'], order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
+                } else {
+                    [$viewcustomer, $count] = $this->customerService->getCustomer(searchTerm: $_POST['s'], order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
+                }
             }
             if (array_key_exists("company", $_POST)) {
-
-                [$viewcustomer, $count] = $this->customerService->getCustomer($_POST['company'], 'company', '', $order_by, $direction, (int) $limit, (int) $offset);
-
+                if ($_POST['s']) {
+                    [$viewcustomer, $count] = $this->customerService->getCustomer(companyFilter: $_POST['company'], searchTerm: $_POST['s'], order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
+                } else {
+                    [$viewcustomer, $count] = $this->customerService->getCustomer(companyFilter: $_POST['company'], order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
+                }
             }
             if (array_key_exists("country", $_POST)) {
-
-                [$viewcustomer, $count] = $this->customerService->getCustomer($_POST['country'], 'country', '', $order_by, $direction, (int) $limit, (int) $offset);
-
-
+                if ($_POST['s']) {
+                    [$viewcustomer, $count] = $this->customerService->getCustomer(countryFilter: $_POST['country'], searchTerm: $_POST['s'], order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
+                } else {
+                    [$viewcustomer, $count] = $this->customerService->getCustomer(countryFilter: $_POST['country'], order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
+                }
             }
             if ($_POST['s'] == '' && !array_key_exists('country', $_POST) && !array_key_exists("company", $_POST)) {
-
                 [$viewcustomer, $count] = $this->customerService->getCustomer(order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
-
             }
 
         } else {

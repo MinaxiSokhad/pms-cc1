@@ -39,7 +39,6 @@ class ProjectController
     }
     public function projectView(array $params = [])
     {
-
         $page = 1;
         $limit = 3;
         $offset = 0;
@@ -52,21 +51,32 @@ class ProjectController
                 $order_by = $_POST['order_by'];
                 $direction = $_POST['direction'];
             }
-            if ($_POST['s']) {
 
-                [$viewproject, $count] = $this->projectService->getProject(searchTerm: $_POST['s'], order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
+            if ($_POST['s']) {
+                if (array_key_exists('status', $_POST)) {
+                    [$viewproject, $count] = $this->projectService->getProject($_POST['status'], $_POST['s'], $order_by, $direction, (int) $limit, (int) $offset);
+                } else {
+                    [$viewproject, $count] = $this->projectService->getProject(searchTerm: $_POST['s'], order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
+
+                }
             }
             if (array_key_exists('status', $_POST)) {
-                [$viewproject, $count] = $this->projectService->getProject($_POST['status'], '', $order_by, $direction, (int) $limit, (int) $offset);
+                if ($_POST['s'] != '') {
+                    [$viewproject, $count] = $this->projectService->getProject($_POST['status'], searchTerm: $_POST['s'], order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
+                } else {
+                    [$viewproject, $count] = $this->projectService->getProject($_POST['status'], '', $order_by, $direction, (int) $limit, (int) $offset);
+                }
             }
             if ($_POST['s'] == '' && !array_key_exists('status', $_POST)) {
                 [$viewproject, $count] = $this->projectService->getProject(order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
             }
+
         } else {
             [$viewproject, $count] = $this->projectService->getProject([], '', order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
         }
 
         $lastPage = ceil($count / $limit);//Find total page
+
 
         echo $this->view->render("projects.php", [
             'viewproject' => $viewproject,

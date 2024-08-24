@@ -97,7 +97,7 @@
                     <?php
                     $statusfilter = [];
                     if (array_key_exists('status', $_POST)) {
-                        $status = array_merge($statusfilter, $_POST['status']);
+                        $statusfilter = array_merge($statusfilter, $_POST['status']);
                     }
                     ?>
                     <div class="d-flex justify-content-between align-items-center">
@@ -137,10 +137,16 @@
                         value="<?php echo e($_POST['s'] ?? ''); ?>" />
                     <input type="hidden" id="order_by" name="order_by" value="id" />
                     <input type="hidden" id="direction" name="direction" value="desc" />
-                    <input type="hidden" id="filter_status" name="filter_status"
-                        value="<?php echo e($_POST['status'] ?? ''); ?>">
+                    <?php if (array_key_exists('statusfilter', $_POST)):
+                        foreach ($_POST['statusfilter'] as $sts): ?>
+                            <input type="hidden" id="_filter_status_[]" name="_filter_status_[]"
+                                value="<?php echo e($sts ?? ''); ?>">
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                    <!-- <input type="hidden" id="filter_status" name="filter_status"
+                        value="<?php //echo e($_POST['statusfilter'] ?? ''); ?>"> -->
                     </form>
-                    <?php //dd($viewproject); ?>
+                    <?php ?>
                     <div class="col-xl-11 col-sm-6 col-9 grid-margin stretch-card">
                         <div class="card corona-gradient-card">
                             <div class="card-body py-0 px-0 px-sm-3" style="background-color:#191C24;">

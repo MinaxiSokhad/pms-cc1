@@ -11,42 +11,48 @@ class CustomerService
     public function __construct(private Database $db, private ValidatorService $validatorService)
     {
     }
-    public function getCustomer(array $name = [], string $column = "company", string $searchTerm = '', string $order_by = 'id', string $direction = 'desc', int $limit = 3, int $offset = 0)
+    public function getCustomer(array $companyFilter = [], array $countryFilter = [], string $searchTerm = '', string $order_by = 'id', string $direction = 'desc', int $limit = 3, int $offset = 0)
     {
-        $query = "SELECT * FROM customers";
-        $where = " WHERE id > 0";
-        $filter = isset($filter) ? $filter : '';
+
+        $filterCompany = isset($filterCompany) ? $filterCompany : '';
+        $filterCountry = isset($filterCountry) ? $filterCountry : '';
         $search = "";
         $order = " ORDER BY " . $order_by . " " . $direction . " LIMIT " . $limit . " OFFSET " . $offset;
 
         $param = [];
-        if ($name) {
+        if ($companyFilter) {
             $names = [];
-            foreach ($name as $i) {
+            foreach ($companyFilter as $i) {
                 $names[] = (string) $i;
             }
-            $name = implode("','", $names);
-            if ($_POST['company']) {
-                $filter .= " AND $column IN ('$name')";
-            }
-            if ($_POST['country']) {
-                $filter .= " AND $column IN ('$name')";
-            }
+            $companyFilter = implode("','", $names);
+            $filterCompany .= " AND company IN ('$companyFilter') ";
 
+        }
+        if ($countryFilter) {
+            $names = [];
+            foreach ($countryFilter as $j) {
+                $names[] = (string) $j;
+            }
+            $countryFilterArr = implode("','", $names);
+            $filterCountry .= " AND country IN ('$countryFilterArr') ";
 
         } else if ($searchTerm != '') {
 
             $search .= " AND website LIKE :search OR email LIKE :search OR phone LIKE :search  OR address LIKE :search ";
             $param = ['search' => "%{$searchTerm}%"];
         }
-
+        $query = "SELECT * FROM customers WHERE id > 0 " . $search . $filterCompany . $filterCountry;
         $viewcustomer = $this->db->query(
-            $query . $where . $search . $filter . $order,
+            $query,
             $param
         )->findAll();
-        // dd($query . $where . $filter . $search . $order);
-        $count = $this->db->query("SELECT COUNT(*) FROM customers")->count();
-        return [$viewcustomer, $count];
+        $recordCount = count($viewcustomer);
+        $viewcustomer = $this->db->query(
+            $query . $order,
+            $param
+        )->findAll();
+        return [$viewcustomer, $recordCount];
         if (empty($name)) {
             die("Customer not found.");
         }

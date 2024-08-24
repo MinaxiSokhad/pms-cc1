@@ -98,6 +98,27 @@ class ProjectService
 
     public function getProject(array $status = [], string $searchTerm = '', string $order_by = 'id', string $direction = 'desc', int $limit = 3, int $offset = 0)
     {
+        $filter = isset($filter) ? $filter : '';
+        $search = isset($search) ? $search : '';
+        $order = "ORDER BY " . $order_by . " " . $direction . " LIMIT " . $limit . " OFFSET " . $offset;
+        $param = [];
+        if (!empty($status)) {
+            $ids = [];
+            foreach ($status as $i) {
+                $ids[] = (string) $i;
+            }
+            $status = implode("','", $ids);
+            $filter .= " AND `project`.`status` IN ('$status') ";
+        }
+        if ($searchTerm != '') {
+            $search .= " AND  project.name LIKE :search 
+            OR project.description LIKE :search
+            OR customers.company LIKE :search
+            OR tags.name LIKE :search
+            OR user.name LIKE :search";
+            $param = ['search' => "%{$searchTerm}%"];
+        }
+
         $query = "SELECT
               project.id,
               project.name,
@@ -125,38 +146,18 @@ class ProjectService
               JOIN user
               ON project_member.user_id = `user`.id
               JOIN customers
-              ON project.customer = customers.id";
-        $group_by = "  GROUP BY project.id ";
-        $where = " WHERE project.id > 0 ";
-        $filter = isset($filter) ? $filter : '';
-        $search = "";
-        $order = "ORDER BY " . $order_by . " " . $direction . " LIMIT " . $limit . " OFFSET " . $offset;
-        $param = [];
-        if (!empty($status)) {
-            $ids = [];
-            foreach ($status as $i) {
-                $ids[] = (string) $i;
-            }
-            $status = implode("','", $ids);
-            $filter .= " AND `project`.`status` IN ('$status') ";
-        }
-        if ($searchTerm != '') {
-            $search .= " AND  project.name LIKE :search 
-            OR project.description LIKE :search
-            OR customers.company LIKE :search
-            OR tags.name LIKE :search
-            OR user.name LIKE :search";
-            $param = ['search' => "%{$searchTerm}%"];
-        }
-        // if (!empty($status) && $searchTerm != '') {
-        //     $search .= $search . $filter;
-        // }
+              ON project.customer = customers.id WHERE project.id > 0 " . $search . $filter . " GROUP BY project.id ";
         $viewproject = $this->db->query(
-            $query . $where . $search . $filter . $group_by . $order,
+            $query,
             $param
-
         )->findAll();
-        $recordCount = $this->db->query("SELECT COUNT(*) FROM project ")->count();
+
+        $recordCount = count($viewproject);
+        $viewproject = $this->db->query(
+            $query . $order,
+            $param
+        )->findAll();
+        // $recordCount = $this->db->query("SELECT COUNT(*) FROM project ")->count();
         return [$viewproject, $recordCount];
         if (empty($status)) {
             die("Project not found.");

@@ -18,14 +18,18 @@
           <!-- Filter Dropdown -->
           <?php include $this->resolve("partials/_search.php"); ?>
           <?php
+          $statusfilter = [];
+          if (array_key_exists('status', $_POST)) {
+            $statusfilter = array_merge($statusfilter, $_POST['status']);
+          }
           $companies = [];
           if (array_key_exists('company', $_POST)) {
-            $companies = $_POST['company']; // Use companies from POST if available
+            $companies = array_merge($companies, $_POST['company']); // Use companies from POST if available
           }
 
           $countries = [];
           if (array_key_exists('country', $_POST)) {
-            $countries = $_POST['country'];
+            $countries = array_merge($countries, $_POST['country']);
           } ?>
           <div class="d-flex justify-content-between align-items-center">
             <div class="dropdown">
@@ -80,10 +84,17 @@
           <input type="hidden" id="search_input" name="search_input" value="<?php echo e($_POST['s'] ?? ''); ?>" />
           <input type="hidden" id="order_by" name="order_by" value="<?php echo e($_POST['order_by'] ?? 'id') ?>" />
           <input type="hidden" id="direction" name="direction" value="<?php echo e($_POST['direction'] ?? 'desc') ?>" />
-          <input type="hidden" id="filter_company" name="filter_company"
-            value="<?php echo e($_POST['company'] ?? ''); ?>">
-          <input type="hidden" id="filter_country" name="filter_country"
-            value="<?php echo e($_POST['country'] ?? ''); ?>">
+          <?php if (array_key_exists('companies', $_POST)):
+            foreach ($_POST['companies'] as $com): ?>
+              <input type="hidden" id="_filter_company_[]" name="_filter_company_[]" value="<?php echo e($com ?? ''); ?>">
+            <?php endforeach; ?>
+          <?php endif; ?>
+          <?php if (array_key_exists('countries', $_POST)):
+            foreach ($_POST['countries'] as $con): ?>
+              <input type="hidden" id="_filter_country_[]" name="_filter_country_[]" value="<?php echo e($con ?? ''); ?>">
+            <?php endforeach; ?>
+          <?php endif; ?>
+
           </form>
           <div class="col-12 grid-margin stretch-card">
             <div class="card corona-gradient-card position-relative">
