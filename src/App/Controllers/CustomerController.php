@@ -31,7 +31,6 @@ class CustomerController
 
             $page = isset($_POST['p']) ? (int) $_POST['p'] : 1;
             $offset = (int) ($page - 1) * $limit;
-
             if (array_key_exists('order_by', $_POST)) {
                 $order_by = $_POST['order_by'];
                 $direction = $_POST['direction'];
@@ -39,7 +38,8 @@ class CustomerController
             if ($_POST['s']) {
                 if (array_key_exists("company", $_POST)) {
                     [$viewcustomer, $count] = $this->customerService->getCustomer(companyFilter: $_POST['company'], searchTerm: $_POST['s'], order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
-                } else if (array_key_exists("country", $_POST)) {
+                }
+                if (array_key_exists("country", $_POST)) {
                     [$viewcustomer, $count] = $this->customerService->getCustomer(countryFilter: $_POST['country'], searchTerm: $_POST['s'], order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
                 } else {
                     [$viewcustomer, $count] = $this->customerService->getCustomer(searchTerm: $_POST['s'], order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
@@ -67,6 +67,7 @@ class CustomerController
 
             [$viewcustomer, $count] = $this->customerService->getCustomer(order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
         }
+
         $customers = $this->customerService->getcustomers();
 
         $lastPage = ceil($count / $limit);

@@ -13,7 +13,6 @@ class CustomerService
     }
     public function getCustomer(array $companyFilter = [], array $countryFilter = [], string $searchTerm = '', string $order_by = 'id', string $direction = 'desc', int $limit = 3, int $offset = 0)
     {
-
         $filterCompany = isset($filterCompany) ? $filterCompany : '';
         $filterCountry = isset($filterCountry) ? $filterCountry : '';
         $search = "";
@@ -21,25 +20,28 @@ class CustomerService
 
         $param = [];
         if ($companyFilter) {
-            $names = [];
+            $comNames = [];
             foreach ($companyFilter as $i) {
-                $names[] = (string) $i;
+                $comNames[] = (string) $i;
             }
-            $companyFilter = implode("','", $names);
-            $filterCompany .= " AND company IN ('$companyFilter') ";
+            $companyFilterArr = implode("','", $comNames);
+            $filterCompany .= " AND company IN ('$companyFilterArr') ";
 
         }
         if ($countryFilter) {
-            $names = [];
+            $conNames = [];
             foreach ($countryFilter as $j) {
-                $names[] = (string) $j;
+                $conNames[] = (string) $j;
             }
-            $countryFilterArr = implode("','", $names);
+            $countryFilterArr = implode("','", $conNames);
             $filterCountry .= " AND country IN ('$countryFilterArr') ";
 
-        } else if ($searchTerm != '') {
+        }
 
-            $search .= " AND website LIKE :search OR email LIKE :search OR phone LIKE :search  OR address LIKE :search ";
+        // dd($filterCountry);
+        if ($searchTerm != '') {
+
+            $search .= " AND (website LIKE :search OR email LIKE :search OR phone LIKE :search  OR address LIKE :search )";
             $param = ['search' => "%{$searchTerm}%"];
         }
         $query = "SELECT * FROM customers WHERE id > 0 " . $search . $filterCompany . $filterCountry;
@@ -52,6 +54,8 @@ class CustomerService
             $query . $order,
             $param
         )->findAll();
+        // dd($query . $order);
+        // dd($filterCompany . $filterCountry);
         return [$viewcustomer, $recordCount];
         if (empty($name)) {
             die("Customer not found.");

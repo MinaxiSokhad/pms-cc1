@@ -9,6 +9,7 @@
     <script>
         const filterform = document.getElementById('filterform');
         function form_submit() {
+            document.getElementById('p').value = 1;
             filterform.submit();
         }
         function setPageAndSubmit(page = 1) {
@@ -16,8 +17,8 @@
             // document.getElementById('p').value = page;
             // Submit the form
             // Select all hidden elements
-            const hiddenElements = document.querySelectorAll('input[type="hidden"]');
             // Log all hidden element values to the console
+            const hiddenElements = document.querySelectorAll('input[type="hidden"]');
             hiddenElements.forEach(element => {
                 if (element.name == "p") {
                     element.value = page;

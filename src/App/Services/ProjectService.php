@@ -111,11 +111,11 @@ class ProjectService
             $filter .= " AND `project`.`status` IN ('$status') ";
         }
         if ($searchTerm != '') {
-            $search .= " AND  project.name LIKE :search 
+            $search .= " AND  (project.name LIKE :search 
             OR project.description LIKE :search
             OR customers.company LIKE :search
             OR tags.name LIKE :search
-            OR user.name LIKE :search";
+            OR user.name LIKE :search)";
             $param = ['search' => "%{$searchTerm}%"];
         }
 
@@ -157,6 +157,7 @@ class ProjectService
             $query . $order,
             $param
         )->findAll();
+        // dd($query . $order);
         // $recordCount = $this->db->query("SELECT COUNT(*) FROM project ")->count();
         return [$viewproject, $recordCount];
         if (empty($status)) {
