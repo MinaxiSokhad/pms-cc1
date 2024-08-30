@@ -53,10 +53,9 @@ if ($currentPage > $lastPage) {
                 <?php endif; ?>
 
                 <select style="background-color:#191C24; color: white;" onchange="setPageAndSubmit(this.value)" id="p"
-                    name="p" class="ml-2 p-1 border border-gray-300 rounded">
-                    <?php for ($i = 1; $i <= $count; $i++): ?>
-                        <option value="<?php echo $i; ?>" <?php echo $i === $currentPage ? 'selected' : ''; ?>
-                            style="background-color:#191C24; color: white;">
+                    name="p" class="ml-2 p-1 btn btn-outline-secondary">
+                    <?php for ($i = 1; $i <= $lastPage; $i++): ?>
+                        <option value=" <?php echo $i; ?>" <?php echo $i == $currentPage ? 'selected' : ''; ?>>
                             <?php echo $i; ?>
                         </option>
                     <?php endfor; ?>

@@ -11,7 +11,8 @@ use App\Controllers\{
     ProfileController,
     EditProfileController,
     CustomerController,
-    ProjectController
+    ProjectController,
+    ErrorController
 };
 use App\Middleware\{AuthRequiredMiddleware, GuestOnlyMiddleware};
 
@@ -42,4 +43,6 @@ function registerRoutes(App $app) //register the route and then autoload files
     $app->post('/editproject/{project}', [ProjectController::class, 'updateProject'])->add(AuthRequiredMiddleware::class);
     $app->delete('/deleteproject/{project}', [ProjectController::class, 'deleteProject'])->add(AuthRequiredMiddleware::class);
     $app->get('/page', [ProjectController::class, 'page'])->add(AuthRequiredMiddleware::class);
+
+    $app->setErrorHandler([ErrorController::class, 'notfound']);
 }
