@@ -1,15 +1,27 @@
 <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search" action="" id="filterform" method="POST">
     <?php include $this->resolve('partials/_csrf.php'); ?>
+    <?php $select_limit = isset($_POST['select_limit']) ? $_POST['select_limit'] : 3; ?>
 
-    <input type="text" name="s" style="color:white;" value="<?php echo e($_POST['s'] ?? ''); ?>" class="form-control"
-        placeholder="Search...">
-    <button type="button" onclick="form_submit()" style="color: black;">
+    <select name="select_limit" id="select_limit" onchange="limit_submit(this.value)"
+        class="ml-2 p-1 btn btn-outline-secondary">
+        <option value="3" <?php echo $select_limit == 3 ? 'selected' : ''; ?>>3</option>
+        <option value="5" <?php echo $select_limit == 5 ? 'selected' : ''; ?>>5</option>
+        <option value="10" <?php echo $select_limit == 10 ? 'selected' : ''; ?>>10</option>
+        <option value="0" <?php echo $select_limit == 0 ? 'selected' : ''; ?>>All</option>
+    </select>
+    <input style="margin-left: 10px; width:500px;" type="text" name="s" style="color:white;"
+        value="<?php echo e($_POST['s'] ?? ''); ?>" class="form-control" placeholder="Search...">
+    <button style="margin-right: 10px;width:90px;" type="button" onclick="form_submit()" style="color: black;">
         Search
     </button>
     <script>
         const filterform = document.getElementById('filterform');
         function form_submit() {
             document.getElementById('p').value = 1;
+            filterform.submit();
+        }
+        function limit_submit() {
+
             filterform.submit();
         }
         function setPageAndSubmit(page = 1) {

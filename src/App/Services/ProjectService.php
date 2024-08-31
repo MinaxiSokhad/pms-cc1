@@ -98,10 +98,17 @@ class ProjectService
 
     public function getProject(array $status = [], string $searchTerm = '', string $order_by = 'id', string $direction = 'desc', int $limit = 3, int $offset = 0)
     {
+        // dd($_POST['select_limit']);
         $filter = isset($filter) ? $filter : '';
         $search = isset($search) ? $search : '';
-        $order = "ORDER BY " . $order_by . " " . $direction . " LIMIT " . $limit . " OFFSET " . $offset;
+        $order = "ORDER BY " . $order_by . " " . $direction;
         $param = [];
+        if ($limit != 0) {
+            $limit_offset = " LIMIT " . $limit . " OFFSET " . $offset;
+        } else {
+            $limit_offset = '';
+        }
+        // dd($limit);
         if (!empty($status)) {
             $ids = [];
             foreach ($status as $i) {
@@ -154,7 +161,7 @@ class ProjectService
 
         $recordCount = count($viewproject);
         $viewproject = $this->db->query(
-            $query . $order,
+            $query . $order . $limit_offset,
             $param
         )->findAll();
         // dd($query . $order);

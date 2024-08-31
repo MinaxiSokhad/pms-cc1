@@ -2,6 +2,7 @@
 
 <!-- Preserve other query parameters in the form action -->
 
+
 <input type="hidden" id="p" name="p" value="<?php echo e($currentPage); ?>">
 <?php
 $pages = range(1, $lastPage);
@@ -14,9 +15,10 @@ if ($currentPage > $lastPage) {
 }
 ?>
 <?php if ($currentPage > 1): ?>
+
     <a href="#" onclick="setPageAndSubmit(1)" class="btn btn-outline-secondary">
         << </a>
-            <a href="#" onclick="setPageAndSubmit(<?php echo $previousPageQuery; ?>)" class="btn btn-outline-secondary">
+            <a href="#" onclick="setPageAndSubmit(<?php echo $currentPage - 1; ?>)" class="btn btn-outline-secondary">
                 < </a>
 
                     <?php foreach (range(2, 1, -1) as $p): ?>
@@ -25,10 +27,12 @@ if ($currentPage > $lastPage) {
                                 class="btn btn-outline-secondary"><?php echo ($currentPage - $p); ?></a>
                         <?php endif; endforeach; ?>
                 <?php endif; ?>
+
                 <a href="#" style="color:green;" onclick="setPageAndSubmit(<?php echo $currentPage; ?>)"
                     class="btn btn-outline-secondary">
                     <?php echo $currentPage; ?>
                 </a>
+
                 <?php if ($currentPage < $lastPage - 2): ?>
                     <?php $randomPage = rand($currentPage + 1, $lastPage - 2); ?>
                     <a href="#" onclick="setPageAndSubmit(<?php echo $randomPage; ?>)" class="btn btn-outline-secondary">
@@ -44,7 +48,8 @@ if ($currentPage > $lastPage) {
                 <!-- Next Page Link -->
                 <?php if ($currentPage < $count): ?>
 
-                    <a href="#" onclick="setPageAndSubmit(<?php echo $nextPageQuery; ?>)" class="btn btn-outline-secondary">
+                    <a href="#" onclick="setPageAndSubmit(<?php echo $currentPage + 1; ?>)"
+                        class="btn btn-outline-secondary">
                         >
                     </a>
                     <a href="#" onclick="setPageAndSubmit(<?php echo $count; ?>)" class="btn btn-outline-secondary">

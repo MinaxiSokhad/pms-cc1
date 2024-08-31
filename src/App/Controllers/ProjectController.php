@@ -39,14 +39,21 @@ class ProjectController
     }
     public function projectView(array $params = [])
     {
-        $page = 1;
-        $limit = 3;
-        $offset = 0;
+        $showRecord = $_POST['select_limit'];
+        // dd($showRecord);
+        if ($showRecord != "0") {
+            $page = isset($_POST['p']) ? (int) $_POST['p'] : 1;
+            $limit = isset($_POST['select_limit']) ? $_POST['select_limit'] : 3;
+            $offset = (int) ($page - 1) * $limit;
+        } else {
+            $page = '';
+            $limit = '';
+            $offset = '';
+        }
         $order_by = 'id';
         $direction = 'desc';
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $page = isset($_POST['p']) ? (int) $_POST['p'] : 1;
-            $offset = (int) ($page - 1) * $limit;
+
             if (array_key_exists('order_by', $_POST)) {
                 $order_by = $_POST['order_by'];
                 $direction = $_POST['direction'];
@@ -74,21 +81,14 @@ class ProjectController
         } else {
             [$viewproject, $count] = $this->projectService->getProject([], '', order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
         }
-
-        $lastPage = ceil($count / $limit);//Find total page
-
+        if ($showRecord != '0') {
+            $lastPage = ceil($count / $limit);//Find total page
+        }
 
         echo $this->view->render("projects.php", [
             'viewproject' => $viewproject,
             'currentPage' => $page,
-            'previousPageQuery' => http_build_query([
-                'p' => $page - 1
-            ]),
             'lastPage' => $lastPage,
-            'nextPageQuery' => http_build_query([
-                'p' => $page + 1
-            ])
-
         ]);
     }
     public function page()
