@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace App\Middleware;
 
-use App\Services\{ProfileService, ProjectService};
+use App\Services\{ProfileService, ProjectService, TaskService};
 use Framework\Contracts\MiddlewareInterface;
 use Framework\TemplateEngine;
 
@@ -11,7 +11,8 @@ class TemplateDataMiddleware implements MiddlewareInterface
     public function __construct(
         private TemplateEngine $view,
         private ProfileService $profileService,
-        private ProjectService $projectService
+        private ProjectService $projectService,
+        private TaskService $taskService
     ) {
     }
     public function process(callable $next)
@@ -23,10 +24,10 @@ class TemplateDataMiddleware implements MiddlewareInterface
             $this->view->addGlobal('profile', $profile);
             $project_status = $this->projectService->getProjectStatus();
             $this->view->addGlobal('project_status', $project_status);
+            // $task_status = $this->taskService->getTaskStatus();
+            // $this->view->addGlobal('task_status', $task_status);
         }
         $this->view->addGlobal('title', 'PMS');
-
-        // dd($profile);
         $next();
     }
 }

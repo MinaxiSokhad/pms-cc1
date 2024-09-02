@@ -2,7 +2,7 @@
 declare(strict_types=1);
 use Framework\{TemplateEngine, Container, Database};
 use App\Config\Paths;
-use App\Services\{ValidatorService, UserService, ProfileService, EditProfileService, CustomerService, ProjectService};
+use App\Services\{ValidatorService, UserService, TaskService, ProfileService, EditProfileService, CustomerService, ProjectService};
 
 
 
@@ -40,5 +40,10 @@ return [
         $db = $container->get(Database::class);
         $validatorService = $container->get(ValidatorService::class);
         return new ProjectService($db, $validatorService);
+    },
+    TaskService::class => function (Container $container) {
+        $db = $container->get(Database::class);
+        $validatorService = $container->get(ValidatorService::class);
+        return new TaskService($db, $validatorService);
     }
 ];

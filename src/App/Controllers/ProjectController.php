@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use Framework\Exceptions\ValidationException;
-use App\Config\Paths;
 use Framework\TemplateEngine;
 use App\Services\{CustomerService, ProjectService, ValidatorService, UserService};
 
@@ -17,7 +16,7 @@ class ProjectController
         private UserService $userService
     ) {
     }
-    public function project()
+    public function createProject()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $viewcustomer = $this->customerService->getcustomers();
@@ -40,7 +39,7 @@ class ProjectController
     public function projectView(array $params = [])
     {
         $showRecord = $_POST['select_limit'];
-        // dd($showRecord);
+
         if ($showRecord != "0") {
             $page = isset($_POST['p']) ? (int) $_POST['p'] : 1;
             $limit = isset($_POST['select_limit']) ? $_POST['select_limit'] : 3;
@@ -58,6 +57,7 @@ class ProjectController
                 $order_by = $_POST['order_by'];
                 $direction = $_POST['direction'];
             }
+            // dd(21);
 
             if ($_POST['s']) {
                 if (array_key_exists('status', $_POST)) {

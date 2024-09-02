@@ -12,7 +12,8 @@ use App\Controllers\{
     EditProfileController,
     CustomerController,
     ProjectController,
-    ErrorController
+    ErrorController,
+    TaskController
 };
 use App\Middleware\{AuthRequiredMiddleware, GuestOnlyMiddleware};
 
@@ -37,11 +38,19 @@ function registerRoutes(App $app) //register the route and then autoload files
     $app->get('/projects', [ProjectController::class, 'projectView'])->add(AuthRequiredMiddleware::class);
     $app->post('/projects', [ProjectController::class, 'projectView'])->add(AuthRequiredMiddleware::class);
     // $app->get('/project/{sort}/{s}', [ProjectController::class, 'projectSort'])->add(AuthRequiredMiddleware::class);
-    $app->get('/createproject', [ProjectController::class, 'project'])->add(AuthRequiredMiddleware::class);
-    $app->post('/createproject', [ProjectController::class, 'project'])->add(AuthRequiredMiddleware::class);
+    $app->get('/createproject', [ProjectController::class, 'createProject'])->add(AuthRequiredMiddleware::class);
+    $app->post('/createproject', [ProjectController::class, 'createProject'])->add(AuthRequiredMiddleware::class);
     $app->get('/editproject/{project}', [ProjectController::class, 'updateProject'])->add(AuthRequiredMiddleware::class);
     $app->post('/editproject/{project}', [ProjectController::class, 'updateProject'])->add(AuthRequiredMiddleware::class);
     $app->delete('/deleteproject/{project}', [ProjectController::class, 'deleteProject'])->add(AuthRequiredMiddleware::class);
+    $app->get('/tasks', [TaskController::class, 'taskView'])->add(AuthRequiredMiddleware::class);
+    $app->post('/tasks', [TaskController::class, 'taskView'])->add(AuthRequiredMiddleware::class);
+    $app->get('/createtask', [TaskController::class, 'createTask'])->add(AuthRequiredMiddleware::class);
+    $app->post('/createtask', [TaskController::class, 'createTask'])->add(AuthRequiredMiddleware::class);
+    $app->get('/edittask/{task}', [TaskController::class, 'updateTask'])->add(AuthRequiredMiddleware::class);
+    $app->post('/edittask/{task}', [TaskController::class, 'updateTask'])->add(AuthRequiredMiddleware::class);
+    $app->delete('/deletetask/{task}', [TaskController::class, 'deleteTask'])->add(AuthRequiredMiddleware::class);
+
     $app->get('/page', [ProjectController::class, 'page'])->add(AuthRequiredMiddleware::class);
 
     $app->setErrorHandler([ErrorController::class, 'notfound']);

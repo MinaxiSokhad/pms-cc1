@@ -104,6 +104,19 @@ class ValidatorService
             'members' => ['required'],
         ]);
     }
+    public function validateTask(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'project' => ['selection'],
+            'name' => ['required', 'name'],
+            'members' => ['required'],
+            'tags' => ['required'],
+            'start_date' => ['required'],
+            'due_date' => ['deadline:Y-m-d,' . $formData['start_date']],
+            'status' => ['required'],
+
+        ]);
+    }
     public function isExists($table, $column, $value, $exclude = null)
     {
         $sql = "SELECT COUNT(*) FROM  $table  WHERE  $column  =:value " . (($exclude != null) ? " AND " . $exclude : "");

@@ -27,10 +27,10 @@
                                                 <div class="col-12 grid-margin stretch-card">
                                                     <div class="card">
                                                         <div class="card-body">
-                                                            <h4 class="card-title">Edit Project</h4>
+                                                            <h4 class="card-title">Edit Task</h4>
                                                             <hr>
                                                             <h5> * Indicates required question</h5><br />
-                                                            <form class="forms-sample" method="POST">
+                                                            <form class="forms-sample" method="POST" name="edittask">
                                                                 <?php include $this->resolve('partials/_csrf.php'); ?>
                                                                 <div class="form-group">
                                                                     <div class="bg-gray-100 mt-2 p-2 text-red-500"
@@ -53,11 +53,40 @@
                                                                             ?>
                                                                         </h5>
                                                                     </div>
-                                                                    <label for="name">Project Name<span
+                                                                    <?php //dd($viewproject); ?>
+                                                                    <label for="project">Project<span
+                                                                            style="color: red;"> * </span></label>
+                                                                            
+                                                                    <select class="js-example-basic-single"
+                                                                        style="width: 100%;" name="project">
+                                                                        <?php foreach ($viewproject as $c): ?>
+                                                                           
+                                                                           <option value="<?php echo e($c['id']); ?>">
+                                                                               <?php
+                                                                              if ($c['name'] == $edittask['project']) {
+                                                                               echo e($edittask['project']);
+                                                                                   continue;
+                                                                               } 
+                                                                               echo e($c['name']);
+                                                                               ?>
+                                                                           </option>
+                                                                       <?php endforeach; ?>
+                                                                    </select>
+                                                                    <?php if (array_key_exists('project', $errors)): ?>
+                                                                        <div class="bg-gray-100 mt-2 p-2 text-red-500"
+                                                                            style="color:red">
+                                                                            <?php echo e($errors['project'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                                                                                ?>
+                                                                        </div>
+                                                                    <?php endif; ?>
+                                                                   
+                                                                </div>
+                                                                <div class="form-group">
+                                                                <label for="name">Task Name<span
                                                                             style="color: red;"> * </span></label>
                                                                     <input type="text" class="form-control" id="name"
-                                                                        name="name" placeholder="Project Name"
-                                                                        value="<?php echo e($editproject['name'] ?? ''); ?>"
+                                                                        name="name" placeholder="Task Name"
+                                                                        value="<?php echo e($edittask['name'] ?? ''); ?>"
                                                                         style="background:black; color:white;">
                                                                     <?php if (array_key_exists('name', $errors)): ?>
                                                                         <div class="bg-gray-100 mt-2 p-2 text-red-500"
@@ -68,34 +97,32 @@
                                                                     <?php endif; ?>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label for="description">Description</label>
-                                                                    <textarea class="form-control" id="description"
-                                                                        rows="2" name="description"
-                                                                        style="background:black; color:white;"><?php echo e($editproject['description'] ?? ''); ?></textarea>
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label for="customer">Customer<span
+                                                                    <label for="members">Members<span
                                                                             style="color: red;"> * </span></label>
-                                                                    <select class="js-example-basic-single"
-                                                                        style="width: 100%;" name="customer">
-                                                                        <?php foreach ($viewcustomer as $c): ?>
-                                                                           
-                                                                            <option value="<?php echo e($c['id']); ?>">
-                                                                                <?php
-                                                                               if ($c['company'] == $editproject['customer']) {
-                                                                                echo e($editproject['customer']);
-                                                                                    continue;
-                                                                                } 
-                                                                                echo e($c['company']);
-                                                                                ?>
-                                                                            </option>
-                                                                        <?php endforeach; ?>
+                                                                            
+                                                                    <select class="js-example-basic-multiple"
+                                                                        name="members[]" multiple="multiple"
+                                                                        style="width:100%" id="members[]">
+                                                                    
+                                                                        <?php foreach ($users as $u): ?>
 
+                                                                            <?php if (in_array($u['name'], explode(",",$edittask['task_member_name']))) :?>
+                                                                            <option value="<?php echo e($u['id']); ?>" selected>
+                                                                                <?php echo e($u['name']);
+                                                                                echo ' ' . '(' . e($u['email']) . ')'; ?>
+                                                                            </option>
+                                                                            <?php else : ?>
+                                                                                <option value="<?php echo e($u['id']); ?>">
+                                                                                <?php echo e($u['name']);
+                                                                                echo ' ' . '(' . e($u['email']) . ')'; ?>
+                                                                            </option>
+                                                                            <?php endif; ?>
+                                                                        <?php endforeach; ?>
                                                                     </select>
-                                                                    <?php if (array_key_exists('customer', $errors)): ?>
+                                                                    <?php if (array_key_exists('members[]', $errors)): ?>
                                                                         <div class="bg-gray-100 mt-2 p-2 text-red-500"
                                                                             style="color:red">
-                                                                            <?php echo e($errors['customer'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                                                                            <?php echo e($errors['members[]'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                                                                                 ?>
                                                                         </div>
                                                                     <?php endif; ?>
@@ -108,11 +135,11 @@
                                                                         name="tags[]" multiple="multiple"
                                                                         style="width:100%" id="tags[]">
                                                                         <?php 
-                                                                        $project_tags = $editproject['project_tags_name'];
-                                                                        $editproject['project_tags_name'] = explode(",",$project_tags);
+                                                                        $task_tags = $edittask['task_tags_name'];
+                                                                        $edittask['task_tags_name'] = explode(",",$task_tags);
                                                                          foreach ($tags as $t):  ?>
                                                                             <?php 
-                                                                             if (in_array($t['name'],$editproject['project_tags_name'])):?>
+                                                                             if (in_array($t['name'],$edittask['task_tags_name'])):?>
                                                                             <option value="<?php echo e($t['id']);  ?>" selected>
                                                                             <?php echo e($t['name']);?>
                                                                             </option>
@@ -138,7 +165,7 @@
                                                                     <div class="form-group">
                                                                         <input type="date" class="form-control"
                                                                             name="start_date"
-                                                                            value="<?php echo e($editproject['start_date'] ?? ''); ?>"
+                                                                            value="<?php echo e($edittask['start_date'] ?? ''); ?>"
                                                                             style="background:black; color:white;" />
                                                                         <?php if (array_key_exists('start_date', $errors)): ?>
                                                                             <div class="bg-gray-100 mt-2 p-2 text-red-500"
@@ -150,34 +177,33 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label for="startdate">Deadline</label>
+                                                                    <label for="due_date">Due Date</label>
                                                                     <div class="form-group">
                                                                         <input type="date" class="form-control"
-                                                                            name="deadline"
-                                                                            value="<?php echo e($editproject['deadline'] ?? ''); ?>"
+                                                                            name="due_date"
+                                                                            value="<?php echo e($edittask['due_date'] ?? ''); ?>"
                                                                             style="background:black; color:white;" />
-                                                                        <?php if (array_key_exists('deadline', $errors)): ?>
+                                                                        <?php if (array_key_exists('due_date', $errors)): ?>
                                                                             <div class="bg-gray-100 mt-2 p-2 text-red-500"
                                                                                 style="color:red">
-                                                                                <?php echo e($errors['deadline'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                                                                                <?php echo e($errors['due_date'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                                                                                     ?>
                                                                             </div>
                                                                         <?php endif; ?>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label for="customer">Status<span
+                                                                    <label for="status">Status<span
                                                                             style="color: red;"> * </span></label>
                                                                             
                                                                     <select class="js-example-basic-single"
                                                                         name="status"
                                                                         style="width: 100%; height: 40px;">
                                                                        
-                                                                        <option value="S" <?php echo e($editproject['status'][0] ?? '') === 'N' ? 'selected' : ''; ?>>Not Started</option>
-                                                                        <option value="P" <?php echo e($editproject['status'][0] ?? '') === 'I' ? 'selected' : ''; ?>>In Progress</option>
-                                                                        <option value="H" <?php echo e($editproject['status'][0] ?? '') === 'O' ? 'selected' : ''; ?>>On Hold</option>
-                                                                        <option value="C" <?php echo e($editproject['status'][0] ?? '') === 'C' ? 'selected' : ''; ?>>Cancelled</option>
-                                                                        <option value="F" <?php echo e($editproject['status'][0] ?? '') === 'F' ? 'selected' : ''; ?>>Finished</option>
+                                                                        <option value="S" <?php echo e($edittask['status'][0] ?? '') === 'N' ? 'selected' : ''; ?>>Not Started</option>
+                                                                        <option value="P" <?php echo e($edittask['status'][0] ?? '') === 'I' ? 'selected' : ''; ?>>In Progress</option>
+                                                                        <option value="C" <?php echo e($edittask['status'][0] ?? '') === 'C' ? 'selected' : ''; ?>>Complete</option>
+                                                                        <option value="T" <?php echo e($edittask['status'][0] ?? '') === 'T' ? 'selected' : ''; ?>>Testing</option>
                                                                    
                                                                     </select>
                                                                     <?php if (array_key_exists('status', $errors)): ?>
@@ -189,43 +215,29 @@
                                                                     <?php endif; ?>
                                                                 </div>
                                                                 <div class="form-group">
-                                                                    <label for="members">Members<span
+                                                                    <label for="priority">Priority<span
                                                                             style="color: red;"> * </span></label>
                                                                             
-                                                                    <select class="js-example-basic-multiple"
-                                                                        name="members[]" multiple="multiple"
-                                                                        style="width:100%" id="members[]">
-                                                                        <?php
-                                                                        //$project_member = $editproject['project_member_name'];
-                                                                        //$editproject['project_member_name'] = explode(',',$editproject['project_member_name']);
+                                                                    <select class="js-example-basic-single"
+                                                                        name="priority"
+                                                                        style="width: 100%; height: 40px;">
                                                                        
-                                                                        ?>
-                                                                        <?php foreach ($users as $u): ?>
-
-                                                                            <?php if (in_array($u['name'], explode(",",$editproject['project_member_name']))) :?>
-                                                                            <option value="<?php echo e($u['id']); ?>" selected>
-                                                                                <?php echo e($u['name']);
-                                                                                echo ' ' . '(' . e($u['email']) . ')'; ?>
-                                                                            </option>
-                                                                            <?php else : ?>
-                                                                                <option value="<?php echo e($u['id']); ?>">
-                                                                                <?php echo e($u['name']);
-                                                                                echo ' ' . '(' . e($u['email']) . ')'; ?>
-                                                                            </option>
-                                                                            <?php endif; ?>
-                                                                        <?php endforeach; ?>
+                                                                        <option value="M" <?php echo e($edittask['priority'][0] ?? '') === 'M' ? 'selected' : ''; ?>>Medium</option>
+                                                                        <option value="H" <?php echo e($edittask['priority'][0] ?? '') === 'H' ? 'selected' : ''; ?>>High</option>
+                                                                        <option value="L" <?php echo e($edittask['priority'][0] ?? '') === 'L' ? 'selected' : ''; ?>>Low</option>
+                                                                        
                                                                     </select>
-                                                                    <?php if (array_key_exists('members[]', $errors)): ?>
+                                                                    <?php if (array_key_exists('status', $errors)): ?>
                                                                         <div class="bg-gray-100 mt-2 p-2 text-red-500"
                                                                             style="color:red">
-                                                                            <?php echo e($errors['members[]'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                                                                            <?php echo e($errors['status'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
                                                                                 ?>
                                                                         </div>
                                                                     <?php endif; ?>
                                                                 </div>
-                                                                <button type="submit" name="projectsubmit"
-                                                                    class="btn btn-primary mr-2">Edit Project</button>
-                                                                <button class="btn btn-dark">Cancel</button>
+                                                                <button type="submit" name="tasksubmit"
+                                                                    class="btn btn-primary mr-2">Edit Task</button>
+                                                                <button class="btn btn-dark" type="reset" name="reset" >Cancel</button>
                                                             </form>
 <?php                                                            
 ?>
@@ -289,3 +301,6 @@
 </body>
 
 </html>
+<script>
+    document.getElementById("edittask").reset();
+</script>

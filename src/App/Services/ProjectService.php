@@ -98,7 +98,7 @@ class ProjectService
 
     public function getProject(array $status = [], string $searchTerm = '', string $order_by = 'id', string $direction = 'desc', int $limit = 3, int $offset = 0)
     {
-        // dd($_POST['select_limit']);
+
         $filter = isset($filter) ? $filter : '';
         $search = isset($search) ? $search : '';
         $order = "ORDER BY " . $order_by . " " . $direction;
@@ -108,7 +108,7 @@ class ProjectService
         } else {
             $limit_offset = '';
         }
-        // dd($limit);
+
         if (!empty($status)) {
             $ids = [];
             foreach ($status as $i) {
@@ -164,19 +164,19 @@ class ProjectService
             $query . $order . $limit_offset,
             $param
         )->findAll();
-        // dd($query . $order);
-        // $recordCount = $this->db->query("SELECT COUNT(*) FROM project ")->count();
+
         return [$viewproject, $recordCount];
         if (empty($status)) {
             die("Project not found.");
         }
     }
-    public function getoneproject($id)
+    public function getoneproject($id = 0)
     {
+        if (!empty($id)) {
 
-        $where = "WHERE `project`.`id` IN ($id)";
-        return $this->db->query(
-            "SELECT
+            $where = "WHERE `project`.`id` IN ($id)";
+            return $this->db->query(
+                "SELECT
       project.id,
       project.name,
       project.description,
@@ -207,8 +207,12 @@ class ProjectService
       $where 
     GROUP BY
         project.id "
-        )->find();
-
+            )->find();
+        } else {
+            return $this->db->query(
+                "SELECT * FROM project"
+            )->findAll();
+        }
     }
     public function update(array $formData, int $id)
     {
