@@ -92,6 +92,7 @@ class ProjectController
             'viewproject' => $viewproject,
             'currentPage' => $page,
             'lastPage' => $lastPage,
+            'record' => $count
         ]);
     }
     public function page()

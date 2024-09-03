@@ -2,12 +2,13 @@
 
 <!-- Preserve other query parameters in the form action -->
 
-<?php
-$pages = range(1, $lastPage);
-$count = count($pages); ?>
-<?php if ($selectedValue = (isset($_POST['select_limit'])) && $_POST['select_limit'] != "1" && count($pages) > 3): ?>
+
+<?php $record = $record ? $record : ''; ?>
+<?php if ($selectedValue = (isset($_POST['select_limit'])) && $_POST['select_limit'] != "1" && ($record) >= 3): ?>
     <input type="hidden" id="p" name="p" value="<?php echo e($currentPage); ?>">
     <?php
+    $pages = range(1, $lastPage);
+    $count = count($pages);
     $currentPage = isset($_POST['p']) ? $_POST['p'] : 1;
     if ($currentPage > $lastPage) {
         $currentPage = $lastPage;

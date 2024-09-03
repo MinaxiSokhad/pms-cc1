@@ -19,6 +19,8 @@ class TaskController
     }
     public function taskView()
     {
+        $viewtask = [];
+        $count = 0;
         $_POST['select_limit'] = $_POST['select_limit'] ? $_POST['select_limit'] : 3;
         $showRecord = $_POST['select_limit'];
 
@@ -62,6 +64,7 @@ class TaskController
         } else {
             [$viewtask, $count] = $this->taskService->getTask([], '', order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
         }
+        // dd($count);
         if ($showRecord != '1') {
             $lastPage = ceil($count / $limit);//Find total page
         }
@@ -70,7 +73,8 @@ class TaskController
             'viewtask' => $viewtask,
             'currentPage' => $page,
             'lastPage' => $lastPage,
-            'task_status' => $task_status
+            'task_status' => $task_status,
+            'record' => $count
         ]);
     }
     public function createTask()

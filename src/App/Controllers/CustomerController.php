@@ -85,7 +85,7 @@ class CustomerController
             'customers' => $customers,
             'currentPage' => $page,
             'lastPage' => $lastPage,
-
+            'record' => $count
         ]);
 
     }
