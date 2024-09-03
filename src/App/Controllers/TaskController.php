@@ -19,9 +19,10 @@ class TaskController
     }
     public function taskView()
     {
+        $_POST['select_limit'] = $_POST['select_limit'] ? $_POST['select_limit'] : 3;
         $showRecord = $_POST['select_limit'];
 
-        if ($showRecord != "0") {
+        if ($showRecord != "1") {
             $page = isset($_POST['p']) ? (int) $_POST['p'] : 1;
             $limit = isset($_POST['select_limit']) ? $_POST['select_limit'] : 3;
             $offset = (int) ($page - 1) * $limit;
@@ -61,7 +62,7 @@ class TaskController
         } else {
             [$viewtask, $count] = $this->taskService->getTask([], '', order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
         }
-        if ($showRecord != '0') {
+        if ($showRecord != '1') {
             $lastPage = ceil($count / $limit);//Find total page
         }
         $task_status = $this->taskService->getTaskStatus();

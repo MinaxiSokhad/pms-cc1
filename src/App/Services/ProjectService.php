@@ -99,6 +99,8 @@ class ProjectService
     public function getProject(array $status = [], string $searchTerm = '', string $order_by = 'id', string $direction = 'desc', int $limit = 3, int $offset = 0)
     {
 
+        $viewproject = [];
+        $recordCount = 0;
         $filter = isset($filter) ? $filter : '';
         $search = isset($search) ? $search : '';
         $order = "ORDER BY " . $order_by . " " . $direction;

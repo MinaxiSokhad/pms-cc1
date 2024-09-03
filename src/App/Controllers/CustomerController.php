@@ -17,20 +17,27 @@ class CustomerController
     }
     public function customerView(array $params = [])
     {
-
-        $page = 1;
-        $limit = 3;
-        $offset = 0;
         $viewcustomer = [];
         $count = 0;
+        $_POST['select_limit'] = $_POST['select_limit'] ? $_POST['select_limit'] : 3;
+        $showRecord = $_POST['select_limit'];
+
+        if ($showRecord != "1") {
+            $page = isset($_POST['p']) ? (int) $_POST['p'] : 1;
+            $limit = isset($_POST['select_limit']) ? $_POST['select_limit'] : 3;
+            $offset = (int) ($page - 1) * $limit;
+        } else {
+            $page = '';
+            $limit = '';
+            $offset = '';
+        }
+
 
         $order_by = 'id';
         $direction = 'desc';
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-            $page = isset($_POST['p']) ? (int) $_POST['p'] : 1;
-            $offset = (int) ($page - 1) * $limit;
             if (array_key_exists('order_by', $_POST)) {
                 $order_by = $_POST['order_by'];
                 $direction = $_POST['direction'];
@@ -51,6 +58,7 @@ class CustomerController
                 } else {
                     [$viewcustomer, $count] = $this->customerService->getCustomer(companyFilter: $_POST['company'], order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
                 }
+
             }
             if (array_key_exists("country", $_POST)) {
                 if ($_POST['s']) {
@@ -69,21 +77,14 @@ class CustomerController
         }
 
         $customers = $this->customerService->getcustomers();
-
-        $lastPage = ceil($count / $limit);
-
+        if ($showRecord != "1") {
+            $lastPage = ceil($count / $limit);//Find total page
+        }
         echo $this->view->render("customer.php", [
             'viewcustomer' => $viewcustomer,
             'customers' => $customers,
-
             'currentPage' => $page,
-            'previousPageQuery' => http_build_query([
-                'p' => $page - 1
-            ]),
             'lastPage' => $lastPage,
-            'nextPageQuery' => http_build_query([
-                'p' => $page + 1
-            ]),
 
         ]);
 

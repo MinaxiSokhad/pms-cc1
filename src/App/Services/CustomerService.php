@@ -16,8 +16,12 @@ class CustomerService
         $filterCompany = isset($filterCompany) ? $filterCompany : '';
         $filterCountry = isset($filterCountry) ? $filterCountry : '';
         $search = "";
-        $order = " ORDER BY " . $order_by . " " . $direction . " LIMIT " . $limit . " OFFSET " . $offset;
-
+        $order = " ORDER BY " . $order_by . " " . $direction;
+        if ($limit != 0) {
+            $limit_offset = " LIMIT " . $limit . " OFFSET " . $offset;
+        } else {
+            $limit_offset = '';
+        }
         $param = [];
         if ($companyFilter) {
             $comNames = [];
@@ -51,7 +55,7 @@ class CustomerService
         )->findAll();
         $recordCount = count($viewcustomer);
         $viewcustomer = $this->db->query(
-            $query . $order,
+            $query . $order . $limit_offset,
             $param
         )->findAll();
         // dd($query . $order);

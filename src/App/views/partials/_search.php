@@ -7,7 +7,7 @@
         <option value="3" <?php echo $select_limit == "3" ? 'selected' : ''; ?>>3</option>
         <option value="5" <?php echo $select_limit == "5" ? 'selected' : ''; ?>>5</option>
         <option value="10" <?php echo $select_limit == "10" ? 'selected' : ''; ?>>10</option>
-        <option value="0" <?php echo $select_limit == "0" ? 'selected' : ''; ?>>All</option>
+        <option value="1" <?php echo $select_limit == "1" ? 'selected' : ''; ?>>All</option>
     </select>
     <input style="margin-left: 10px; width:500px;color:white;" type="text" name="s"
         value="<?php echo e($_POST['s'] ?? ''); ?>" class="form-control" placeholder="Search...">

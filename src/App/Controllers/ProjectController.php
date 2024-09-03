@@ -38,9 +38,12 @@ class ProjectController
     }
     public function projectView(array $params = [])
     {
+        $viewproject = [];
+        $count = 0;
+        $_POST['select_limit'] = $_POST['select_limit'] ? $_POST['select_limit'] : 3;
         $showRecord = $_POST['select_limit'];
 
-        if ($showRecord != "0") {
+        if ($showRecord != "1") {
             $page = isset($_POST['p']) ? (int) $_POST['p'] : 1;
             $limit = isset($_POST['select_limit']) ? $_POST['select_limit'] : 3;
             $offset = (int) ($page - 1) * $limit;
@@ -81,10 +84,10 @@ class ProjectController
         } else {
             [$viewproject, $count] = $this->projectService->getProject([], '', order_by: $order_by, direction: $direction, limit: (int) $limit, offset: (int) $offset);
         }
-        if ($showRecord != '0') {
+        if ($showRecord != '1') {
             $lastPage = ceil($count / $limit);//Find total page
         }
-
+        // dd([$viewproject, $count]);
         echo $this->view->render("projects.php", [
             'viewproject' => $viewproject,
             'currentPage' => $page,

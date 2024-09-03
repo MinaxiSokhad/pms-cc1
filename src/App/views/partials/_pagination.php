@@ -3,7 +3,7 @@
 <!-- Preserve other query parameters in the form action -->
 
 
-<?php if ($selectedValue = (isset($_POST['select_limit'])) && $_POST['select_limit'] != "0"): ?>
+<?php if ($selectedValue = (isset($_POST['select_limit'])) && $_POST['select_limit'] != "1"): ?>
     <input type="hidden" id="p" name="p" value="<?php echo e($currentPage); ?>">
     <?php
     $pages = range(1, $lastPage);
@@ -14,6 +14,7 @@
     } else if ($currentPage <= 0) {
         $currentPage = 1;
     }
+    // dd($viewproject);
     ?>
     <?php if ($currentPage > 1): ?>
 
@@ -69,6 +70,9 @@
                     </form>
                     </div>
                 <?php endif; ?>
+                <?php
+
+                ?>
                 <script>
 
                 </script>
