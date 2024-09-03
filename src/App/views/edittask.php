@@ -60,16 +60,14 @@
                                                                     <select class="js-example-basic-single"
                                                                         style="width: 100%;" name="project">
                                                                         <?php foreach ($viewproject as $c): ?>
-                                                                           
-                                                                           <option value="<?php echo e($c['id']); ?>">
-                                                                               <?php
-                                                                              if ($c['name'] == $edittask['project']) {
-                                                                               echo e($edittask['project']);
-                                                                                   continue;
-                                                                               } 
-                                                                               echo e($c['name']);
-                                                                               ?>
+                                                                           <?php if($c['name']==$edittask['project']) :?>
+                                                                           <option value="<?php echo e($c['id']); ?>" selected>
+                                                                           <?php echo e($c['name']); ?>
                                                                            </option>
+                                                                           <?php else : ?>
+                                                                            <option value="<?php echo e($c['id']); ?>">
+                                                                            <?php echo e($c['name']); ?>
+                                                                            <?php endif; ?>
                                                                        <?php endforeach; ?>
                                                                     </select>
                                                                     <?php if (array_key_exists('project', $errors)): ?>

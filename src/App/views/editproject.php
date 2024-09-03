@@ -30,7 +30,7 @@
                                                             <h4 class="card-title">Edit Project</h4>
                                                             <hr>
                                                             <h5> * Indicates required question</h5><br />
-                                                            <form class="forms-sample" method="POST">
+                                                            <form class="forms-sample" method="POST" id="editproject">
                                                                 <?php include $this->resolve('partials/_csrf.php'); ?>
                                                                 <div class="form-group">
                                                                     <div class="bg-gray-100 mt-2 p-2 text-red-500"
@@ -79,16 +79,17 @@
                                                                     <select class="js-example-basic-single"
                                                                         style="width: 100%;" name="customer">
                                                                         <?php foreach ($viewcustomer as $c): ?>
-                                                                           
-                                                                            <option value="<?php echo e($c['id']); ?>">
-                                                                                <?php
-                                                                               if ($c['company'] == $editproject['customer']) {
-                                                                                echo e($editproject['customer']);
-                                                                                    continue;
-                                                                                } 
-                                                                                echo e($c['company']);
+                                                                            <?php
+                                                                               if ($c['company'] == $editproject['customer']):
                                                                                 ?>
+                                                                            <option value="<?php echo e($c['id']); ?>" selected>
+                                                                               <?php echo e($c['company']); ?>
                                                                             </option>
+                                                                            <?php else: ?>
+                                                                                <option value="<?php echo e($c['id']); ?>" >
+                                                                               <?php echo e($c['company']); ?>
+                                                                            </option>
+                                                                            <?php endif; ?>
                                                                         <?php endforeach; ?>
 
                                                                     </select>
@@ -225,7 +226,7 @@
                                                                 </div>
                                                                 <button type="submit" name="projectsubmit"
                                                                     class="btn btn-primary mr-2">Edit Project</button>
-                                                                <button class="btn btn-dark">Cancel</button>
+                                                                    <button class="btn btn-dark" type="reset" name="reset" >Cancel</button>
                                                             </form>
 <?php                                                            
 ?>
@@ -289,3 +290,6 @@
 </body>
 
 </html>
+<script>
+    document.getElementById("editproject").reset();
+</script>

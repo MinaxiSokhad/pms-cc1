@@ -9,7 +9,7 @@
         <option value="10" <?php echo $select_limit == "10" ? 'selected' : ''; ?>>10</option>
         <option value="0" <?php echo $select_limit == "0" ? 'selected' : ''; ?>>All</option>
     </select>
-    <input style="margin-left: 10px; width:500px;" type="text" name="s" style="color:white;"
+    <input style="margin-left: 10px; width:500px;color:white;" type="text" name="s"
         value="<?php echo e($_POST['s'] ?? ''); ?>" class="form-control" placeholder="Search...">
     <button style="margin-right: 10px;width:90px;" type="button" onclick="form_submit()" style="color: black;">
         Search
@@ -25,11 +25,6 @@
             filterform.submit();
         }
         function setPageAndSubmit(page = 1) {
-            // Set the hidden input's value to the selected page
-            // document.getElementById('p').value = page;
-            // Submit the form
-            // Select all hidden elements
-            // Log all hidden element values to the console
             const hiddenElements = document.querySelectorAll('input[type="hidden"]');
             hiddenElements.forEach(element => {
                 if (element.name == "p") {
