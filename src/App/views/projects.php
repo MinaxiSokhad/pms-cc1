@@ -231,8 +231,10 @@
                                                                             <a a href="#" class="sort-button"
                                                                                 onclick="sortBy('project_member_name','desc')">▼</a>
                                                                         </th>
-                                                                        <th>Edit</th>
-                                                                        <th>Delete</th>
+                                                                        <?php if ($_SESSION['user_type'] == "A"): ?>
+                                                                            <th>Edit</th>
+                                                                            <th>Delete</th>
+                                                                        <?php endif; ?>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -249,7 +251,14 @@
                                                                                     </label>
                                                                                 </div>
                                                                             </td>
-                                                                            <td><?php echo e($p['name']); ?></td>
+                                                                            <?php if ($_SESSION['user_type'] == "A"): ?>
+                                                                                <td><a
+                                                                                        href="/editproject/<?php echo e($p['id']); ?>">
+                                                                                        <?php echo e($p['name']); ?></a></td>
+                                                                            <?php else: ?>
+                                                                                <td><?php echo e($p['name']); ?></td>
+                                                                            <?php endif; ?>
+
                                                                             <td><?php echo e($p['description']); ?></td>
                                                                             <td><?php echo e($p['customer']); ?></td>
                                                                             <td><?php echo e($p['project_tags_name']); ?>
@@ -259,38 +268,41 @@
                                                                             <td><?php echo e($p['status']); ?></td>
                                                                             <td><?php echo e($p['project_member_name']); ?>
                                                                             </td>
+                                                                            <?php if ($_SESSION['user_type'] == "A"): ?>
 
-                                                                            <td><a
-                                                                                    href="/editproject/<?php echo $p['id']; ?>">
-                                                                                    <div
-                                                                                        class="badge badge-outline-success">
-                                                                                        Edit</div>
-                                                                                </a></td>
-                                                                            <input type="hidden" name="_METHOD"
-                                                                                value="DELETE">
-                                                                            <td><button type="button"
-                                                                                    onclick="deleteproject(<?php echo $p['id']; ?>)"
-                                                                                    name="delete"
-                                                                                    class="badge badge-outline-danger"
-                                                                                    style="background-color:transparent;">Delete
-                                                                                </button></td>
+                                                                                <td><a
+                                                                                        href="/editproject/<?php echo $p['id']; ?>">
+                                                                                        <div
+                                                                                            class="badge badge-outline-success">
+                                                                                            Edit</div>
+                                                                                    </a></td>
+                                                                                <input type="hidden" name="_METHOD"
+                                                                                    value="DELETE">
+                                                                                <td><button type="button"
+                                                                                        onclick="deleteproject(<?php echo $p['id']; ?>)"
+                                                                                        name="delete"
+                                                                                        class="badge badge-outline-danger"
+                                                                                        style="background-color:transparent;">Delete
+                                                                                    </button></td>
+                                                                            <?php endif; ?>
                                                                         </tr>
                                                                     <?php endforeach; ?>
                                                                 </tbody>
                                                             </table>
-                                                            <br>
-                                                            <a href="/createproject">
-                                                                <div class="badge badge-outline-success">Add New
-                                                                    Project</div>
-                                                            </a>
-                                                            <?php if ($viewproject): ?>
-                                                                <input type="hidden" name="_METHOD" value="DELETE">
-                                                                <button type="button" onclick="deleteSelectedProjects()"
-                                                                    name="deleteAll" class="badge badge-outline-danger"
-                                                                    style="background-color:transparent;">Delete
-                                                                    Selected Projects</button>
+                                                            <?php if ($_SESSION['user_type'] == "A"): ?>
+                                                                <br>
+                                                                <a href="/createproject">
+                                                                    <div class="badge badge-outline-success">Add New
+                                                                        Project</div>
+                                                                </a>
+                                                                <?php if ($viewproject): ?>
+                                                                    <input type="hidden" name="_METHOD" value="DELETE">
+                                                                    <button type="button" onclick="deleteSelectedProjects()"
+                                                                        name="deleteAll" class="badge badge-outline-danger"
+                                                                        style="background-color:transparent;">Delete
+                                                                        Selected Projects</button>
+                                                                <?php endif; ?>
                                                             <?php endif; ?>
-
                                                             <br /><br />
                                                             <?php include $this->resolve("partials/_pagination.php") ?>
 

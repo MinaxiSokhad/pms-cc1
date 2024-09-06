@@ -27,10 +27,13 @@
             <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
+
                   <div class="row">
                     <div class="col-9">
                       <div class="d-flex align-items-center align-self-start">
+
                         <h3 class="mb-0">Total Projects</h3>
+
                       </div>
                     </div>
                     <div class="col-3">
@@ -39,7 +42,9 @@
                       </div>
                     </div>
                   </div>
-                  <h4 class="mb-0"><?php echo e(count($project_count)); ?></h4>
+                  <?php if ($_SESSION['user_type'] == "A"): ?>
+                    <h4 class="mb-0"><?php echo e(count($project_count)); ?></h4>
+                  <?php endif; ?>
                 </div>
               </div>
             </div>
@@ -58,48 +63,59 @@
                       </div>
                     </div>
                   </div>
-                  <h4 class="mb-0"><?php echo e(count($task_count)); ?></h4>
+                  <?php if ($_SESSION['user_type'] == "A"): ?>
+                    <h4 class="mb-0"><?php echo e(count($task_count)); ?></h4>
+                  <?php endif; ?>
                 </div>
               </div>
             </div>
-            <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-9">
-                      <div class="d-flex align-items-center align-self-start">
-                        <h3 class="mb-0">Total Customers</h3>
+            <?php if ($_SESSION['user_type'] == "A"): ?>
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0">Total Customers</h3>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="icon icon-box-success ">
+                          <!-- <span class="mdi mdi-arrow-top-right icon-item"></span> -->
+                        </div>
                       </div>
                     </div>
-                    <div class="col-3">
-                      <div class="icon icon-box-success ">
-                        <!-- <span class="mdi mdi-arrow-top-right icon-item"></span> -->
-                      </div>
-                    </div>
+
+                    <h4 class="mb-0"><?php echo e(count($customer_count)); ?></h4>
+
                   </div>
-                  <h4 class="mb-0"><?php echo e(count($customer_count)); ?></h4>
                 </div>
+
               </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <div class="row">
-                    <div class="col-9">
-                      <div class="d-flex align-items-center align-self-start">
-                        <h3 class="mb-0">Total Members</h3>
+            <?php endif; ?>
+            <?php if ($_SESSION['user_type'] == "A"): ?>
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0">Total Members</h3>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="icon icon-box-success ">
+                          <!-- <span class="mdi mdi-arrow-top-right icon-item"></span> -->
+                        </div>
                       </div>
                     </div>
-                    <div class="col-3">
-                      <div class="icon icon-box-success ">
-                        <!-- <span class="mdi mdi-arrow-top-right icon-item"></span> -->
-                      </div>
-                    </div>
+
+                    <h4 class="mb-0"><?php echo e(count($user_count)); ?></h4>
+
                   </div>
-                  <h4 class="mb-0"><?php echo e(count($user_count)); ?></h4>
                 </div>
               </div>
-            </div>
+            <?php endif; ?>
           </div>
           <div class="row">
 
@@ -248,7 +264,11 @@
             <div class="col-12 grid-margin">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Latest Projects</h4>
+                  <?php if ($_SESSION['user_type'] == "A"): ?>
+                    <h4 class="card-title">Latest Projects</h4>
+                  <?php else: ?>
+                    <h4 class="card-title">My Projects</h4>
+                  <?php endif; ?>
                   <div class="table-responsive">
                     <form id="form" action="" method="POST">
                       <?php include $this->resolve('partials/_csrf.php'); ?>
@@ -304,8 +324,10 @@
                               Members
                               <a a href="#" class="sort-button" onclick="sortBy('project_member_name','desc')">▼</a>
                             </th>
-                            <th>Edit</th>
-                            <th>Delete</th>
+                            <?php if ($_SESSION['user_type'] == "A"): ?>
+                              <th>Edit</th>
+                              <th>Delete</th>
+                            <?php endif; ?>
                           </tr>
                         </thead>
                         <tbody>
@@ -323,7 +345,13 @@
                                         </label>
                                       </div>
                                     </td>
-                                    <td><?php echo e($p['name']); ?></td>
+                                    <?php if ($_SESSION['user_type'] == "A"): ?>
+                                      <td><a href="/editproject/<?php echo e($p['id']); ?>">
+                                          <?php echo e($p['name']); ?></a></td>
+                                    <?php else: ?>
+                                      <td><a href="/showproject/<?php echo e($p['id']); ?>">
+                                          <?php echo e($p['name']); ?></a></td>
+                                    <?php endif; ?>
                                     <td><?php echo e($p['description']); ?></td>
                                     <td><?php echo e($p['customer']); ?></td>
                                     <td><?php echo e($p['project_tags_name']); ?>
@@ -333,15 +361,16 @@
                                     <td><?php echo e($p['status']); ?></td>
                                     <td><?php echo e($p['project_member_name']); ?>
                                     </td>
-
-                                    <td><a href="/editproject/<?php echo $p['id']; ?>">
-                                        <div class="badge badge-outline-success">
-                                          Edit</div>
-                                      </a></td>
-                                    <input type="hidden" name="_METHOD" value="DELETE">
-                                    <td><button type="button" onclick="deleteproject(<?php echo $p['id']; ?>)" name="delete"
-                                        class="badge badge-outline-danger" style="background-color:transparent;">Delete
-                                      </button></td>
+                                    <?php if ($_SESSION['user_type'] == "A"): ?>
+                                      <td><a href="/editproject/<?php echo $p['id']; ?>">
+                                          <div class="badge badge-outline-success">
+                                            Edit</div>
+                                        </a></td>
+                                      <input type="hidden" name="_METHOD" value="DELETE">
+                                      <td><button type="button" onclick="deleteproject(<?php echo $p['id']; ?>)" name="delete"
+                                          class="badge badge-outline-danger" style="background-color:transparent;">Delete
+                                        </button></td>
+                                    <?php endif; ?>
                                   </tr>
 
                                 <?php endforeach; ?>
@@ -358,7 +387,11 @@
             <div class="col-12 grid-margin">
               <div class="card">
                 <div class="card-body">
-                  <h4 class="card-title">Latest Tasks</h4>
+                  <?php if ($_SESSION['user_type'] == "A"): ?>
+                    <h4 class="card-title">Latest Tasks</h4>
+                  <?php else: ?>
+                    <h4 class="card-title">My Tasks</h4>
+                  <?php endif; ?>
                   <div class="table-responsive">
                     <form id="form" action="" method="POST">
                       <?php include $this->resolve('partials/_csrf.php'); ?>
@@ -372,11 +405,11 @@
                                 </label>
                               </div>
                             </th>
-                            <th>
+                            <!-- <th>
                               <a a href="#" class="sort-button" onclick="sortBy('name','asc')">▲</a>
                               Project Name
                               <a a href="#" class="sort-button" onclick="sortBy('name','desc')">▼</a>
-                            </th>
+                            </th> -->
                             <th>
                               <a a href="#" class="sort-button" onclick="sortBy('name','asc')">▲</a>
                               Task Name
@@ -414,8 +447,10 @@
                               Priority
                               <a a href="#" class="sort-button" onclick="sortBy('priority','desc')">▼</a>
                             </th>
-                            <th>Edit</th>
-                            <th>Delete</th>
+                            <?php if ($_SESSION['user_type'] == "A"): ?>
+                              <th>Edit</th>
+                              <th>Delete</th>
+                            <?php endif; ?>
                           </tr>
                         </thead>
                         <tbody>
@@ -432,8 +467,14 @@
                                         </label>
                                       </div>
                                     </td>
-                                    <td><?php echo e($t['project']); ?></td>
-                                    <td><?php echo e($t['name']); ?></td>
+                                    <td> <?php if ($_SESSION['user_type'] == "A"): ?>
+                                        <a href="/edittask/<?php echo $t['id']; ?>">
+                                          <?php echo e($t['name']); ?></a><br><br><?php echo e("# " . $t['project']); ?>
+                                      <?php else: ?>
+                                        <a href="/showtask/<?php echo $t['id']; ?>">
+                                          <?php echo e($t['name']); ?></a><br><br><?php echo e("# " . $t['project']); ?>
+                                      <?php endif; ?>
+                                    </td>
                                     <td><?php echo e($t['task_member_name']); ?>
                                     </td>
                                     <td><?php echo e($t['task_tags_name']); ?>
@@ -443,21 +484,23 @@
                                     <td><?php echo e($t['status']); ?></td>
                                     <td><?php echo e($t['priority']); ?>
                                     </td>
-
-                                    <td><a href="/edittask/<?php echo $t['id']; ?>">
-                                        <div class="badge badge-outline-success">
-                                          Edit</div>
-                                      </a></td>
-                                    <input type="hidden" name="_METHOD" value="DELETE">
-                                    <td><button type="button" onclick="deletetask(<?php echo $t['id']; ?>)" name="delete"
-                                        class="badge badge-outline-danger" style="background-color:transparent;">Delete
-                                      </button></td>
+                                    <?php if ($_SESSION['user_type'] == "A"): ?>
+                                      <td><a href="/edittask/<?php echo $t['id']; ?>">
+                                          <div class="badge badge-outline-success">
+                                            Edit</div>
+                                        </a></td>
+                                      <input type="hidden" name="_METHOD" value="DELETE">
+                                      <td><button type="button" onclick="deletetask(<?php echo $t['id']; ?>)" name="delete"
+                                          class="badge badge-outline-danger" style="background-color:transparent;">Delete
+                                        </button></td>
+                                    <?php endif; ?>
                                   </tr>
                                 <?php endforeach; ?>
                               <?php endif; endforeach; endif; ?>
                         </tbody>
                       </table>
                     </form>
+
                   </div>
                 </div>
               </div>
@@ -484,3 +527,44 @@
 </body>
 
 </html>
+<script>
+  $(document).ready(function () {
+    // Select/Deselect all checkboxes
+    $("#selectAll").click(function () {
+      $("input[name='ids[]']").prop('checked', this.checked);
+    });
+
+    // Select/Deselect checkboxes in the Customers group
+    $("input[name='selectStatus[]']").click(function () {
+      $("input[name='status[]']").prop('checked', this.checked);
+    });
+  });
+
+  function deleteSelectedProjects() {
+    var form = document.getElementById('form');
+    var selectedCheckboxes = document.querySelectorAll("input[name^='ids']:checked");
+    if (selectedCheckboxes.length === 0) {
+      alert("No projects selected");
+
+      form.action = "/projects";
+    }
+    else {
+      if (confirm('Are you sure you want to delete selected projects?')) {
+        <?php $id[0] = [0]; ?>
+        form.action = "/deleteproject/<?php echo e($id[0][0]); ?>";
+        form.submit();
+      }
+    }
+
+  }
+  function deleteproject(projectid) {
+    if (confirm('Are you sure you want to delete this project ?')) {
+      <?php $id[0] = [0]; ?>
+      form.action = "/deleteproject/" + projectid;
+      form.submit();
+    }
+  }
+
+
+
+</script>

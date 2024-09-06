@@ -98,7 +98,10 @@ class ProjectService
 
     public function getProject(array $status = [], string $searchTerm = '', string $order_by = 'id', string $direction = 'desc', int $limit = 3, int $offset = 0)
     {
-
+        if ($_SESSION['user_type'] == "A") {
+            $param = [];
+            $where = " WHERE project.id > 0";
+        }
         $viewproject = [];
         $recordCount = 0;
         $filter = isset($filter) ? $filter : '';
@@ -125,7 +128,7 @@ class ProjectService
             OR customers.company LIKE :search
             OR tags.name LIKE :search
             OR user.name LIKE :search)";
-            $param = ['search' => "%{$searchTerm}%"];
+            $param .= ['search' => "%{$searchTerm}%"];
         }
 
         $query = "SELECT

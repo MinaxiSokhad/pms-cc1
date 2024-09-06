@@ -51,17 +51,17 @@ class EditProfileService
         return $this->db->query(
             "SELECT * FROM user WHERE id=:id",
             [
-                'id' => $_SESSION['user']
+                'id' => $id
             ]
         )->find();
 
-        if (!isset($_SESSION['user'])) {
+        if (!isset($id)) {
             die("User not found.");
         }
     }
     public function updateData(array $formData, array $file, int $id)
     {
-        $userdata = $this->getUserProfile((int) $_SESSION['user']);
+        $userdata = $this->getUserProfile((int) $id);
 
         if ($file['name'] != '') {
             $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);

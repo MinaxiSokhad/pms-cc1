@@ -157,13 +157,13 @@
                                                                                 </label>
                                                                             </div>
                                                                         </th>
-                                                                        <th>
+                                                                        <!-- <th>
                                                                             <a a href="#" class="sort-button"
                                                                                 onclick="sortBy('name','asc')">▲</a>
                                                                             Project Name
                                                                             <a a href="#" class="sort-button"
                                                                                 onclick="sortBy('name','desc')">▼</a>
-                                                                        </th>
+                                                                        </th> -->
                                                                         <th>
                                                                             <a a href="#" class="sort-button"
                                                                                 onclick="sortBy('name','asc')">▲</a>
@@ -215,11 +215,16 @@
                                                                             <a a href="#" class="sort-button"
                                                                                 onclick="sortBy('priority','desc')">▼</a>
                                                                         </th>
-                                                                        <th>Edit</th>
-                                                                        <th>Delete</th>
+                                                                        <?php if ($_SESSION['user_type'] == "A"): ?>
+                                                                            <th>Edit</th>
+                                                                            <th>Delete</th>
+                                                                        <?php endif; ?>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
+                                                                    <?php foreach ($viewproject as $p) {
+
+                                                                    } ?>
                                                                     <?php foreach ($viewtask as $t): ?>
                                                                         <tr>
                                                                             <td>
@@ -233,8 +238,15 @@
                                                                                     </label>
                                                                                 </div>
                                                                             </td>
-                                                                            <td><?php echo e($t['project']); ?></td>
-                                                                            <td><?php echo e($t['name']); ?></td>
+                                                                            <!-- <td><?php //echo e($t['project']); ?></td> -->
+                                                                            <td> <?php if ($_SESSION['user_type'] == "A"): ?>
+                                                                                    <a href="/edittask/<?php echo $t['id']; ?>">
+                                                                                        <?php echo e($t['name']); ?></a><br><br><?php echo e("# " . $t['project']); ?>
+                                                                                <?php else: ?>
+                                                                                    <a href="/showtask/<?php echo $t['id']; ?>">
+                                                                                        <?php echo e($t['name']); ?></a><br><br><?php echo e("# " . $t['project']); ?>
+                                                                                <?php endif; ?>
+                                                                            </td>
                                                                             <td><?php echo e($t['task_member_name']); ?>
                                                                             </td>
                                                                             <td><?php echo e($t['task_tags_name']); ?>
@@ -244,38 +256,41 @@
                                                                             <td><?php echo e($t['status']); ?></td>
                                                                             <td><?php echo e($t['priority']); ?>
                                                                             </td>
-
-                                                                            <td><a href="/edittask/<?php echo $t['id']; ?>">
-                                                                                    <div
-                                                                                        class="badge badge-outline-success">
-                                                                                        Edit</div>
-                                                                                </a></td>
-                                                                            <input type="hidden" name="_METHOD"
-                                                                                value="DELETE">
-                                                                            <td><button type="button"
-                                                                                    onclick="deletetask(<?php echo $t['id']; ?>)"
-                                                                                    name="delete"
-                                                                                    class="badge badge-outline-danger"
-                                                                                    style="background-color:transparent;">Delete
-                                                                                </button></td>
+                                                                            <?php if ($_SESSION['user_type'] == "A"): ?>
+                                                                                <td><a href="/edittask/<?php echo $t['id']; ?>">
+                                                                                        <div
+                                                                                            class="badge badge-outline-success">
+                                                                                            Edit</div>
+                                                                                    </a></td>
+                                                                                <input type="hidden" name="_METHOD"
+                                                                                    value="DELETE">
+                                                                                <td><button type="button"
+                                                                                        onclick="deletetask(<?php echo $t['id']; ?>)"
+                                                                                        name="delete"
+                                                                                        class="badge badge-outline-danger"
+                                                                                        style="background-color:transparent;">Delete
+                                                                                    </button></td>
+                                                                            <?php endif; ?>
                                                                         </tr>
                                                                     <?php endforeach; ?>
                                                                 </tbody>
                                                             </table>
-                                                            <br>
-                                                            <a href="/createtask">
-                                                                <div class="badge badge-outline-success">Add New
-                                                                    Task</div>
-                                                            </a>
-                                                            <?php if ($viewtask): ?>
-                                                                <input type="hidden" name="_METHOD" value="DELETE">
-                                                                <button type="button" onclick="deleteSelectedTasks()"
-                                                                    name="deleteAll" class="badge badge-outline-danger"
-                                                                    style="background-color:transparent;">Delete
-                                                                    Selected Tasks</button>
+                                                            <?php if ($_SESSION['user_type'] == "A"): ?>
+                                                                <br>
+                                                                <a href="/createtask">
+                                                                    <div class="badge badge-outline-success">Add New
+                                                                        Task</div>
+                                                                </a>
+                                                                <?php if ($viewtask): ?>
+                                                                    <input type="hidden" name="_METHOD" value="DELETE">
+                                                                    <button type="button" onclick="deleteSelectedTasks()"
+                                                                        name="deleteAll" class="badge badge-outline-danger"
+                                                                        style="background-color:transparent;">Delete
+                                                                        Selected Tasks</button>
+                                                                <?php endif; ?>
                                                             <?php endif; ?>
-
                                                             <br /><br />
+
                                                             <?php include $this->resolve("partials/_pagination.php") ?>
 
                                                         </form>

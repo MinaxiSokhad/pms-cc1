@@ -18,22 +18,26 @@ class ProjectController
     }
     public function createProject()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            $viewcustomer = $this->customerService->getcustomers();
-            $users = $this->projectService->getUser();
-            $viewtags = $this->projectService->getTags();
-            echo $this->view->render("createproject.php", [
-                "viewcustomer" => $viewcustomer,
-                "users" => $users,
-                'tags' => $viewtags
-            ]);
-        } else {
-            $this->validatorService->validateProject($_POST);
-            if ($this->validatorService->isExists('project', 'name', $_POST['name'])) {
-                throw new ValidationException(['name' => ['Project Name Already Exists']]);
+        if ($_SESSION['user_type'] == "A") {
+            if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+                $viewcustomer = $this->customerService->getcustomers();
+                $users = $this->projectService->getUser();
+                $viewtags = $this->projectService->getTags();
+                echo $this->view->render("createproject.php", [
+                    "viewcustomer" => $viewcustomer,
+                    "users" => $users,
+                    'tags' => $viewtags
+                ]);
+            } else {
+                $this->validatorService->validateProject($_POST);
+                if ($this->validatorService->isExists('project', 'name', $_POST['name'])) {
+                    throw new ValidationException(['name' => ['Project Name Already Exists']]);
+                }
+                $this->projectService->create($_POST);
+                redirectTo('/projects');
             }
-            $this->projectService->create($_POST);
-            redirectTo('/projects');
+        } else {
+            echo $this->view->render("errors/permission-error.php");
         }
     }
     public function projectView(array $params = [])
@@ -101,37 +105,45 @@ class ProjectController
     }
     public function updateProject(array $params = [])
     {
+        if ($_SESSION['user_type'] == "A") {
 
-        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            $editproject = $this->projectService->getoneproject($params["project"]);
-            $viewcustomer = $this->customerService->getcustomers();
-            $users = $this->projectService->getUser();
-            $viewtags = $this->projectService->getTags();
-            if (!$editproject) {
-                redirectTo('/');
+            if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+                $editproject = $this->projectService->getoneproject($params["project"]);
+                $viewcustomer = $this->customerService->getcustomers();
+                $users = $this->projectService->getUser();
+                $viewtags = $this->projectService->getTags();
+                if (!$editproject) {
+                    redirectTo('/');
+                }
+
+                echo $this->view->render("editproject.php", [
+                    'editproject' => $editproject,
+                    "viewcustomer" => $viewcustomer,
+                    "users" => $users,
+                    'tags' => $viewtags
+                ]);
+            } else {
+                $this->validatorService->validateProject($_POST);
+                $this->projectService->update($_POST, (int) $params['project']);
+                redirectTo('/projects');
             }
-
-            echo $this->view->render("editproject.php", [
-                'editproject' => $editproject,
-                "viewcustomer" => $viewcustomer,
-                "users" => $users,
-                'tags' => $viewtags
-            ]);
         } else {
-            $this->validatorService->validateProject($_POST);
-            $this->projectService->update($_POST, (int) $params['project']);
-            redirectTo('/projects');
+            echo $this->view->render("errors/permission-error.php");
         }
     }
     public function deleteProject(array $id)
     {
+        if ($_SESSION['user_type'] == "A") {
 
-        if ($id['project'] === "0") {
-            $this->projectService->delete($_POST['ids']);
-            redirectTo('/projects');
+            if ($id['project'] === "0") {
+                $this->projectService->delete($_POST['ids']);
+                redirectTo('/projects');
+            } else {
+                $this->projectService->delete([$id['project']]);//'customer' -> route parameter
+                redirectTo('/projects');
+            }
         } else {
-            $this->projectService->delete([$id['project']]);//'customer' -> route parameter
-            redirectTo('/projects');
+            echo $this->view->render("errors/permission-error.php");
         }
     }
 

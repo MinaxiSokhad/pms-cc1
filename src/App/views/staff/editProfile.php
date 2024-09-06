@@ -34,7 +34,7 @@
                                                                 $storage = "/storage/uploads/";
                                                                 $defaultImage = "/storage/uploads/download.png";
                                                                 // $url = "http://192.168.1.30/storage/uploads/";   
-                                                                $profileImage = !empty($profile['image']) ? $storage . $profile['storage_filename'] : $defaultImage;
+                                                                $profileImage = !empty($editProfile['image']) ? $storage . $editProfile['storage_filename'] : $defaultImage;
 
                                                                 ?>
                                                                 <div
@@ -42,7 +42,7 @@
                                                                     <img src="<?php echo e($profileImage) ?>"
                                                                         alt="Admin" class="rounded-circle" width="150">
                                                                     <div class="mt-3">
-                                                                        <h4><?php echo e($profile['name']); ?></h4>
+                                                                        <h4><?php echo e($editProfile['name']); ?></h4>
                                                                     </div>
                                                                 </div>
                                                             </div>

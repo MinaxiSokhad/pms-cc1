@@ -13,14 +13,14 @@
             $storage = "/storage/uploads/";
             $defaultImage = "/storage/uploads/download.png";
             // $url = "http://192.168.1.30/storage/uploads/";   
-            $profileImage = !empty($profile['image']) ? $storage . $profile['storage_filename'] : $defaultImage;
+            $profileImage = !empty($profileImg['image']) ? $storage . $profileImg['storage_filename'] : $defaultImage;
 
             ?>
             <img class="img-xs rounded-circle " src="<?php echo e($profileImage) ?>" alt="">
             <span class="count bg-success"></span>
           </div>
           <div class="profile-name">
-            <h5 class="mb-0 font-weight-normal" style="color:white"><?php echo e($profile['name']); ?></h5>
+            <h5 class="mb-0 font-weight-normal" style="color:white"><?php echo e($profileImg['name']); ?></h5>
             <span>Project Member</span>
           </div>
         </div>
@@ -69,14 +69,16 @@
         <span class="menu-title">Dashboard</span>
       </a>
     </li>
-    <li class="nav-item menu-items">
-      <a class="nav-link" href="/customer" aria-expanded="false" aria-controls="ui-basic">
+    <?php //dd($_SESSION['user_type']);
+    if ($_SESSION['user_type'] == "A"): ?>
+      <li class="nav-item menu-items">
+        <a class="nav-link" href="/customer" aria-expanded="false" aria-controls="ui-basic">
 
-        <span class="menu-title">Customer</span>
+          <span class="menu-title">Customer</span>
 
-      </a>
-    </li>
-
+        </a>
+      </li>
+    <?php endif; ?>
     <li class="nav-item menu-items">
       <a class="nav-link" href="/projects">
 
@@ -90,5 +92,14 @@
         <span class="menu-title">Tasks</span>
       </a>
     </li>
+    <?php //dd($_SESSION['user_type']);
+    if ($_SESSION['user_type'] == "A"): ?>
+      <li class="nav-item menu-items">
+        <a class="nav-link" href="/members">
+
+          <span class="menu-title">Members</span>
+        </a>
+      </li>
+    <?php endif; ?>
   </ul>
 </nav>

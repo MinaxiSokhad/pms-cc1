@@ -69,66 +69,80 @@ class TaskController
             $lastPage = ceil($count / $limit);//Find total page
         }
         $task_status = $this->taskService->getTaskStatus();
+        $viewproject = $this->projectService->getoneproject();
         echo $this->view->render("tasks.php", [
             'viewtask' => $viewtask,
             'currentPage' => $page,
             'lastPage' => $lastPage,
             'task_status' => $task_status,
-            'record' => $count
+            'record' => $count,
+            'viewproject' => $viewproject
         ]);
     }
     public function createTask()
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            $viewproject = $this->projectService->getoneproject();
-            $users = $this->projectService->getUser();
-            $viewtags = $this->projectService->getTags();
-            echo $this->view->render("createtask.php", [
-                "viewproject" => $viewproject,
-                "users" => $users,
-                'tags' => $viewtags
-            ]);
+        if ($_SESSION['user_type'] == "A") {
+            if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+                $viewproject = $this->projectService->getoneproject();
+                $users = $this->projectService->getUser();
+                $viewtags = $this->projectService->getTags();
+                echo $this->view->render("createtask.php", [
+                    "viewproject" => $viewproject,
+                    "users" => $users,
+                    'tags' => $viewtags
+                ]);
+            } else {
+                $this->validatorService->validateTask($_POST);
+                // if ($this->validatorService->isExists('task', 'name', $_POST['name'])) {
+                //     throw new ValidationException(['name' => ['Task Name Already Exists']]);
+                // }
+                $this->taskService->create($_POST);
+                redirectTo('/tasks');
+            }
         } else {
-            $this->validatorService->validateTask($_POST);
-            // if ($this->validatorService->isExists('task', 'name', $_POST['name'])) {
-            //     throw new ValidationException(['name' => ['Task Name Already Exists']]);
-            // }
-            $this->taskService->create($_POST);
-            redirectTo('/tasks');
+            echo $this->view->render("errors/permission-error.php");
         }
     }
     public function updateTask(array $params = [])
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            $edittask = $this->taskService->getonetask($params["task"]);
-            $viewproject = $this->projectService->getoneproject();
-            $users = $this->projectService->getUser();
-            $viewtags = $this->projectService->getTags();
-            if (!$edittask) {
-                redirectTo('/');
-            }
+        if ($_SESSION['user_type'] == "A") {
+            if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+                $edittask = $this->taskService->getonetask($params["task"]);
+                $viewproject = $this->projectService->getoneproject();
+                $users = $this->projectService->getUser();
+                $viewtags = $this->projectService->getTags();
+                if (!$edittask) {
+                    redirectTo('/');
+                }
 
-            echo $this->view->render("edittask.php", [
-                'edittask' => $edittask,
-                "viewproject" => $viewproject,
-                "users" => $users,
-                'tags' => $viewtags
-            ]);
+                echo $this->view->render("edittask.php", [
+                    'edittask' => $edittask,
+                    "viewproject" => $viewproject,
+                    "users" => $users,
+                    'tags' => $viewtags
+                ]);
+            } else {
+                $this->validatorService->validateTask($_POST);
+                $this->taskService->update($_POST, (int) $params['task']);
+                redirectTo('/tasks');
+            }
         } else {
-            $this->validatorService->validateTask($_POST);
-            $this->taskService->update($_POST, (int) $params['task']);
-            redirectTo('/tasks');
+            echo $this->view->render("errors/permission-error.php");
         }
     }
     public function deleteTask(array $id)
     {
+        if ($_SESSION['user_type'] == "A") {
 
-        if ($id['task'] === "0") {
-            $this->taskService->delete($_POST['ids']);
-            redirectTo('/tasks');
+            if ($id['task'] === "0") {
+                $this->taskService->delete($_POST['ids']);
+                redirectTo('/tasks');
+            } else {
+                $this->taskService->delete([$id['task']]);
+                redirectTo('/tasks');
+            }
         } else {
-            $this->taskService->delete([$id['task']]);
-            redirectTo('/tasks');
+            echo $this->view->render("errors/permission-error.php");
         }
     }
 }

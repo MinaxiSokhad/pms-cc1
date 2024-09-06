@@ -41,7 +41,7 @@ class ValidatorService
         $this->validator->validate($formData, [
             'name' => ['required', 'name'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'password'],
+            'password' => ['required'],// 'password' => ['required', 'password'],
             'country' => ['required', 'in:USA,Canada,Mexico,India,Russia'],
             'state' => ['required', 'name'],
             'city' => ['required', 'name'],
@@ -56,8 +56,8 @@ class ValidatorService
     public function validateLogin(array $formData)
     {
         $this->validator->validate($formData, [
-            'email' => ['required', 'email'],
-            'password' => ['required', 'password']
+            'email' => ['required'],
+            'password' => ['required']
         ]);
     }
     public function validateProfile(array $formData)
@@ -65,7 +65,7 @@ class ValidatorService
         $this->validator->validate($formData, [
             'name' => ['required', 'name'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'password'],
+            'password' => ['required'], //'password' => ['required', 'password'],
             'country' => ['required', 'in:USA,Canada,Mexico,India,Russia'],
             'state' => ['required', 'name'],
             'city' => ['required', 'name'],
@@ -128,14 +128,14 @@ class ValidatorService
         )->fetchColumn();
         return boolval($recordCount);
     }
-    public function searchsort(string $searchTerm = '', $fields, $table, $join = null, $exclude = null, $groupby = null, string $order_by = "id", string $direction = "desc")
-    {
-        $param = [];
-        $param = ["search" => "%{$searchTerm}%"];
-        $sql = "SELECT $fields FROM $table " . (($join != null) ? $join : "") .
-            (($exclude != null) ? $exclude : "") . (($groupby != null) ? $groupby : "") . " ORDER BY " . $order_by . " " . $direction;
-        $searchsort = $this->db->query($sql, $param)->findAll();
-        return boolval($searchsort);
+    // public function searchsort(string $searchTerm = '', $fields, $table, $join = null, $exclude = null, $groupby = null, string $order_by = "id", string $direction = "desc")
+    // {
+    //     $param = [];
+    //     $param = ["search" => "%{$searchTerm}%"];
+    //     $sql = "SELECT $fields FROM $table " . (($join != null) ? $join : "") .
+    //         (($exclude != null) ? $exclude : "") . (($groupby != null) ? $groupby : "") . " ORDER BY " . $order_by . " " . $direction;
+    //     $searchsort = $this->db->query($sql, $param)->findAll();
+    //     return boolval($searchsort);
 
-    }
+    // }
 }

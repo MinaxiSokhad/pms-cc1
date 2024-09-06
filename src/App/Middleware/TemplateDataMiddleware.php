@@ -21,8 +21,8 @@ class TemplateDataMiddleware implements MiddlewareInterface
 
 
         if (array_key_exists('user', $_SESSION)) {
-            $profile = $this->profileService->getUserProfile((int) $_SESSION['user']);
-            $this->view->addGlobal('profile', $profile);
+            $profileImg = $this->profileService->getUserProfile((int) $_SESSION['user']);
+            $this->view->addGlobal('profileImg', $profileImg);
             $user_count = $this->profileService->getUserProfile();
             $this->view->addGlobal('user_count', $user_count);
             $project_status = $this->projectService->getProjectStatus();

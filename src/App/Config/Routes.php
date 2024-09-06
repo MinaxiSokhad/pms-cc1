@@ -26,8 +26,8 @@ function registerRoutes(App $app) //register the route and then autoload files
     $app->post('/login', [AuthController::class, 'login'])->add(GuestOnlyMiddleware::class);
     $app->get('/logout', [AuthController::class, 'logout'])->add(AuthRequiredMiddleware::class);
     $app->get('/profile/{user}', [ProfileController::class, 'profileView'])->add(AuthRequiredMiddleware::class);
-    $app->get('/staff/editProfile/{user}', [EditProfileController::class, 'updateProfile'])->add(AuthRequiredMiddleware::class);
-    $app->post('/staff/editProfile/{user}', [EditProfileController::class, 'updateProfile'])->add(AuthRequiredMiddleware::class);
+    $app->get('/staff/editProfile/{user}', [ProfileController::class, 'updateProfile'])->add(AuthRequiredMiddleware::class);
+    $app->post('/staff/editProfile/{user}', [ProfileController::class, 'updateProfile'])->add(AuthRequiredMiddleware::class);
     $app->get('/customer', [CustomerController::class, 'customerView'])->add(AuthRequiredMiddleware::class);
     $app->post('/customer', [CustomerController::class, 'customerView'])->add(AuthRequiredMiddleware::class);
     $app->get('/createcustomer', [CustomerController::class, 'customer'])->add(AuthRequiredMiddleware::class);
@@ -50,6 +50,9 @@ function registerRoutes(App $app) //register the route and then autoload files
     $app->get('/edittask/{task}', [TaskController::class, 'updateTask'])->add(AuthRequiredMiddleware::class);
     $app->post('/edittask/{task}', [TaskController::class, 'updateTask'])->add(AuthRequiredMiddleware::class);
     $app->delete('/deletetask/{task}', [TaskController::class, 'deleteTask'])->add(AuthRequiredMiddleware::class);
+    $app->get('/members', [AuthController::class, 'memberView'])->add(AuthRequiredMiddleware::class);
+    $app->post('/members', [AuthController::class, 'memberView'])->add(AuthRequiredMiddleware::class);
+    $app->delete('/deletemember/{member}', [AuthController::class, 'deleteMember'])->add(AuthRequiredMiddleware::class);
 
     $app->get('/page', [ProjectController::class, 'page'])->add(AuthRequiredMiddleware::class);
 

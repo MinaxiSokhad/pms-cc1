@@ -14,10 +14,11 @@
       </li>
     </ul>
     <ul class="navbar-nav navbar-nav-right">
-      <li class="nav-item dropdown d-none d-lg-block">
-        <a href="/createproject" class="nav-link btn btn-success create-new-button" id="createbuttonDropdown"
-          aria-expanded="false" href="#">+ Create New Project</a>
-        <!-- <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
+      <?php if ($_SESSION['user_type'] == "A"): ?>
+        <li class="nav-item dropdown d-none d-lg-block">
+          <a href="/createproject" class="nav-link btn btn-success create-new-button" id="createbuttonDropdown"
+            aria-expanded="false" href="#">+ Create New Project</a>
+          <!-- <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
                  data-toggle="dropdown" add in a tag if dropdown list show
                 <h6 class="p-3 mb-0">Projects</h6>
                   <div class="dropdown-divider"></div>
@@ -56,7 +57,8 @@
                   <div class="dropdown-divider"></div>
                   <p class="p-3 mb-0 text-center">See all projects</p>
                 </div> -->
-      </li>
+        </li>
+      <?php endif; ?>
       <li class="nav-item nav-settings d-none d-lg-block">
         <a class="nav-link" href="#">
           <i class="mdi mdi-view-grid"></i>
@@ -160,18 +162,18 @@
             $storage = "/storage/uploads/";
             $defaultImage = "/storage/uploads/download.png";
             // $url = "http://192.168.1.30/storage/uploads/";   
-            $profileImage = !empty($profile['image']) ? $storage . $profile['storage_filename'] : $defaultImage;
+            $profileImage = !empty($profileImg['image']) ? $storage . $profileImg['storage_filename'] : $defaultImage;
 
             ?>
             <img class="img-xs rounded-circle" src="<?php echo e($profileImage) ?>" alt="">
-            <p class="mb-0 d-none d-sm-block navbar-profile-name"><?php echo e($profile['name']); ?></p>
+            <p class="mb-0 d-none d-sm-block navbar-profile-name"><?php echo e($profileImg['name']); ?></p>
             <i class="mdi mdi-menu-down d-none d-sm-block"></i>
           </div>
         </a>
         <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
           <h6 class="p-3 mb-0">Profile</h6>
           <div class="dropdown-divider"></div>
-          <a href="/profile/<?php echo e($_SESSION['user']) ?>" class="dropdown-item preview-item">
+          <a href="/profile/<?php echo e($profileImg['id']) ?>" class="dropdown-item preview-item">
             <div class="preview-thumbnail">
               <!-- <div class="preview-icon bg-dark rounded-circle">
                         <i class="mdi mdi-settings text-success"></i>
@@ -182,7 +184,7 @@
             </div>
           </a>
           <div class="dropdown-divider"></div>
-          <a href="/staff/editProfile/<?php echo e($_SESSION['user']) ?>" class="dropdown-item preview-item">
+          <a href="/staff/editProfile/<?php echo e($profileImg['id']) ?>" class="dropdown-item preview-item">
             <div class="preview-thumbnail">
               <!-- <div class="preview-icon bg-dark rounded-circle">
                         <i class="mdi mdi-logout text-danger"></i>

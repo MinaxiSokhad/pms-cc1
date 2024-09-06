@@ -35,15 +35,78 @@ class UserService
                 'hireDate' => $hireDate
             ]
         );
+
         session_regenerate_id();
         $_SESSION['user'] = $this->db->id();
+        $user_type = "SELECT user_type FROM user WHERE id =:id";
+        $_SESSION['user_type'] = $this->db->query($user_type, ['id' => $_SESSION['user']])->find();
+
+    }
+    public function getUser(array $country = [], string $searchTerm = '', string $order_by = 'id', string $direction = 'desc', int $limit = 3, int $offset = 0)
+    {
+        $viewmember = [];
+        $recordCount = 0;
+        $filter = isset($filter) ? $filter : '';
+        $search = isset($search) ? $search : '';
+        $order = "ORDER BY " . $order_by . " " . $direction;
+        $param = [];
+        if ($limit != 0) {
+            $limit_offset = " LIMIT " . $limit . " OFFSET " . $offset;
+        } else {
+            $limit_offset = '';
+        }
+
+        if (!empty($country)) {
+            $ids = [];
+            foreach ($country as $i) {
+                $ids[] = (string) $i;
+            }
+            $country = implode("','", $ids);
+            $filter .= " AND `user`.`country` IN ('$country') ";
+        }
+        if ($searchTerm != '') {
+
+            $search .= " AND (name LIKE :search
+             OR email LIKE :search
+             OR country LIKE :search
+             OR state LIKE :search
+             OR city LIKE :search
+             OR gender LIKE :search
+             OR maritalStatus LIKE :search
+             OR address LIKE :search
+             OR mobileNo LIKE :search 
+             OR address LIKE :search )";
+            $param = ['search' => "%{$searchTerm}%"];
+        }
+        $query = "SELECT * FROM user WHERE id > 0 " . $search . $filter;
+        $viewmember = $this->db->query(
+            $query,
+            $param
+        )->findAll();
+        $recordCount = count($viewmember);
+        $viewmember = $this->db->query(
+            $query . $order . $limit_offset,
+            $param
+        )->findAll();
+        return [$viewmember, $recordCount];
+        if (empty($name)) {
+            die("Member not found.");
+        }
+    }
+    public function delete(array $id)
+    {
+        $ids = implode(",", $id);
+        $sql = "DELETE FROM user WHERE id IN ('$ids')";
+        return $this->db->query($sql);
+
     }
     public function login(array $formData)
     {
         $user = $this->db->query(
             "SELECT * FROM user WHERE email=:email",
             [
-                'email' => $formData['email']
+                'email' => $formData['email'],
+
             ]
         )->find();
 
@@ -56,6 +119,7 @@ class UserService
         }
         session_regenerate_id();
         $_SESSION['user'] = $user['id'];
+        $_SESSION['user_type'] = $user['user_type'];
     }
     public function logout()
     {

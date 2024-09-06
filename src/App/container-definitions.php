@@ -24,13 +24,14 @@ return [
     },
     ProfileService::class => function (Container $container) {
         $db = $container->get(Database::class);
-        return new ProfileService($db);
-    },
-    EditProfileService::class => function (Container $container) {
-        $db = $container->get(Database::class);
         $validatorService = $container->get(ValidatorService::class);
-        return new EditProfileService($db, $validatorService);
+        return new ProfileService($db, $validatorService);
     },
+        // EditProfileService::class => function (Container $container) {
+        //     $db = $container->get(Database::class);
+        //     $validatorService = $container->get(ValidatorService::class);
+        //     return new EditProfileService($db, $validatorService);
+        // },
     CustomerService::class => function (Container $container) {
         $db = $container->get(Database::class);
         $validatorService = $container->get(ValidatorService::class);

@@ -170,7 +170,7 @@
                                 <div class="row">
                                   <div class="col-sm-12">
                                     <a class="btn btn-info "
-                                      href="/staff/editProfile/<?php echo e($_SESSION['user']); ?>">Edit</a>
+                                      href="/staff/editProfile/<?php echo e($profile['id']); ?>">Edit</a>
                                   </div>
                                 </div>
                               </div>
