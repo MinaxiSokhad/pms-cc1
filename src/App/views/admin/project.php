@@ -127,7 +127,14 @@
                                                                 </div>
 
                                                                 <hr>
-
+                                                                <?php if ($_SESSION['user_type'] == "A"): ?>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12">
+                                                                            <a class="btn btn-info "
+                                                                                href="/admin/editproject/<?php echo e($userproject['id']); ?>">Edit</a>
+                                                                        </div>
+                                                                    </div>
+                                                                <?php endif; ?>
                                                             </div>
                                                         </div>
                                                     </div>

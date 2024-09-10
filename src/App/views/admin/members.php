@@ -263,7 +263,7 @@
                                                                             </td>
 
                                                                             <td><a
-                                                                                    href="/staff/editProfile/<?php echo $t['id']; ?>">
+                                                                                    href="/admin/staff/editProfile/<?php echo $t['id']; ?>">
                                                                                     <div
                                                                                         class="badge badge-outline-success">
                                                                                         Edit</div>
@@ -281,7 +281,7 @@
                                                                 </tbody>
                                                             </table>
                                                             <br>
-                                                            <a href="/register">
+                                                            <a href="/admin/register">
                                                                 <div class="badge badge-outline-success">Add New
                                                                     Member</div>
                                                             </a>
@@ -450,12 +450,12 @@
         if (selectedCheckboxes.length === 0) {
             alert("No Members selected");
 
-            form.action = "/members";
+            form.action = "/admin/members";
         }
         else {
             if (confirm('Are you sure you want to delete selected members?')) {
                 <?php $id[0] = [0]; ?>
-                form.action = "/deletemember/<?php echo e($id[0][0]); ?>";
+                form.action = "/admin/deletemember/<?php echo e($id[0][0]); ?>";
                 form.submit();
             }
         }
@@ -464,7 +464,7 @@
     function deletemember(userid) {
         if (confirm('Are you sure you want to delete this member ?')) {
             <?php $id[0] = [0]; ?>
-            form.action = "/deletemember/" + userid;
+            form.action = "/admin/deletemember/" + userid;
             form.submit();
         }
     }

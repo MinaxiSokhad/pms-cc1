@@ -82,7 +82,7 @@ class CustomerController
             if ($showRecord != "1") {
                 $lastPage = ceil($count / $limit);//Find total page
             }
-            echo $this->view->render("customer.php", [
+            echo $this->view->render("/admin/customer.php", [
                 'viewcustomer' => $viewcustomer,
                 'customers' => $customers,
                 'currentPage' => $page,
@@ -99,7 +99,7 @@ class CustomerController
     {
         if ($_SESSION['user_type'] == "A") {
             if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-                echo $this->view->render("createcustomer.php", [
+                echo $this->view->render("/admin/createcustomer.php", [
                     // 'createcustomer' => $createcustomer
                 ]);
             } else {
@@ -117,7 +117,7 @@ class CustomerController
                     throw new ValidationException(['phone' => ['Phone number already exists']]);
                 }
                 $this->customerService->create($_POST);
-                redirectTo('/customer');
+                redirectTo('/admin/customer');
             }
         } else {
             echo $this->view->render("errors/permission-error.php");
@@ -133,13 +133,13 @@ class CustomerController
                     redirectTo('/admin/');
                 }
 
-                echo $this->view->render("editcustomer.php", [
+                echo $this->view->render("/admin/editcustomer.php", [
                     'editcustomer' => $editcustomer
                 ]);
             } else {
                 $this->validatorService->validateCustomer($_POST);
                 $this->customerService->update($_POST, (int) $params['customer']);
-                redirectTo('/customer');
+                redirectTo('/admin/customer');
             }
         } else {
             echo $this->view->render("errors/permission-error.php");
@@ -151,10 +151,10 @@ class CustomerController
 
             if ($id['customer'] === "0") {
                 $this->customerService->delete($_POST['ids']);
-                redirectTo('/customer');
+                redirectTo('/admin/customer');
             } else {
                 $this->customerService->delete([$id['customer']]);//'customer' -> route parameter
-                redirectTo('/customer');
+                redirectTo('/admin/customer');
             }
         } else {
             echo $this->view->render("errors/permission-error.php");

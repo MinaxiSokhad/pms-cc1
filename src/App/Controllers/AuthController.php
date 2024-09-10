@@ -22,7 +22,7 @@ class AuthController
     public function registerView()
     {
         echo $this->view->render(
-            "register.php"
+            "/admin/register.php"
 
         ); //render the register.php file 
     }
@@ -79,7 +79,7 @@ class AuthController
                 $lastPage = ceil($count / $limit);//Find total page
             }
             echo $this->view->render(
-                "members.php",
+                "/admin/members.php",
                 [
                     'viewmember' => $viewmember,
                     'currentPage' => $page,
@@ -96,10 +96,10 @@ class AuthController
         if ($_SESSION['user_type'] == "A") {
             if ($id['member'] === "0") {
                 $this->userService->delete($_POST['ids']);
-                redirectTo('/members');
+                redirectTo('/admin/members');
             } else {
                 $this->userService->delete([$id['member']]);//'customer' -> route parameter
-                redirectTo('/members');
+                redirectTo('/admin/members');
             }
         } else {
             echo $this->view->render("errors/permission-error.php");
@@ -120,7 +120,7 @@ class AuthController
     public function loginView()
     {
         echo $this->view->render(
-            "login.php"
+            "/admin/login.php"
         );
     }
     public function login()
@@ -140,6 +140,6 @@ class AuthController
     {
         $this->userService->logout();
 
-        redirectTo("/login");
+        redirectTo("/admin/login");
     }
 }

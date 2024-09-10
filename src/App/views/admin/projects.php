@@ -253,11 +253,11 @@
                                                                             </td>
                                                                             <?php if ($_SESSION['user_type'] == "A"): ?>
                                                                                 <td><a
-                                                                                        href="/editproject/<?php echo e($p['id']); ?>">
+                                                                                        href="/admin/project/<?php echo e($p['id']); ?>">
                                                                                         <?php echo e($p['name']); ?></a></td>
                                                                             <?php else: ?>
                                                                                 <td><a
-                                                                                        href="/showproject/<?php echo e($p['id']); ?>">
+                                                                                        href="/admin/project/<?php echo e($p['id']); ?>">
                                                                                         <?php echo e($p['name']); ?></a></td>
                                                                             <?php endif; ?>
 
@@ -273,11 +273,12 @@
                                                                             $project_members = array_combine($project_member_id, $project_member_name); ?>
                                                                             <td><?php foreach ($project_members as $p_id => $p_name): ?>
                                                                                     <?php if ($_SESSION['user_type'] == "A"): ?>
-                                                                                        <a href="/profile/<?php echo e($p_id); ?>">
+                                                                                        <a
+                                                                                            href="/admin/profile/<?php echo e($p_id); ?>">
                                                                                             <?php echo e($p_name); ?></a>
                                                                                     <?php else: ?>
                                                                                         <a
-                                                                                            href="/showmember/<?php echo e($p_id); ?>">
+                                                                                            href="/admin/profile/<?php echo e($p_id); ?>">
                                                                                             <?php echo e($p_name); ?></a>
                                                                                     <?php endif; ?>
                                                                                 <?php endforeach; ?>
@@ -285,7 +286,7 @@
                                                                             <?php if ($_SESSION['user_type'] == "A"): ?>
 
                                                                                 <td><a
-                                                                                        href="/editproject/<?php echo $p['id']; ?>">
+                                                                                        href="/admin/editproject/<?php echo $p['id']; ?>">
                                                                                         <div
                                                                                             class="badge badge-outline-success">
                                                                                             Edit</div>
@@ -305,7 +306,7 @@
                                                             </table>
                                                             <?php if ($_SESSION['user_type'] == "A"): ?>
                                                                 <br>
-                                                                <a href="/createproject">
+                                                                <a href="/admin/createproject">
                                                                     <div class="badge badge-outline-success">Add New
                                                                         Project</div>
                                                                 </a>
@@ -475,12 +476,12 @@
         if (selectedCheckboxes.length === 0) {
             alert("No projects selected");
 
-            form.action = "/projects";
+            form.action = "/admin/projects";
         }
         else {
             if (confirm('Are you sure you want to delete selected projects?')) {
                 <?php $id[0] = [0]; ?>
-                form.action = "/deleteproject/<?php echo e($id[0][0]); ?>";
+                form.action = "/admin/deleteproject/<?php echo e($id[0][0]); ?>";
                 form.submit();
             }
         }
@@ -489,7 +490,7 @@
     function deleteproject(projectid) {
         if (confirm('Are you sure you want to delete this project ?')) {
             <?php $id[0] = [0]; ?>
-            form.action = "/deleteproject/" + projectid;
+            form.action = "/admin/deleteproject/" + projectid;
             form.submit();
         }
     }

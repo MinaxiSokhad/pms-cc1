@@ -275,10 +275,10 @@
                                                                             </td>
                                                                             <!-- <td><?php //echo e($t['project']); ?></td> -->
                                                                             <td> <?php if ($_SESSION['user_type'] == "A"): ?>
-                                                                                    <a href="/edittask/<?php echo $t['id']; ?>">
+                                                                                    <a href="/admin/task/<?php echo $t['id']; ?>">
                                                                                         <?php echo e($t['name']); ?></a><br><br><?php echo e("# " . $t['project']); ?>
                                                                                 <?php else: ?>
-                                                                                    <a href="/showtask/<?php echo $t['id']; ?>">
+                                                                                    <a href="/admin/task/<?php echo $t['id']; ?>">
                                                                                         <?php echo e($t['name']); ?></a><br><br><?php echo e("# " . $t['project']); ?>
                                                                                 <?php endif; ?>
                                                                             </td>
@@ -287,11 +287,11 @@
                                                                             $task_members = array_combine($task_member_id, $task_member_name);?>
                                                                             <td> <?php foreach ($task_members as $task_id => $task_name): ?>
                                                                                 <?php if ($_SESSION['user_type'] == "A"): ?>
-                                                                                    <a href="/profile/<?php echo $task_id; ?>">                          
+                                                                                    <a href="/admin/profile/<?php echo $task_id; ?>">                          
                                                                                         <?php echo e($task_name); ?>
                                                                                        </a>
                                                                                 <?php else: ?>
-                                                                                    <a href="/showmember/<?php echo $task_id; ?>"> 
+                                                                                    <a href="/admin/showmember/<?php echo $task_id; ?>"> 
                                                                                         <?php echo e($task_name); ?>
                                                                                        </a>
                                                                                 <?php endif; ?>     
@@ -304,7 +304,7 @@
                                                                             <td><?php echo e($t['priority']); ?>
                                                                             </td>
                                                                             <?php if ($_SESSION['user_type'] == "A"): ?>
-                                                                                <td><a href="/edittask/<?php echo $t['id']; ?>">
+                                                                                <td><a href="/admin/edittask/<?php echo $t['id']; ?>">
                                                                                         <div
                                                                                             class="badge badge-outline-success">
                                                                                             Edit</div>
@@ -324,7 +324,7 @@
                                                             </table>
                                                             <?php if ($_SESSION['user_type'] == "A"): ?>
                                                                 <br>
-                                                                <a href="/createtask">
+                                                                <a href="/admin/createtask">
                                                                     <div class="badge badge-outline-success">Add New
                                                                         Task</div>
                                                                 </a>
@@ -494,12 +494,12 @@
         if (selectedCheckboxes.length === 0) {
             alert("No tasks selected");
 
-            form.action = "/tasks";
+            form.action = "/admin/tasks";
         }
         else {
             if (confirm('Are you sure you want to delete selected tasks?')) {
                 <?php $id[0] = [0]; ?>
-                form.action = "/deletetask/<?php echo e($id[0][0]); ?>";
+                form.action = "/admin/deletetask/<?php echo e($id[0][0]); ?>";
                 form.submit();
             }
         }
@@ -508,7 +508,7 @@
     function deletetask(taskid) {
         if (confirm('Are you sure you want to delete this task ?')) {
             <?php $id[0] = [0]; ?>
-            form.action = "/deletetask/" + taskid;
+            form.action = "/admin/deletetask/" + taskid;
             form.submit();
         }
     }

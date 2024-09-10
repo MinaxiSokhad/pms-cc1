@@ -23,7 +23,7 @@ class ProfileController
             redirectTo('/admin/');
         }
 
-        echo $this->view->render("/profile.php", [
+        echo $this->view->render("/admin/profile.php", [
             'profile' => $profile,
             'storage' => Paths::STORAGE_UPLOADS
 
@@ -38,7 +38,7 @@ class ProfileController
             redirectTo('/admin/');
         }
 
-        echo $this->view->render("/showmember.php", [
+        echo $this->view->render("/admin/showmember.php", [
             'member' => $member,
             'storage' => Paths::STORAGE_UPLOADS
 
@@ -68,7 +68,7 @@ class ProfileController
                 redirectTo('/admin/');
             }
 
-            echo $this->view->render("/staff/editProfile.php", [
+            echo $this->view->render("/admin/staff/editProfile.php", [
                 'editProfile' => $editProfile,
                 'storage' => Paths::STORAGE_UPLOADS
 

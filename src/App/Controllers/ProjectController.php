@@ -23,7 +23,7 @@ class ProjectController
                 $viewcustomer = $this->customerService->getcustomers();
                 $users = $this->projectService->getUser();
                 $viewtags = $this->projectService->getTags();
-                echo $this->view->render("createproject.php", [
+                echo $this->view->render("/admin/createproject.php", [
                     "viewcustomer" => $viewcustomer,
                     "users" => $users,
                     'tags' => $viewtags
@@ -34,7 +34,7 @@ class ProjectController
                     throw new ValidationException(['name' => ['Project Name Already Exists']]);
                 }
                 $this->projectService->create($_POST);
-                redirectTo('/projects');
+                redirectTo('/admin/projects');
             }
         } else {
             echo $this->view->render("errors/permission-error.php");
@@ -92,7 +92,7 @@ class ProjectController
             $lastPage = ceil($count / $limit);//Find total page
         }
         // dd([$viewproject, $count]);
-        echo $this->view->render("projects.php", [
+        echo $this->view->render("/admin/projects.php", [
             'viewproject' => $viewproject,
             'currentPage' => $page,
             'lastPage' => $lastPage,
@@ -107,7 +107,7 @@ class ProjectController
             redirectTo('/admin/');
         }
 
-        echo $this->view->render("/showproject.php", [
+        echo $this->view->render("/admin/project.php", [
             'userproject' => $userproject,
 
 
@@ -130,7 +130,7 @@ class ProjectController
                     redirectTo('/admin/');
                 }
 
-                echo $this->view->render("editproject.php", [
+                echo $this->view->render("/admin/editproject.php", [
                     'editproject' => $editproject,
                     "viewcustomer" => $viewcustomer,
                     "users" => $users,
@@ -139,7 +139,7 @@ class ProjectController
             } else {
                 $this->validatorService->validateProject($_POST);
                 $this->projectService->update($_POST, (int) $params['project']);
-                redirectTo('/projects');
+                redirectTo('/admin/projects');
             }
         } else {
             echo $this->view->render("errors/permission-error.php");
@@ -151,10 +151,10 @@ class ProjectController
 
             if ($id['project'] === "0") {
                 $this->projectService->delete($_POST['ids']);
-                redirectTo('/projects');
+                redirectTo('/admin/projects');
             } else {
                 $this->projectService->delete([$id['project']]);//'customer' -> route parameter
-                redirectTo('/projects');
+                redirectTo('/admin/projects');
             }
         } else {
             echo $this->view->render("errors/permission-error.php");

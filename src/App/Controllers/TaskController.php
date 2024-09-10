@@ -71,7 +71,7 @@ class TaskController
         $task_status = $this->taskService->getTaskStatus();
         $task_userassign_status = $this->taskService->userAssignTaskStatus();
         $viewproject = $this->projectService->getoneproject();
-        echo $this->view->render("tasks.php", [
+        echo $this->view->render("/admin/tasks.php", [
             'viewtask' => $viewtask,
             'currentPage' => $page,
             'lastPage' => $lastPage,
@@ -88,7 +88,7 @@ class TaskController
                 $viewproject = $this->projectService->getoneproject();
                 $users = $this->projectService->getUser();
                 $viewtags = $this->projectService->getTags();
-                echo $this->view->render("createtask.php", [
+                echo $this->view->render("/admin/createtask.php", [
                     "viewproject" => $viewproject,
                     "users" => $users,
                     'tags' => $viewtags
@@ -99,7 +99,7 @@ class TaskController
                 //     throw new ValidationException(['name' => ['Task Name Already Exists']]);
                 // }
                 $this->taskService->create($_POST);
-                redirectTo('/tasks');
+                redirectTo('/admin/tasks');
             }
         } else {
             echo $this->view->render("errors/permission-error.php");
@@ -113,7 +113,7 @@ class TaskController
             redirectTo('/');
         }
 
-        echo $this->view->render("/showtask.php", [
+        echo $this->view->render("/admin/task.php", [
             'usertask' => $usertask,
 
 
@@ -131,7 +131,7 @@ class TaskController
                     redirectTo('/admin/');
                 }
 
-                echo $this->view->render("edittask.php", [
+                echo $this->view->render("/admin/edittask.php", [
                     'edittask' => $edittask,
                     "viewproject" => $viewproject,
                     "users" => $users,
@@ -140,7 +140,7 @@ class TaskController
             } else {
                 $this->validatorService->validateTask($_POST);
                 $this->taskService->update($_POST, (int) $params['task']);
-                redirectTo('/tasks');
+                redirectTo('/admin/tasks');
             }
         } else {
             echo $this->view->render("errors/permission-error.php");
@@ -152,10 +152,10 @@ class TaskController
 
             if ($id['task'] === "0") {
                 $this->taskService->delete($_POST['ids']);
-                redirectTo('/tasks');
+                redirectTo('/admin/tasks');
             } else {
                 $this->taskService->delete([$id['task']]);
-                redirectTo('/tasks');
+                redirectTo('/admin/tasks');
             }
         } else {
             echo $this->view->render("errors/permission-error.php");

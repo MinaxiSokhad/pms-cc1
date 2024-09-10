@@ -1,6 +1,6 @@
 <nav class="navbar p-0 fixed-top d-flex flex-row">
   <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
-    <a class="navbar-brand brand-logo-mini" href="/"><img src="/assets/images/logo-mini.svg" alt="logo" /></a>
+    <a class="navbar-brand brand-logo-mini" href="/admin/"><img src="/assets/images/logo-mini.svg" alt="logo" /></a>
   </div>
   <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
     <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -16,7 +16,7 @@
     <ul class="navbar-nav navbar-nav-right">
       <?php if ($_SESSION['user_type'] == "A"): ?>
         <li class="nav-item dropdown d-none d-lg-block">
-          <a href="/createproject" class="nav-link btn btn-success create-new-button" id="createbuttonDropdown"
+          <a href="/admin/createproject" class="nav-link btn btn-success create-new-button" id="createbuttonDropdown"
             aria-expanded="false" href="#">+ Create New Project</a>
           <!-- <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
                  data-toggle="dropdown" add in a tag if dropdown list show
@@ -173,7 +173,7 @@
         <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="profileDropdown">
           <h6 class="p-3 mb-0">Profile</h6>
           <div class="dropdown-divider"></div>
-          <a href="/profile/<?php echo e($profileImg['id']) ?>" class="dropdown-item preview-item">
+          <a href="/admin/profile/<?php echo e($profileImg['id']) ?>" class="dropdown-item preview-item">
             <div class="preview-thumbnail">
               <!-- <div class="preview-icon bg-dark rounded-circle">
                         <i class="mdi mdi-settings text-success"></i>
@@ -184,7 +184,7 @@
             </div>
           </a>
           <div class="dropdown-divider"></div>
-          <a href="/staff/editProfile/<?php echo e($profileImg['id']) ?>" class="dropdown-item preview-item">
+          <a href="/admin/staff/editProfile/<?php echo e($profileImg['id']) ?>" class="dropdown-item preview-item">
             <div class="preview-thumbnail">
               <!-- <div class="preview-icon bg-dark rounded-circle">
                         <i class="mdi mdi-logout text-danger"></i>

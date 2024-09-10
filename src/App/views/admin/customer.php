@@ -164,7 +164,7 @@
                                           <td><?php echo e($value); ?></td>
                                         <?php endif; ?>
                                       <?php endforeach; ?>
-                                      <td><a href="/editcustomer/<?php echo $p['id']; ?>">
+                                      <td><a href="/admin/editcustomer/<?php echo $p['id']; ?>">
                                           <div class="badge badge-outline-success">Edit</div>
                                         </a></td>
                                       <td>
@@ -179,7 +179,7 @@
                                 </tbody>
                               </table>
                               <br>
-                              <a href="/createcustomer">
+                              <a href="/admin/createcustomer">
                                 <div class="badge badge-outline-success">Add New Customers</div>
                               </a>
                               <?php if ($viewcustomer): ?>
@@ -231,12 +231,12 @@
       var selectedCheckboxes = document.querySelectorAll("input[name^='ids']:checked");
       if (selectedCheckboxes.length === 0) {
         alert("No customers selected");
-        form.action = "/customer";
+        form.action = "/admin/customer";
       }
       else {
         if (confirm('Are you sure you want to delete this customers?')) {
           <?php $id[0] = [0]; ?>
-          form.action = "/deletecustomer/<?php echo e($id[0][0]); ?>";
+          form.action = "/admin/deletecustomer/<?php echo e($id[0][0]); ?>";
           form.submit();
         }
       }
@@ -245,7 +245,7 @@
     function deletecustomer(customerid) {
       if (confirm('Are you sure you want to delete this customer?')) {
         <?php $id[0] = [0]; ?>
-        form.action = "/deletecustomer/" + customerid;
+        form.action = "/admin/deletecustomer/" + customerid;
         form.submit();
       }
     }

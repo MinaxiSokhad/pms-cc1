@@ -61,18 +61,23 @@
         </div>
       </div>
     </li>
+
+
     <li class="nav-item menu-items">
       <a class="nav-link" href="/admin/">
         <!-- <span class="menu-icon">
-          <i class="fas fa-wifi-1"></i>
-        </span> -->
+      <i class="fas fa-wifi-1"></i>
+    </span> -->
         <span class="menu-title">Dashboard</span>
       </a>
     </li>
+
+
+
     <?php //dd($_SESSION['user_type']);
     if ($_SESSION['user_type'] == "A"): ?>
       <li class="nav-item menu-items">
-        <a class="nav-link" href="/customer" aria-expanded="false" aria-controls="ui-basic">
+        <a class="nav-link" href="/admin/customer" aria-expanded="false" aria-controls="ui-basic">
 
           <span class="menu-title">Customer</span>
 
@@ -80,14 +85,14 @@
       </li>
     <?php endif; ?>
     <li class="nav-item menu-items">
-      <a class="nav-link" href="/projects">
+      <a class="nav-link" href="/admin/projects">
 
         <span class="menu-title">Projects</span>
       </a>
     </li>
 
     <li class="nav-item menu-items">
-      <a class="nav-link" href="/tasks">
+      <a class="nav-link" href="/admin/tasks">
 
         <span class="menu-title">Tasks</span>
       </a>
@@ -95,7 +100,7 @@
     <?php //dd($_SESSION['user_type']);
     if ($_SESSION['user_type'] == "A"): ?>
       <li class="nav-item menu-items">
-        <a class="nav-link" href="/members">
+        <a class="nav-link" href="/admin/members">
 
           <span class="menu-title">Members</span>
         </a>

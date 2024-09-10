@@ -107,7 +107,7 @@ class ProjectService
         $recordCount = 0;
         $filter = isset($filter) ? $filter : '';
         $search = isset($search) ? $search : '';
-        $order = "ORDER BY " . $order_by . " " . $direction;
+        $order = " ORDER BY " . $order_by . " " . $direction;
         $param = [];
         $where = " WHERE project.id > 0 ";
         $having = "";
@@ -143,7 +143,7 @@ class ProjectService
             OR customers.company LIKE :search
             OR tags.name LIKE :search
             OR user.name LIKE :search) ";
-            $where = " HAVING COUNT(CASE WHEN project_member.user_id=:id THEN 1 ELSE NULL END) > 0";
+            $having = " HAVING COUNT(CASE WHEN project_member.user_id=:id THEN 1 ELSE NULL END) > 0";
             $param = [
 
                 'search' => "%{$searchTerm}%",
