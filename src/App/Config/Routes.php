@@ -19,13 +19,14 @@ use App\Middleware\{AuthRequiredMiddleware, GuestOnlyMiddleware};
 
 function registerRoutes(App $app) //register the route and then autoload files
 {
-    $app->get('/', [HomeController::class, 'home'])->add(AuthRequiredMiddleware::class);
+    $app->get('/admin/', [HomeController::class, 'home'])->add(AuthRequiredMiddleware::class);
     $app->get('/register', [AuthController::class, 'registerView'])->add(GuestOnlyMiddleware::class);
     $app->post('/register', [AuthController::class, 'register'])->add(GuestOnlyMiddleware::class);
     $app->get('/login', [AuthController::class, 'loginView'])->add(GuestOnlyMiddleware::class);
     $app->post('/login', [AuthController::class, 'login'])->add(GuestOnlyMiddleware::class);
     $app->get('/logout', [AuthController::class, 'logout'])->add(AuthRequiredMiddleware::class);
     $app->get('/profile/{user}', [ProfileController::class, 'profileView'])->add(AuthRequiredMiddleware::class);
+    // $app->get('/member/{user}', [ProfileController::class, 'member'])->add(AuthRequiredMiddleware::class);
     $app->get('/staff/editProfile/{user}', [ProfileController::class, 'updateProfile'])->add(AuthRequiredMiddleware::class);
     $app->post('/staff/editProfile/{user}', [ProfileController::class, 'updateProfile'])->add(AuthRequiredMiddleware::class);
     $app->get('/customer', [CustomerController::class, 'customerView'])->add(AuthRequiredMiddleware::class);
@@ -43,6 +44,7 @@ function registerRoutes(App $app) //register the route and then autoload files
     $app->get('/editproject/{project}', [ProjectController::class, 'updateProject'])->add(AuthRequiredMiddleware::class);
     $app->post('/editproject/{project}', [ProjectController::class, 'updateProject'])->add(AuthRequiredMiddleware::class);
     $app->delete('/deleteproject/{project}', [ProjectController::class, 'deleteProject'])->add(AuthRequiredMiddleware::class);
+    $app->get('/showproject/{user}', [ProjectController::class, 'showProject'])->add(AuthRequiredMiddleware::class);
     $app->get('/tasks', [TaskController::class, 'taskView'])->add(AuthRequiredMiddleware::class);
     $app->post('/tasks', [TaskController::class, 'taskView'])->add(AuthRequiredMiddleware::class);
     $app->get('/createtask', [TaskController::class, 'createTask'])->add(AuthRequiredMiddleware::class);
@@ -50,10 +52,11 @@ function registerRoutes(App $app) //register the route and then autoload files
     $app->get('/edittask/{task}', [TaskController::class, 'updateTask'])->add(AuthRequiredMiddleware::class);
     $app->post('/edittask/{task}', [TaskController::class, 'updateTask'])->add(AuthRequiredMiddleware::class);
     $app->delete('/deletetask/{task}', [TaskController::class, 'deleteTask'])->add(AuthRequiredMiddleware::class);
+    $app->get('/showtask/{user}', [TaskController::class, 'showTask'])->add(AuthRequiredMiddleware::class);
     $app->get('/members', [AuthController::class, 'memberView'])->add(AuthRequiredMiddleware::class);
     $app->post('/members', [AuthController::class, 'memberView'])->add(AuthRequiredMiddleware::class);
     $app->delete('/deletemember/{member}', [AuthController::class, 'deleteMember'])->add(AuthRequiredMiddleware::class);
-
+    $app->get('/showmember/{user}', [ProfileController::class, 'member'])->add(AuthRequiredMiddleware::class);
     $app->get('/page', [ProjectController::class, 'page'])->add(AuthRequiredMiddleware::class);
 
     $app->setErrorHandler([ErrorController::class, 'notfound']);

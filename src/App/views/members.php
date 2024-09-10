@@ -250,7 +250,16 @@
                                                                             <td><?php echo e($t['address']); ?>
                                                                             <td><?php echo e($t['dob']); ?>
                                                                             <td><?php echo e($t['hireDate']); ?>
-                                                                            <td><?php echo e($t['status']); ?>
+                                                                            <?php if ($t['status'] === '1') : ?>
+                                                                <td>
+                                                                    <div class="badge badge-outline-primary">Active</div>
+                                                                </td>
+                                                            <?php else : ?>
+                                                                <td>
+                                                                    <div class="badge badge-outline-danger">Not Active</div>
+                                                                </td>
+                                                            <?php endif; ?>
+                                                                            
                                                                             </td>
 
                                                                             <td><a

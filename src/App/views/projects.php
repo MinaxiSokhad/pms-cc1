@@ -256,7 +256,9 @@
                                                                                         href="/editproject/<?php echo e($p['id']); ?>">
                                                                                         <?php echo e($p['name']); ?></a></td>
                                                                             <?php else: ?>
-                                                                                <td><?php echo e($p['name']); ?></td>
+                                                                                <td><a
+                                                                                        href="/showproject/<?php echo e($p['id']); ?>">
+                                                                                        <?php echo e($p['name']); ?></a></td>
                                                                             <?php endif; ?>
 
                                                                             <td><?php echo e($p['description']); ?></td>
@@ -266,7 +268,19 @@
                                                                             <td><?php echo e($p['start_date']); ?></td>
                                                                             <td><?php echo e($p['deadline']); ?></td>
                                                                             <td><?php echo e($p['status']); ?></td>
-                                                                            <td><?php echo e($p['project_member_name']); ?>
+                                                                            <?php $project_member_id = explode(",", $p['project_member_id']); ?>
+                                                                            <?php $project_member_name = explode(",", $p['project_member_name']);
+                                                                            $project_members = array_combine($project_member_id, $project_member_name); ?>
+                                                                            <td><?php foreach ($project_members as $p_id => $p_name): ?>
+                                                                                    <?php if ($_SESSION['user_type'] == "A"): ?>
+                                                                                        <a href="/profile/<?php echo e($p_id); ?>">
+                                                                                            <?php echo e($p_name); ?></a>
+                                                                                    <?php else: ?>
+                                                                                        <a
+                                                                                            href="/showmember/<?php echo e($p_id); ?>">
+                                                                                            <?php echo e($p_name); ?></a>
+                                                                                    <?php endif; ?>
+                                                                                <?php endforeach; ?>
                                                                             </td>
                                                                             <?php if ($_SESSION['user_type'] == "A"): ?>
 
@@ -303,12 +317,12 @@
                                                                         Selected Projects</button>
                                                                 <?php endif; ?>
                                                             <?php endif; ?>
-                                                            <br /><br />
+                                                            <br />
+                                                            <hr>
                                                             <?php include $this->resolve("partials/_pagination.php") ?>
-
                                                         </form>
-
                                                     </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -317,6 +331,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
 
                 <?php include $this->resolve("partials/_footer.php"); ?>

@@ -20,7 +20,7 @@ class ProfileController
         $profile = $this->profileService->getUserProfile((int) $params['user']);
         //dd($profile);
         if (!$profile) {
-            redirectTo('/');
+            redirectTo('/admin/');
         }
 
         echo $this->view->render("/profile.php", [
@@ -30,12 +30,42 @@ class ProfileController
         ]);
 
     }
+    public function member(array $params)
+    {
+        $member = $this->profileService->getUserProfile((int) $params['user']);
+        //dd($profile);
+        if (!$member) {
+            redirectTo('/admin/');
+        }
+
+        echo $this->view->render("/showmember.php", [
+            'member' => $member,
+            'storage' => Paths::STORAGE_UPLOADS
+
+        ]);
+
+    }
+    // public function member(array $params)
+    // {
+    //     $member = $this->profileService->members($params['user']);
+    //     //dd($profile);
+    //     if (!$member) {
+    //         redirectTo('/');
+    //     }
+
+    //     echo $this->view->render("/profile.php", [
+    //         'member' => $member,
+    //         'storage' => Paths::STORAGE_UPLOADS
+
+    //     ]);
+
+    // }
     public function updateProfile(array $params = [])
     {
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $editProfile = $this->profileService->getUserProfile((int) $params['user']);
             if (!$editProfile) {
-                redirectTo('/');
+                redirectTo('/admin/');
             }
 
             echo $this->view->render("/staff/editProfile.php", [

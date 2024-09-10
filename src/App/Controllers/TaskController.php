@@ -69,12 +69,14 @@ class TaskController
             $lastPage = ceil($count / $limit);//Find total page
         }
         $task_status = $this->taskService->getTaskStatus();
+        $task_userassign_status = $this->taskService->userAssignTaskStatus();
         $viewproject = $this->projectService->getoneproject();
         echo $this->view->render("tasks.php", [
             'viewtask' => $viewtask,
             'currentPage' => $page,
             'lastPage' => $lastPage,
             'task_status' => $task_status,
+            'task_userassign_status' => $task_userassign_status,
             'record' => $count,
             'viewproject' => $viewproject
         ]);
@@ -103,6 +105,20 @@ class TaskController
             echo $this->view->render("errors/permission-error.php");
         }
     }
+    public function showTask(array $params)
+    {
+        $usertask = $this->taskService->getonetask($params['user']);
+        //dd($profile);
+        if (!$usertask) {
+            redirectTo('/');
+        }
+
+        echo $this->view->render("/showtask.php", [
+            'usertask' => $usertask,
+
+
+        ]);
+    }
     public function updateTask(array $params = [])
     {
         if ($_SESSION['user_type'] == "A") {
@@ -112,7 +128,7 @@ class TaskController
                 $users = $this->projectService->getUser();
                 $viewtags = $this->projectService->getTags();
                 if (!$edittask) {
-                    redirectTo('/');
+                    redirectTo('/admin/');
                 }
 
                 echo $this->view->render("edittask.php", [

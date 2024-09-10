@@ -130,7 +130,7 @@ class CustomerController
                 $editcustomer = $this->customerService->getcustomers([$params['customer']]);
 
                 if (!$editcustomer) {
-                    redirectTo('/');
+                    redirectTo('/admin/');
                 }
 
                 echo $this->view->render("editcustomer.php", [

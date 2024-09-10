@@ -20,62 +20,90 @@
                 <br />
                 <h2>Tasks Summary</h2>
                 <div class="row">
-                    <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
+                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-9">
                                         <div class="d-flex align-items-center align-self-start">
                                             <h3 class="mb-0"><?php echo $task_status[0]['S']; ?></h3>
-                                            <p class="text-success ml-2 mb-0 font-weight-medium">Not Started</p>
+                                            <h3 class="text-success ml-2 mb-0 font-weight-medium">Not Started</h3>
                                         </div>
                                     </div>
+
                                 </div>
+                                <?php if ($_SESSION['user_type'] != "A"): ?>
+                                    <h6 class="mb-0"><br>Task assigned to me :
+                                        <?php echo $task_userassign_status[0]['S']; ?>
+                                    </h6>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
+                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-9">
                                         <div class="d-flex align-items-center align-self-start">
                                             <h3 class="mb-0"><?php echo $task_status[1]['P']; ?></h3>
-                                            <p class="text-success ml-2 mb-0 font-weight-medium">In Progress</p>
+                                            <h3 class="text-success ml-2 mb-0 font-weight-medium">In Progress</h3>
                                         </div>
                                     </div>
+
                                 </div>
+                                <?php if ($_SESSION['user_type'] != "A"): ?>
+                                    <h6 class="mb-0"><br>Task assigned to me :
+                                        <?php echo $task_userassign_status[1]['P']; ?>
+                                    </h6>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
+                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-9">
                                         <div class="d-flex align-items-center align-self-start">
                                             <h3 class="mb-0"><?php echo $task_status[2]['C']; ?></h3>
-                                            <p class="text-success ml-2 mb-0 font-weight-medium">Complete</p>
+                                            <h3 class="text-success ml-2 mb-0 font-weight-medium">Completed</h3>
                                         </div>
                                     </div>
+
                                 </div>
+                                <?php if ($_SESSION['user_type'] != "A"): ?>
+                                    <h6 class="mb-0"><br>Task assigned to me :
+                                        <?php echo $task_userassign_status[2]['C']; ?>
+                                    </h6>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-2 col-sm-6 grid-margin stretch-card">
+                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-9">
                                         <div class="d-flex align-items-center align-self-start">
                                             <h3 class="mb-0"><?php echo $task_status[3]['T']; ?></h3>
-                                            <p class="text-success ml-2 mb-0 font-weight-medium">Testing</p>
+                                            <h3 class="text-success ml-2 mb-0 font-weight-medium">Testing</h3>
                                         </div>
                                     </div>
+
                                 </div>
+                                <?php if ($_SESSION['user_type'] != "A"): ?>
+                                    <h6 class="mb-0"><br>Task assigned to me :
+                                        <?php echo $task_userassign_status[3]['T']; ?>
+                                    </h6>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
+
+
+
+
                 </div>
                 <div class="content-wrapper">
                     <!-- Filter Dropdown -->
@@ -221,6 +249,13 @@
                                                                         <?php endif; ?>
                                                                     </tr>
                                                                 </thead>
+                                                                <?php
+                                                                //   $defaultImage = "https://bootdey.com/img/Content/avatar/avatar7.png";
+                                                                $storage = "/storage/uploads/";
+                                                                $defaultImage = "/storage/uploads/download.png";
+                                                                // $url = "http://192.168.1.30/storage/uploads/";   
+                                                                $profileImage = !empty($t['image']) ? $storage . $t['storage_filename'] : $defaultImage;
+                                                                ?>
                                                                 <tbody>
                                                                     <?php foreach ($viewproject as $p) {
 
@@ -247,8 +282,20 @@
                                                                                         <?php echo e($t['name']); ?></a><br><br><?php echo e("# " . $t['project']); ?>
                                                                                 <?php endif; ?>
                                                                             </td>
-                                                                            <td><?php echo e($t['task_member_name']); ?>
-                                                                            </td>
+                                                                            <?php $task_member_id = explode(",", $t['task_member_id']); ?>
+                                                                            <?php $task_member_name = explode(",", $t['task_member_name']); 
+                                                                            $task_members = array_combine($task_member_id, $task_member_name);?>
+                                                                            <td> <?php foreach ($task_members as $task_id => $task_name): ?>
+                                                                                <?php if ($_SESSION['user_type'] == "A"): ?>
+                                                                                    <a href="/profile/<?php echo $task_id; ?>">                          
+                                                                                        <?php echo e($task_name); ?>
+                                                                                       </a>
+                                                                                <?php else: ?>
+                                                                                    <a href="/showmember/<?php echo $task_id; ?>"> 
+                                                                                        <?php echo e($task_name); ?>
+                                                                                       </a>
+                                                                                <?php endif; ?>     
+                                                                            <?php endforeach; ?></td>
                                                                             <td><?php echo e($t['task_tags_name']); ?>
                                                                             </td>
                                                                             <td><?php echo e($t['start_date']); ?></td>

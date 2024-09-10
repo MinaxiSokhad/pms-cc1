@@ -99,6 +99,20 @@ class ProjectController
             'record' => $count
         ]);
     }
+    public function showProject(array $params)
+    {
+        $userproject = $this->projectService->getoneproject($params['user']);
+        //dd($profile);
+        if (!$userproject) {
+            redirectTo('/admin/');
+        }
+
+        echo $this->view->render("/showproject.php", [
+            'userproject' => $userproject,
+
+
+        ]);
+    }
     public function page()
     {
         echo $this->view->render('page.php');
@@ -113,7 +127,7 @@ class ProjectController
                 $users = $this->projectService->getUser();
                 $viewtags = $this->projectService->getTags();
                 if (!$editproject) {
-                    redirectTo('/');
+                    redirectTo('/admin/');
                 }
 
                 echo $this->view->render("editproject.php", [

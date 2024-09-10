@@ -17,11 +17,14 @@ class TaskService
         $search = isset($search) ? $search : '';
         $order = "ORDER BY " . $order_by . " " . $direction;
         $param = [];
+        $where = " WHERE task.id > 0 ";
+        $having = "";
         if ($limit != 0) {
             $limit_offset = " LIMIT " . $limit . " OFFSET " . $offset;
         } else {
             $limit_offset = '';
         }
+
         if (!empty($status)) {
             $ids = [];
             foreach ($status as $i) {
@@ -34,9 +37,26 @@ class TaskService
             $search .= " AND  (task.name LIKE :search 
             OR task.priority LIKE :search
             OR tags.name LIKE :search
-            OR user.name LIKE :search)";
+            OR user.name LIKE :search) ";
             $param = ['search' => "%{$searchTerm}%"];
         }
+        if ($_SESSION['user_type'] != "A") {
+            $having = " HAVING COUNT(CASE WHEN task_member.user_id =:id THEN 1 ELSE NULL END) > 0 ";
+            $param = ['id' => $_SESSION['user']];
+        }
+        if ($_SESSION['user_type'] != "A" && $searchTerm != '') {
+            // dd($param);
+            $search .= " AND  (task.name LIKE :search 
+            OR task.priority LIKE :search
+            OR tags.name LIKE :search
+            OR user.name LIKE :search) ";
+            $having = " HAVING COUNT(CASE WHEN task_member.user_id =:id THEN 1 ELSE NULL END) > 0  ";
+            $param = [
+                'search' => "%{$searchTerm}%",
+                'id' => $_SESSION['user']
+            ];
+        }
+
         $query = "SELECT
               task.id,
               project.name as project,
@@ -57,7 +77,8 @@ class TaskService
                     ELSE task.status 
                 END AS `status`,
               GROUP_CONCAT(DISTINCT tags.name SEPARATOR ',') as `task_tags_name`,
-              GROUP_CONCAT(DISTINCT `user`.name SEPARATOR ',')as `task_member_name`
+              GROUP_CONCAT(DISTINCT `user`.name SEPARATOR ',')as `task_member_name`,
+              GROUP_CONCAT(DISTINCT `user`.id SEPARATOR ',')as `task_member_id`
             FROM task
             JOIN task_tags
               ON task.id = task_tags.task_id
@@ -69,7 +90,7 @@ class TaskService
               ON task_member.user_id = `user`.id
               JOIN project
               ON task.project = project.id
-              WHERE task.id > 0 " . $search . $filter . " GROUP BY task.id ";
+               " . $where . $search . $filter . " GROUP BY task.id " . $having;
         $viewtask = $this->db->query(
             $query,
             $param
@@ -87,6 +108,7 @@ class TaskService
     }
     public function getTaskStatus()
     {
+
         return [
             $this->db->query(
                 "SELECT COUNT(`status`) as 'S' FROM task WHERE `status`='S'"
@@ -101,6 +123,45 @@ class TaskService
                 "SELECT COUNT(`status`) as 'T' FROM task WHERE `status`='T'"
             )->find()
         ];
+    }
+    public function userAssignTaskStatus()
+    {
+
+        return [
+            $this->db->query("SELECT COUNT(`task`.`status`) as 'S' FROM task
+              JOIN task_member
+              ON task.id = task_member.task_id
+              JOIN user
+              ON task_member.user_id = `user`.id
+    WHERE `task`.`status`='S' AND task_member.user_id =:id", [
+                'id' => $_SESSION['user']
+            ])->find(),
+            $this->db->query("SELECT COUNT(`task`.`status`) as 'P' FROM task
+              JOIN task_member
+              ON task.id = task_member.task_id
+              JOIN user
+              ON task_member.user_id = `user`.id
+    WHERE `task`.`status`='P' AND task_member.user_id =:id", [
+                'id' => $_SESSION['user']
+            ])->find(),
+            $this->db->query("SELECT COUNT(`task`.`status`) as 'C' FROM task
+              JOIN task_member
+              ON task.id = task_member.task_id
+              JOIN user
+              ON task_member.user_id = `user`.id
+    WHERE `task`.`status`='C' AND task_member.user_id =:id", [
+                'id' => $_SESSION['user']
+            ])->find(),
+            $this->db->query("SELECT COUNT(`task`.`status`) as 'T' FROM task
+              JOIN task_member
+              ON task.id = task_member.task_id
+              JOIN user
+              ON task_member.user_id = `user`.id
+    WHERE `task`.`status`='T' AND task_member.user_id =:id", [
+                'id' => $_SESSION['user']
+            ])->find(),
+        ];
+
     }
     public function create(array $formData)
     {
@@ -167,7 +228,9 @@ class TaskService
                     ELSE task.status 
                 END AS `status`,
               GROUP_CONCAT(DISTINCT tags.name SEPARATOR ',') as `task_tags_name`,
-              GROUP_CONCAT(DISTINCT `user`.name SEPARATOR ',')as `task_member_name`
+              GROUP_CONCAT(DISTINCT `user`.name SEPARATOR ',')as `task_member_name`,
+              GROUP_CONCAT(DISTINCT `user`.id SEPARATOR ',') as `task_member_id`
+             
             FROM task
             JOIN task_tags
               ON task.id = task_tags.task_id

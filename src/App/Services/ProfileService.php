@@ -28,6 +28,21 @@ class ProfileService
             die("User not found.");
         }
     }
+    // public function members(array $id = [])
+    // {
+    //     if (!empty($id)) {
+    //         $ids = [];
+    //         foreach ($id as $i) {
+    //             $ids[] = (INT) $i;
+    //         }
+    //         $id = implode(",", $ids);
+    //         $where = " WHERE id IN ($id) ";
+    //         return $this->db->query("SELECT * FROM user" . $where)->findAll();
+    //     } else {
+    //         $where = "";
+    //         return $this->db->query("SELECT * FROM user" . $where)->findAll();
+    //     }
+    // }
     public function validateFile(?array $file)
     {
 

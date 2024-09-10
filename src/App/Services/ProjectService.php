@@ -95,19 +95,22 @@ class ProjectService
             throw new Exception($e->getMessage());
         }
     }
+    public function showUserProject()
+    {
+
+    }
 
     public function getProject(array $status = [], string $searchTerm = '', string $order_by = 'id', string $direction = 'desc', int $limit = 3, int $offset = 0)
     {
-        if ($_SESSION['user_type'] == "A") {
-            $param = [];
-            $where = " WHERE project.id > 0";
-        }
+
         $viewproject = [];
         $recordCount = 0;
         $filter = isset($filter) ? $filter : '';
         $search = isset($search) ? $search : '';
         $order = "ORDER BY " . $order_by . " " . $direction;
         $param = [];
+        $where = " WHERE project.id > 0 ";
+        $having = "";
         if ($limit != 0) {
             $limit_offset = " LIMIT " . $limit . " OFFSET " . $offset;
         } else {
@@ -128,7 +131,24 @@ class ProjectService
             OR customers.company LIKE :search
             OR tags.name LIKE :search
             OR user.name LIKE :search)";
-            $param .= ['search' => "%{$searchTerm}%"];
+            $param = ['search' => "%{$searchTerm}%"];
+        }
+        if ($_SESSION['user_type'] != "A") {
+            $having = " HAVING COUNT(CASE WHEN project_member.user_id=:id THEN 1 ELSE NULL END) > 0 ";
+            $param = ['id' => $_SESSION['user'],];
+        }
+        if ($_SESSION['user_type'] != "A" && $searchTerm != '') {
+            $search .= " AND  (project.name LIKE :search 
+            OR project.description LIKE :search
+            OR customers.company LIKE :search
+            OR tags.name LIKE :search
+            OR user.name LIKE :search) ";
+            $where = " HAVING COUNT(CASE WHEN project_member.user_id=:id THEN 1 ELSE NULL END) > 0";
+            $param = [
+
+                'search' => "%{$searchTerm}%",
+                'id' => $_SESSION['user']
+            ];
         }
 
         $query = "SELECT
@@ -147,6 +167,7 @@ class ProjectService
                     ELSE project.status 
                 END AS `status`,
               GROUP_CONCAT(DISTINCT tags.name SEPARATOR ',') as `project_tags_name`,
+              GROUP_CONCAT(DISTINCT `user`.id SEPARATOR ',')as `project_member_id`,
               GROUP_CONCAT(DISTINCT `user`.name SEPARATOR ',')as `project_member_name`
             FROM project
             JOIN project_tags
@@ -158,7 +179,7 @@ class ProjectService
               JOIN user
               ON project_member.user_id = `user`.id
               JOIN customers
-              ON project.customer = customers.id WHERE project.id > 0 " . $search . $filter . " GROUP BY project.id ";
+              ON project.customer = customers.id " . $where . $search . $filter . " GROUP BY project.id " . $having;
         $viewproject = $this->db->query(
             $query,
             $param
@@ -197,6 +218,7 @@ class ProjectService
             ELSE project.status 
         END AS `status`,
       GROUP_CONCAT(DISTINCT tags.name SEPARATOR ',') as `project_tags_name`,
+      GROUP_CONCAT(DISTINCT `user`.id SEPARATOR ',')as `project_member_id`,
       GROUP_CONCAT(DISTINCT `user`.name SEPARATOR ',')as `project_member_name`
     FROM project
     JOIN project_tags

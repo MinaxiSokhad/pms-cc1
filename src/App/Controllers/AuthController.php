@@ -134,7 +134,7 @@ class AuthController
         // } else {
         //     redirectTo("/user");
         // }
-        redirectTo("/");
+        redirectTo("/admin/");
     }
     public function logout()
     {
