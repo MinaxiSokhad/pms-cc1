@@ -64,7 +64,7 @@
 
 
     <li class="nav-item menu-items">
-      <a class="nav-link" href="/admin/">
+      <a class="nav-link" href="/admin/" onclick="activateLink(this)">
         <!-- <span class="menu-icon">
       <i class="fas fa-wifi-1"></i>
     </span> -->
@@ -77,9 +77,9 @@
     <?php //dd($_SESSION['user_type']);
     if ($_SESSION['user_type'] == "A"): ?>
       <li class="nav-item menu-items">
-        <a class="nav-link" href="/admin/customer" aria-expanded="false" aria-controls="ui-basic">
+        <a class="nav-link" href="/admin/customers" aria-expanded="false" aria-controls="ui-basic">
 
-          <span class="menu-title">Customer</span>
+          <span class="menu-title">Customers</span>
 
         </a>
       </li>
@@ -108,3 +108,39 @@
     <?php endif; ?>
   </ul>
 </nav>
+<style>
+  .nav-link {
+    text-decoration: none;
+    color: #000;
+    padding: 5px 10px;
+  }
+
+  .active {
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+  }
+
+  .inactive {
+    background-color: transparent;
+    color: black;
+  }
+</style>
+<script>
+  // Function to activate the clicked link and deactivate the rest
+  function activateLink(clickedElement) {
+    // Get all elements with class 'nav-link'
+    var links = document.querySelectorAll('.nav-link');
+
+    // Loop through all links and remove the 'active' class
+    links.forEach(function (link) {
+      link.classList.remove('active');
+      link.classList.add('inactive');
+    });
+
+    // Add 'active' class to the clicked element
+    clickedElement.classList.add('active');
+    clickedElement.classList.remove('inactive');
+  }
+
+</script>

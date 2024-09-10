@@ -226,7 +226,9 @@
                                                                 </div>
                                                                 <button type="submit" name="projectsubmit"
                                                                     class="btn btn-primary mr-2">Edit Project</button>
-                                                                    <button class="btn btn-dark" type="reset" name="reset" >Cancel</button>
+                                                                    <a class="btn btn-info "
+                                                                    href="/admin/projects">Cancel</a>
+                                                                    <!-- <button class="btn btn-dark" type="reset" name="reset" >Cancel</button> -->
                                                             </form>
 <?php                                                            
 ?>

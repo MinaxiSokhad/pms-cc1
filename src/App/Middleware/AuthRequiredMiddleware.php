@@ -13,7 +13,7 @@ class AuthRequiredMiddleware implements MiddlewareInterface
   {
     if (empty($_SESSION['user'])) {
 
-      redirectTo('/login');
+      redirectTo('/admin/login');
     }
     try {
 

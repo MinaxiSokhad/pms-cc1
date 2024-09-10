@@ -161,7 +161,8 @@
                                   <?php endforeach; ?>
 
                                   <button class="btn btn-primary" type="submit">Save Changes</button>
-                                  <?php // dd($errors); ?>
+                                  <a class="btn btn-info " href="/admin/customers">Cancel</a>
+                                  <!-- <button class="btn btn-dark" type="reset" name="reset">Cancel</button> -->
                                 </form>
 
                               </div>
@@ -291,3 +292,6 @@
     margin-right: 1rem;
   }
 </style>
+<script>
+  document.getElementById("edittask").reset();
+</script>

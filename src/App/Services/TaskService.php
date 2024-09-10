@@ -77,8 +77,8 @@ class TaskService
                     ELSE task.status 
                 END AS `status`,
               GROUP_CONCAT(DISTINCT tags.name SEPARATOR ',') as `task_tags_name`,
-              GROUP_CONCAT(DISTINCT `user`.name SEPARATOR ',')as `task_member_name`,
-              GROUP_CONCAT(DISTINCT `user`.id SEPARATOR ',')as `task_member_id`
+              GROUP_CONCAT(DISTINCT `user`.name  ORDER BY user.id SEPARATOR ',')as `task_member_name`,
+              GROUP_CONCAT(DISTINCT `user`.id  ORDER BY user.id SEPARATOR ',')as `task_member_id`
             FROM task
             JOIN task_tags
               ON task.id = task_tags.task_id

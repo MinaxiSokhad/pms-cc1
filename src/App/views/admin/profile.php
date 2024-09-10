@@ -19,6 +19,7 @@
                     <div class="container">
                       <div class="main-body">
                         <div class="card-body">
+                          <?php $currentId = $_SESSION['user']; ?>
                           <h2 style="color:white">User Profile</h2>
                         </div>
                         <div class="row gutters-sm">
@@ -66,7 +67,7 @@
                                   </div>
                                 </div>
                                 <hr>
-                                <?php if ($_SESSION['user_type'] == "A"): ?>
+                                <?php if ($_SESSION['user_type'] == "A" || $profile['id'] == $currentId): ?>
                                   <div class="row">
                                     <div class="col-sm-3">
                                       <h6 class="mb-0">Country</h6>
@@ -151,7 +152,7 @@
                                   </div>
                                 </div>
                                 <hr>
-                                <?php if ($_SESSION['user_type'] == "A"): ?>
+                                <?php if ($_SESSION['user_type'] == "A" || $profile['id'] == $currentId): ?>
                                   <div class="row">
                                     <div class="col-sm-3">
                                       <h6 class="mb-0">Date Of Birth</h6>
@@ -171,14 +172,16 @@
                                   </div>
                                 <?php endif; ?>
                                 <hr>
-                                <?php if ($_SESSION['user_type'] == "A"): ?>
+                                <?php if ($_SESSION['user_type'] == "A" || $profile['id'] == $currentId): ?>
                                   <div class="row">
                                     <div class="col-sm-12">
                                       <a class="btn btn-info "
                                         href="/admin/staff/editProfile/<?php echo e($profile['id']); ?>">Edit</a>
+                                      <a class="btn btn-info " href="/admin/">Back</a>
                                     </div>
                                   </div>
                                 <?php endif; ?>
+
                               </div>
                             </div>
                           </div>

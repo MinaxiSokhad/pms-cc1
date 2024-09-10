@@ -346,10 +346,10 @@
                                       </div>
                                     </td>
                                     <?php if ($_SESSION['user_type'] == "A"): ?>
-                                      <td><a href="/editproject/<?php echo e($p['id']); ?>">
+                                      <td><a href="/admin/project/<?php echo e($p['id']); ?>">
                                           <?php echo e($p['name']); ?></a></td>
                                     <?php else: ?>
-                                      <td><a href="/showproject/<?php echo e($p['id']); ?>">
+                                      <td><a href="/admin/project/<?php echo e($p['id']); ?>">
                                           <?php echo e($p['name']); ?></a></td>
                                     <?php endif; ?>
                                     <td><?php echo e($p['description']); ?></td>
@@ -362,7 +362,7 @@
                                     <td><?php echo e($p['project_member_name']); ?>
                                     </td>
                                     <?php if ($_SESSION['user_type'] == "A"): ?>
-                                      <td><a href="/editproject/<?php echo $p['id']; ?>">
+                                      <td><a href="/admin/editproject/<?php echo $p['id']; ?>">
                                           <div class="badge badge-outline-success">
                                             Edit</div>
                                         </a></td>
@@ -468,10 +468,10 @@
                                       </div>
                                     </td>
                                     <td> <?php if ($_SESSION['user_type'] == "A"): ?>
-                                        <a href="/edittask/<?php echo $t['id']; ?>">
+                                        <a href="/admin/task/<?php echo $t['id']; ?>">
                                           <?php echo e($t['name']); ?></a><br><br><?php echo e("# " . $t['project']); ?>
                                       <?php else: ?>
-                                        <a href="/showtask/<?php echo $t['id']; ?>">
+                                        <a href="/admin/task/<?php echo $t['id']; ?>">
                                           <?php echo e($t['name']); ?></a><br><br><?php echo e("# " . $t['project']); ?>
                                       <?php endif; ?>
                                     </td>
@@ -485,7 +485,7 @@
                                     <td><?php echo e($t['priority']); ?>
                                     </td>
                                     <?php if ($_SESSION['user_type'] == "A"): ?>
-                                      <td><a href="/edittask/<?php echo $t['id']; ?>">
+                                      <td><a href="/admin/edittask/<?php echo $t['id']; ?>">
                                           <div class="badge badge-outline-success">
                                             Edit</div>
                                         </a></td>

@@ -127,14 +127,16 @@
                                                                 </div>
 
                                                                 <hr>
-                                                                <?php if ($_SESSION['user_type'] == "A"): ?>
-                                                                    <div class="row">
-                                                                        <div class="col-sm-12">
+                                                                <div class="row">
+                                                                    <div class="col-sm-12">
+                                                                        <a class="btn btn-info "
+                                                                            href="/admin/tasks">Back</a>
+                                                                        <?php if ($_SESSION['user_type'] == "A"): ?>
                                                                             <a class="btn btn-info "
                                                                                 href="/admin/edittask/<?php echo e($usertask['id']); ?>">Edit</a>
-                                                                        </div>
+                                                                        <?php endif; ?>
                                                                     </div>
-                                                                <?php endif; ?>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>

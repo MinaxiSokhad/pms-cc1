@@ -62,21 +62,26 @@ class ProfileController
     // }
     public function updateProfile(array $params = [])
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-            $editProfile = $this->profileService->getUserProfile((int) $params['user']);
-            if (!$editProfile) {
-                redirectTo('/admin/');
+        $currentUser = (int) $params['user'];
+        if ($_SESSION['user_type'] == "A" || $_SESSION['user'] == $currentUser) {
+            if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+                $editProfile = $this->profileService->getUserProfile((int) $params['user']);
+                if (!$editProfile) {
+                    redirectTo('/admin/');
+                }
+
+                echo $this->view->render("/admin/staff/editProfile.php", [
+                    'editProfile' => $editProfile,
+                    'storage' => Paths::STORAGE_UPLOADS
+
+                ]);
+            } else {
+                $this->validatorService->validateProfile($_POST);
+                $this->profileService->updateData($_POST, $_FILES['image'], (int) $params['user']);
+                redirectTo($_SERVER['HTTP_REFERER']);
             }
-
-            echo $this->view->render("/admin/staff/editProfile.php", [
-                'editProfile' => $editProfile,
-                'storage' => Paths::STORAGE_UPLOADS
-
-            ]);
         } else {
-            $this->validatorService->validateProfile($_POST);
-            $this->profileService->updateData($_POST, $_FILES['image'], (int) $params['user']);
-            redirectTo($_SERVER['HTTP_REFERER']);
+            redirectTo('/admin/');
         }
     }
 }

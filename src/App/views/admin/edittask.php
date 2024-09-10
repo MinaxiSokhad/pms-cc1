@@ -235,10 +235,10 @@
                                                                 </div>
                                                                 <button type="submit" name="tasksubmit"
                                                                     class="btn btn-primary mr-2">Edit Task</button>
-                                                                <button class="btn btn-dark" type="reset" name="reset" >Cancel</button>
+                                                                    <a class="btn btn-info "
+                                                                    href="/admin/tasks">Cancel</a>
+                                                                <!-- <button class="btn btn-dark" type="reset" name="reset" >Cancel</button> -->
                                                             </form>
-<?php                                                            
-?>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -253,8 +253,7 @@
 
                 </div>
                 
-                <?php 
-                ?>
+              
 
                 <!-- content-wrapper ends -->
                 <!-- partial:partials/_footer.html -->

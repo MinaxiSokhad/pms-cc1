@@ -29,8 +29,8 @@ function registerRoutes(App $app) //register the route and then autoload files
     // $app->get('/member/{user}', [ProfileController::class, 'member'])->add(AuthRequiredMiddleware::class);
     $app->get('/admin/staff/editProfile/{user}', [ProfileController::class, 'updateProfile'])->add(AuthRequiredMiddleware::class);
     $app->post('/admin/staff/editProfile/{user}', [ProfileController::class, 'updateProfile'])->add(AuthRequiredMiddleware::class);
-    $app->get('/admin/customer', [CustomerController::class, 'customerView'])->add(AuthRequiredMiddleware::class);
-    $app->post('/admin/customer', [CustomerController::class, 'customerView'])->add(AuthRequiredMiddleware::class);
+    $app->get('/admin/customers', [CustomerController::class, 'customerView'])->add(AuthRequiredMiddleware::class);
+    $app->post('/admin/customers', [CustomerController::class, 'customerView'])->add(AuthRequiredMiddleware::class);
     $app->get('/admin/createcustomer', [CustomerController::class, 'customer'])->add(AuthRequiredMiddleware::class);
     $app->post('/admin/createcustomer', [CustomerController::class, 'customer'])->add(AuthRequiredMiddleware::class);
     $app->get('/admin/editcustomer/{customer}', [CustomerController::class, 'updateCustomer'])->add(AuthRequiredMiddleware::class);

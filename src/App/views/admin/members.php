@@ -234,7 +234,7 @@
                                                                             $profileImage = !empty($t['image']) ? $storage . $t['storage_filename'] : $defaultImage;
                                                                             ?>
                                                                             <td><a
-                                                                                    href="/profile/<?php echo e($t['id']) ?>">
+                                                                                    href="/admin/profile/<?php echo e($t['id']) ?>">
                                                                                     <img src="<?php echo e($profileImage) ?>"
                                                                                         alt="Admin" class="rounded-circle"
                                                                                         width="150"></a></td>

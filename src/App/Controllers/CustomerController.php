@@ -82,7 +82,7 @@ class CustomerController
             if ($showRecord != "1") {
                 $lastPage = ceil($count / $limit);//Find total page
             }
-            echo $this->view->render("/admin/customer.php", [
+            echo $this->view->render("/admin/customers.php", [
                 'viewcustomer' => $viewcustomer,
                 'customers' => $customers,
                 'currentPage' => $page,
@@ -117,7 +117,7 @@ class CustomerController
                     throw new ValidationException(['phone' => ['Phone number already exists']]);
                 }
                 $this->customerService->create($_POST);
-                redirectTo('/admin/customer');
+                redirectTo('/admin/customers');
             }
         } else {
             echo $this->view->render("errors/permission-error.php");
@@ -139,7 +139,7 @@ class CustomerController
             } else {
                 $this->validatorService->validateCustomer($_POST);
                 $this->customerService->update($_POST, (int) $params['customer']);
-                redirectTo('/admin/customer');
+                redirectTo('/admin/customers');
             }
         } else {
             echo $this->view->render("errors/permission-error.php");
@@ -151,10 +151,10 @@ class CustomerController
 
             if ($id['customer'] === "0") {
                 $this->customerService->delete($_POST['ids']);
-                redirectTo('/admin/customer');
+                redirectTo('/admin/customers');
             } else {
                 $this->customerService->delete([$id['customer']]);//'customer' -> route parameter
-                redirectTo('/admin/customer');
+                redirectTo('/admin/customers');
             }
         } else {
             echo $this->view->render("errors/permission-error.php");

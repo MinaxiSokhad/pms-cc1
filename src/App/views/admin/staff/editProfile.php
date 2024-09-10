@@ -426,12 +426,14 @@
                                                                             <?php endif; ?>
                                                                         </div>
                                                                     </div>
-
+                                                                    <hr>
                                                                     <div class="row">
                                                                         <div class="col-sm-12">
                                                                             <button class="btn btn-primary"
                                                                                 type="submit">Save
                                                                                 Changes</button>
+                                                                            <a class="btn btn-info "
+                                                                                href="/admin/">Cancel</a>
                                                                         </div>
                                                                     </div>
                                                             </div>

@@ -268,19 +268,23 @@
                                                                             <td><?php echo e($p['start_date']); ?></td>
                                                                             <td><?php echo e($p['deadline']); ?></td>
                                                                             <td><?php echo e($p['status']); ?></td>
-                                                                            <?php $project_member_id = explode(",", $p['project_member_id']); ?>
-                                                                            <?php $project_member_name = explode(",", $p['project_member_name']);
+                                                                            <?php
+                                                                            //   $defaultImage = "https://bootdey.com/img/Content/avatar/avatar7.png";
+                                                                            $storage = "/storage/uploads/";
+                                                                            $defaultImage = "/storage/uploads/download.png";
+                                                                            // $url = "http://192.168.1.30/storage/uploads/";   
+                                                                            $profileImage = !empty($p['image']) ? $storage . $p['storage_filename'] : $defaultImage;
+                                                                            // dd($profileImage);
+                                                                            ?>
+                                                                            <?php
+                                                                            $project_member_id = explode(",", $p['project_member_id']);
+                                                                            $project_member_name = explode(",", $p['project_member_name']); ?>
+                                                                            <?php
                                                                             $project_members = array_combine($project_member_id, $project_member_name); ?>
                                                                             <td><?php foreach ($project_members as $p_id => $p_name): ?>
-                                                                                    <?php if ($_SESSION['user_type'] == "A"): ?>
-                                                                                        <a
-                                                                                            href="/admin/profile/<?php echo e($p_id); ?>">
-                                                                                            <?php echo e($p_name); ?></a>
-                                                                                    <?php else: ?>
-                                                                                        <a
-                                                                                            href="/admin/profile/<?php echo e($p_id); ?>">
-                                                                                            <?php echo e($p_name); ?></a>
-                                                                                    <?php endif; ?>
+                                                                                    <a
+                                                                                        href="/admin/profile/<?php echo e($p_id); ?>">
+                                                                                        <?php echo e($p_name) ?></a>
                                                                                 <?php endforeach; ?>
                                                                             </td>
                                                                             <?php if ($_SESSION['user_type'] == "A"): ?>

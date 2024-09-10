@@ -167,8 +167,8 @@ class ProjectService
                     ELSE project.status 
                 END AS `status`,
               GROUP_CONCAT(DISTINCT tags.name SEPARATOR ',') as `project_tags_name`,
-              GROUP_CONCAT(DISTINCT `user`.id SEPARATOR ',')as `project_member_id`,
-              GROUP_CONCAT(DISTINCT `user`.name SEPARATOR ',')as `project_member_name`
+              GROUP_CONCAT(DISTINCT `user`.id  ORDER BY user.id SEPARATOR ',')as `project_member_id`,
+              GROUP_CONCAT(DISTINCT `user`.name  ORDER BY user.id SEPARATOR ',')as `project_member_name`
             FROM project
             JOIN project_tags
               ON project.id = project_tags.project_id
