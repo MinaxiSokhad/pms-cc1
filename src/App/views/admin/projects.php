@@ -135,8 +135,10 @@
                     <input type="hidden" id="p" name="p" value="<?php echo e($_POST['p'] ?? 1); ?>">
                     <input type="hidden" id="search_input" name="search_input"
                         value="<?php echo e($_POST['s'] ?? ''); ?>" />
-                    <input type="hidden" id="order_by" name="order_by" value="id" />
-                    <input type="hidden" id="direction" name="direction" value="desc" />
+                    <input type="hidden" id="order_by" name="order_by"
+                        value="<?php echo e($_POST['order_by'] ?? 'id'); ?>" />
+                    <input type="hidden" id="direction" name="direction"
+                        value="<?php echo e($_POST['direction'] ?? 'desc'); ?>" />
                     <?php if (array_key_exists('statusfilter', $_POST)):
                         foreach ($_POST['statusfilter'] as $sts): ?>
                             <input type="hidden" id="_filter_status_[]" name="_filter_status_[]"
