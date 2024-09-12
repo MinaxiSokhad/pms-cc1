@@ -21,7 +21,7 @@ class TaskController
     {
         $viewtask = [];
         $count = 0;
-        $_POST['select_limit'] = $_POST['select_limit'] ? $_POST['select_limit'] : 3;
+        $_POST['select_limit'] = isset($_POST['select_limit']) ? $_POST['select_limit'] : 3;
         $showRecord = $_POST['select_limit'];
 
         if ($showRecord != "1") {
@@ -110,7 +110,7 @@ class TaskController
         $usertask = $this->taskService->getonetask($params['user']);
         //dd($profile);
         if (!$usertask) {
-            redirectTo('/');
+            redirectTo('/admin/');
         }
 
         echo $this->view->render("/admin/task.php", [

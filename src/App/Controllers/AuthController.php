@@ -31,7 +31,7 @@ class AuthController
         if ($_SESSION['user_type'] == "A") {
             $viewmember = [];
             $count = 0;
-            $_POST['select_limit'] = $_POST['select_limit'] ? $_POST['select_limit'] : 3;
+            $_POST['select_limit'] = isset($_POST['select_limit']) ? $_POST['select_limit'] : 3;
             $showRecord = $_POST['select_limit'];
 
             if ($showRecord != "1") {

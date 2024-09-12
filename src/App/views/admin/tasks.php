@@ -275,27 +275,33 @@
                                                                             </td>
                                                                             <!-- <td><?php //echo e($t['project']); ?></td> -->
                                                                             <td> <?php if ($_SESSION['user_type'] == "A"): ?>
-                                                                                    <a href="/admin/task/<?php echo $t['id']; ?>">
+                                                                                    <a
+                                                                                        href="/admin/task/<?php echo $t['id']; ?>">
                                                                                         <?php echo e($t['name']); ?></a><br><br><?php echo e("# " . $t['project']); ?>
                                                                                 <?php else: ?>
-                                                                                    <a href="/admin/task/<?php echo $t['id']; ?>">
+                                                                                    <a
+                                                                                        href="/admin/task/<?php echo $t['id']; ?>">
                                                                                         <?php echo e($t['name']); ?></a><br><br><?php echo e("# " . $t['project']); ?>
                                                                                 <?php endif; ?>
                                                                             </td>
                                                                             <?php $task_member_id = explode(",", $t['task_member_id']); ?>
-                                                                            <?php $task_member_name = explode(",", $t['task_member_name']); 
-                                                                            $task_members = array_combine($task_member_id, $task_member_name);?>
+                                                                            <?php $task_member_name = explode(",", $t['task_member_name']);
+                                                                            $task_members = array_combine($task_member_id, $task_member_name);
+                                                                            // dd($task_member_name); ?>
                                                                             <td> <?php foreach ($task_members as $task_id => $task_name): ?>
-                                                                                <?php if ($_SESSION['user_type'] == "A"): ?>
-                                                                                    <a href="/admin/profile/<?php echo $task_id; ?>">                          
-                                                                                        <?php echo e($task_name); ?>
-                                                                                       </a>
-                                                                                <?php else: ?>
-                                                                                    <a href="/admin/showmember/<?php echo $task_id; ?>"> 
-                                                                                        <?php echo e($task_name); ?>
-                                                                                       </a>
-                                                                                <?php endif; ?>     
-                                                                            <?php endforeach; ?></td>
+                                                                                    <?php if ($_SESSION['user_type'] == "A"): ?>
+                                                                                        <a
+                                                                                            href="/admin/profile/<?php echo $task_id; ?>">
+                                                                                            <?php echo $task_name; ?>
+                                                                                        </a>
+                                                                                    <?php else: ?>
+                                                                                        <a
+                                                                                            href="/admin/profile/<?php echo $task_id; ?>">
+                                                                                            <?php echo $task_name; ?>
+                                                                                        </a>
+                                                                                    <?php endif; ?>
+                                                                                <?php endforeach; ?>
+                                                                            </td>
                                                                             <td><?php echo e($t['task_tags_name']); ?>
                                                                             </td>
                                                                             <td><?php echo e($t['start_date']); ?></td>
@@ -304,7 +310,8 @@
                                                                             <td><?php echo e($t['priority']); ?>
                                                                             </td>
                                                                             <?php if ($_SESSION['user_type'] == "A"): ?>
-                                                                                <td><a href="/admin/edittask/<?php echo $t['id']; ?>">
+                                                                                <td><a
+                                                                                        href="/admin/edittask/<?php echo $t['id']; ?>">
                                                                                         <div
                                                                                             class="badge badge-outline-success">
                                                                                             Edit</div>

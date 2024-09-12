@@ -36,12 +36,13 @@
             filterform.submit();
         }
         function sortBy(order_by = 'id', direction = 'desc') {
-            document.getElementById('p').value = 1;
+
             const field_order_by = document.getElementById('order_by');
             const field_direction = document.getElementById('direction');
             field_order_by.value = order_by;
             field_direction.value = direction;
             console.log(order_by, direction);
+            document.getElementById('p').value = 1;
             filterform.submit();
         }
     </script>
