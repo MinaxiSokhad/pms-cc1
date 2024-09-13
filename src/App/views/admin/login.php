@@ -66,15 +66,7 @@
         background-color: #0056b3;
     }
 </style>
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Form</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
+<title>Login Form</title>
 <!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             const login = document.getElementById('login');
@@ -126,42 +118,36 @@
             }
         });
     </script> -->
-
-<body>
-    <div class="login-container">
-        <h2>Login</h2>
-        <form id="login" method="POST">
-            <?php include $this->resolve('partials/_csrf.php'); ?>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email">
-                <div id="emailErr" style="color:red">
-                </div>
-                <?php if (array_key_exists('email', $errors)): ?>
-                    <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
-                        <?php echo e($errors['email'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
-                            ?>
-                    </div>
-                <?php endif; ?>
+<div class="login-container">
+    <h2>Login</h2>
+    <form id="login" method="POST">
+        <?php include $this->resolve('partials/_csrf.php'); ?>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email">
+            <div id="emailErr" style="color:red">
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password">
-                <div id="passwordErr" class="mt-2 p-2 text-red-500" style="color:red">
+            <?php if (array_key_exists('email', $errors)): ?>
+                <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
+                    <?php echo e($errors['email'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                        ?>
                 </div>
-                <?php if (array_key_exists('password', $errors)): ?>
-                    <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
-                        <?php echo e($errors['password'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
-                            ?>
-                    </div>
-                <?php endif; ?>
+            <?php endif; ?>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password">
+            <div id="passwordErr" class="mt-2 p-2 text-red-500" style="color:red">
             </div>
-            <input type="hidden" name="user_type" id="user_type" value="$user_type" />
-            <button type="submit">Login</button>
-            <p>Not registered yet? <a href="/register">Check registration</a></p>
-        </form>
-
-    </div>
-</body>
-
-</html>
+            <?php if (array_key_exists('password', $errors)): ?>
+                <div class="bg-gray-100 mt-2 p-2 text-red-500" style="color:red">
+                    <?php echo e($errors['password'][0]); //show error through looping -> one by one error is check and show it // [0] is display the first error message
+                        ?>
+                </div>
+            <?php endif; ?>
+        </div>
+        <input type="hidden" name="user_type" id="user_type" value="$user_type" />
+        <button type="submit">Login</button>
+        <p>Not registered yet? <a href="/register">Check registration</a></p>
+    </form>
+</div>

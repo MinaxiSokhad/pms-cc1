@@ -1,355 +1,337 @@
-<!DOCTYPE html>
-<html lang="en">
+<title>Tasks</title>
+<?php include $this->resolve("partials/_header.php"); ?>
+<div class="container-scroller">
+    <?php include $this->resolve("partials/_sidebar.php"); ?>
+    <div class="container-fluid page-body-wrapper">
+        <?php include $this->resolve("partials/_navbar.php"); ?>
+        <?php include $this->resolve('partials/_csrf.php'); ?>
+        <div class="main-panel">
 
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasks</title>
-</head>
-
-<body>
-    <?php include $this->resolve("partials/_header.php"); ?>
-    <div class="container-scroller">
-        <?php include $this->resolve("partials/_sidebar.php"); ?>
-        <div class="container-fluid page-body-wrapper">
-            <?php include $this->resolve("partials/_navbar.php"); ?>
-            <?php include $this->resolve('partials/_csrf.php'); ?>
-            <div class="main-panel">
-
-                <br />
-                <h2>Tasks Summary</h2>
-                <div class="row">
-                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-9">
-                                        <div class="d-flex align-items-center align-self-start">
-                                            <h3 class="mb-0"><?php echo $task_status[0]['S']; ?></h3>
-                                            <h3 class="text-success ml-2 mb-0 font-weight-medium">Not Started</h3>
-                                        </div>
+            <br />
+            <h2>Tasks Summary</h2>
+            <div class="row">
+                <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-9">
+                                    <div class="d-flex align-items-center align-self-start">
+                                        <h3 class="mb-0"><?php echo $task_status[0]['S']; ?></h3>
+                                        <h3 class="text-success ml-2 mb-0 font-weight-medium">Not Started</h3>
                                     </div>
-
                                 </div>
-                                <?php if ($_SESSION['user_type'] != "A"): ?>
-                                    <h6 class="mb-0"><br>Task assigned to me :
-                                        <?php echo $task_userassign_status[0]['S']; ?>
-                                    </h6>
-                                <?php endif; ?>
+
                             </div>
+                            <?php if ($_SESSION['user_type'] != "A"): ?>
+                                <h6 class="mb-0"><br>Task assigned to me :
+                                    <?php echo $task_userassign_status[0]['S']; ?>
+                                </h6>
+                            <?php endif; ?>
                         </div>
                     </div>
-                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-9">
-                                        <div class="d-flex align-items-center align-self-start">
-                                            <h3 class="mb-0"><?php echo $task_status[1]['P']; ?></h3>
-                                            <h3 class="text-success ml-2 mb-0 font-weight-medium">In Progress</h3>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <?php if ($_SESSION['user_type'] != "A"): ?>
-                                    <h6 class="mb-0"><br>Task assigned to me :
-                                        <?php echo $task_userassign_status[1]['P']; ?>
-                                    </h6>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-9">
-                                        <div class="d-flex align-items-center align-self-start">
-                                            <h3 class="mb-0"><?php echo $task_status[2]['C']; ?></h3>
-                                            <h3 class="text-success ml-2 mb-0 font-weight-medium">Completed</h3>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <?php if ($_SESSION['user_type'] != "A"): ?>
-                                    <h6 class="mb-0"><br>Task assigned to me :
-                                        <?php echo $task_userassign_status[2]['C']; ?>
-                                    </h6>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-9">
-                                        <div class="d-flex align-items-center align-self-start">
-                                            <h3 class="mb-0"><?php echo $task_status[3]['T']; ?></h3>
-                                            <h3 class="text-success ml-2 mb-0 font-weight-medium">Testing</h3>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <?php if ($_SESSION['user_type'] != "A"): ?>
-                                    <h6 class="mb-0"><br>Task assigned to me :
-                                        <?php echo $task_userassign_status[3]['T']; ?>
-                                    </h6>
-                                <?php endif; ?>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
                 </div>
-                <div class="content-wrapper">
-                    <!-- Filter Dropdown -->
-                    <?php include $this->resolve("partials/_search.php"); ?>
-                    <?php
-                    $statusfilter = [];
-                    if (array_key_exists('status', $_POST)) {
-                        $statusfilter = array_merge($statusfilter, $_POST['status']);
-                    }
-                    ?>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="dropdown">
-                            <button class="btn btn-outline-primary dropdown-toggle" type="button" id="filterDropdown"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="mdi mdi-filter-variant"></i> Filter
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="filterDropdown">
-                                <div class="dropdown-item">
-                                    <input type="checkbox" name="selectStatus[]" value="status"> Status
-                                    <div class="sub-items">
-                                        <?php $status = ['S' => 'Not Started', 'P' => 'In Progress', 'C' => 'Complete', 'T' => 'Testing']; ?>
-                                        <?php foreach ($status as $s => $value):
-                                            ?>
-                                            <?php if ($_SERVER['REQUEST_METHOD'] == "POST" && in_array($s, $statusfilter)): ?>
-                                                <label><input type="checkbox" name="status[]" value="<?php echo (string) $s;
-                                                ?>" checked><?php echo (string) $value; ?></label>
-
-                                            <?php else: ?>
-                                                <label><input type="checkbox" name="status[]" value="<?php echo (string) $s;
-                                                ?>">
-                                                    <?php echo (string) $value; ?></label>
-                                            <?php endif; ?>
-                                        <?php endforeach; ?>
+                <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-9">
+                                    <div class="d-flex align-items-center align-self-start">
+                                        <h3 class="mb-0"><?php echo $task_status[1]['P']; ?></h3>
+                                        <h3 class="text-success ml-2 mb-0 font-weight-medium">In Progress</h3>
                                     </div>
                                 </div>
 
-                                <!-- Add more items and sub-items as needed -->
-                                <button type="button" onclick="form_submit()" class="submit-btn">Apply
-                                    Filters</button>
                             </div>
+                            <?php if ($_SESSION['user_type'] != "A"): ?>
+                                <h6 class="mb-0"><br>Task assigned to me :
+                                    <?php echo $task_userassign_status[1]['P']; ?>
+                                </h6>
+                            <?php endif; ?>
                         </div>
                     </div>
-                    <input type="hidden" id="p" name="p" value="<?php echo e($_POST['p'] ?? 1); ?>">
-                    <input type="hidden" id="search_input" name="search_input"
-                        value="<?php echo e($_POST['s'] ?? ''); ?>" />
-                    <input type="hidden" id="order_by" name="order_by" value="id" />
-                    <input type="hidden" id="direction" name="direction" value="desc" />
-                    <?php if (array_key_exists('statusfilter', $_POST)):
-                        foreach ($_POST['statusfilter'] as $sts): ?>
-                            <input type="hidden" id="_filter_status_[]" name="_filter_status_[]"
-                                value="<?php echo e($sts ?? ''); ?>">
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                    </form>
+                </div>
+                <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-9">
+                                    <div class="d-flex align-items-center align-self-start">
+                                        <h3 class="mb-0"><?php echo $task_status[2]['C']; ?></h3>
+                                        <h3 class="text-success ml-2 mb-0 font-weight-medium">Completed</h3>
+                                    </div>
+                                </div>
 
-                    <div class="col-xl-11 col-sm-6 col-9 grid-margin stretch-card">
-                        <div class="card corona-gradient-card">
-                            <div class="card-body py-0 px-0 px-sm-3" style="background-color:#191C24;">
-                                <div class="row align-items-center">
-                                    <div class="row">
-                                        <div class="col-12 grid-margin">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h4 class="card-title">Tasks</h4>
-                                                    <div class="table-responsive">
-                                                        <form id="form" action="" method="POST">
-                                                            <?php include $this->resolve('partials/_csrf.php'); ?>
-                                                            <table class="table">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>
-                                                                            <div
-                                                                                class="form-check form-check-muted m-0">
-                                                                                <label class="form-check-label">
-                                                                                    <input type="checkbox"
-                                                                                        class="form-check-input"
-                                                                                        id="selectAll"
-                                                                                        name="selectAll[]">
-                                                                                </label>
-                                                                            </div>
-                                                                        </th>
-                                                                        <!-- <th>
+                            </div>
+                            <?php if ($_SESSION['user_type'] != "A"): ?>
+                                <h6 class="mb-0"><br>Task assigned to me :
+                                    <?php echo $task_userassign_status[2]['C']; ?>
+                                </h6>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-9">
+                                    <div class="d-flex align-items-center align-self-start">
+                                        <h3 class="mb-0"><?php echo $task_status[3]['T']; ?></h3>
+                                        <h3 class="text-success ml-2 mb-0 font-weight-medium">Testing</h3>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <?php if ($_SESSION['user_type'] != "A"): ?>
+                                <h6 class="mb-0"><br>Task assigned to me :
+                                    <?php echo $task_userassign_status[3]['T']; ?>
+                                </h6>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+            <div class="content-wrapper">
+                <!-- Filter Dropdown -->
+                <?php include $this->resolve("partials/_search.php"); ?>
+                <?php
+                $statusfilter = [];
+                if (array_key_exists('status', $_POST)) {
+                    $statusfilter = array_merge($statusfilter, $_POST['status']);
+                }
+                ?>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary dropdown-toggle" type="button" id="filterDropdown"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="mdi mdi-filter-variant"></i> Filter
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="filterDropdown">
+                            <div class="dropdown-item">
+                                <input type="checkbox" name="selectStatus[]" value="status"> Status
+                                <div class="sub-items">
+                                    <?php $status = ['S' => 'Not Started', 'P' => 'In Progress', 'C' => 'Complete', 'T' => 'Testing']; ?>
+                                    <?php foreach ($status as $s => $value):
+                                        ?>
+                                        <?php if ($_SERVER['REQUEST_METHOD'] == "POST" && in_array($s, $statusfilter)): ?>
+                                            <label><input type="checkbox" name="status[]" value="<?php echo (string) $s;
+                                            ?>" checked><?php echo (string) $value; ?></label>
+
+                                        <?php else: ?>
+                                            <label><input type="checkbox" name="status[]" value="<?php echo (string) $s;
+                                            ?>">
+                                                <?php echo (string) $value; ?></label>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+
+                            <!-- Add more items and sub-items as needed -->
+                            <button type="button" onclick="form_submit()" class="submit-btn">Apply
+                                Filters</button>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="p" name="p" value="<?php echo e($_POST['p'] ?? 1); ?>">
+                <input type="hidden" id="search_input" name="search_input"
+                    value="<?php echo e($_POST['s'] ?? ''); ?>" />
+                <input type="hidden" id="order_by" name="order_by" value="id" />
+                <input type="hidden" id="direction" name="direction" value="desc" />
+                <?php if (array_key_exists('statusfilter', $_POST)):
+                    foreach ($_POST['statusfilter'] as $sts): ?>
+                        <input type="hidden" id="_filter_status_[]" name="_filter_status_[]"
+                            value="<?php echo e($sts ?? ''); ?>">
+                    <?php endforeach; ?>
+                <?php endif; ?>
+                </form>
+
+                <div class="col-xl-11 col-sm-6 col-9 grid-margin stretch-card">
+                    <div class="card corona-gradient-card">
+                        <div class="card-body py-0 px-0 px-sm-3" style="background-color:#191C24;">
+                            <div class="row align-items-center">
+                                <div class="row">
+                                    <div class="col-12 grid-margin">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h4 class="card-title">Tasks</h4>
+                                                <div class="table-responsive">
+                                                    <form id="form" action="" method="POST">
+                                                        <?php include $this->resolve('partials/_csrf.php'); ?>
+                                                        <table class="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>
+                                                                        <div class="form-check form-check-muted m-0">
+                                                                            <label class="form-check-label">
+                                                                                <input type="checkbox"
+                                                                                    class="form-check-input"
+                                                                                    id="selectAll" name="selectAll[]">
+                                                                            </label>
+                                                                        </div>
+                                                                    </th>
+                                                                    <!-- <th>
                                                                             <a a href="#" class="sort-button"
                                                                                 onclick="sortBy('name','asc')">▲</a>
                                                                             Project Name
                                                                             <a a href="#" class="sort-button"
                                                                                 onclick="sortBy('name','desc')">▼</a>
                                                                         </th> -->
-                                                                        <th>
-                                                                            <a a href="#" class="sort-button"
-                                                                                onclick="sortBy('name','asc')">▲</a>
-                                                                            Task Name
-                                                                            <a a href="#" class="sort-button"
-                                                                                onclick="sortBy('name','desc')">▼</a>
-                                                                        </th>
-                                                                        <th>
-                                                                            <a href="#" class="sort-button"
-                                                                                onclick="sortBy('task_member_name','asc')">
-                                                                                ▲</a>
-                                                                            Assigned to
-                                                                            <a a href="#" class="sort-button"
-                                                                                onclick="sortBy('task_member_name','desc')">▼</a>
-                                                                        </th>
-                                                                        <th>
-                                                                            <a a href="#" class="sort-button"
-                                                                                onclick="sortBy('task_tags_name','asc')">▲</a>
-                                                                            Tags
-                                                                            <a a href="#" class="sort-button"
-                                                                                onclick="sortBy('task_tags_name','desc')">▼</a>
-                                                                        </th>
-                                                                        <th>
-                                                                            <a a href="#" class="sort-button"
-                                                                                onclick="sortBy('start_date','asc')">▲</a>
-                                                                            Start Date
-                                                                            <a a href="#" class="sort-button"
-                                                                                onclick="sortBy('start_date','desc')">▼</a>
-                                                                        </th>
-                                                                        <th>
-                                                                            <a a href="#" class="sort-button"
-                                                                                onclick="sortBy('due_date','asc')">▲</a>
-                                                                            Due Date
-                                                                            <aa href="#" class="sort-button"
-                                                                                onclick="sortBy('due_date','desc')">
-                                                                                ▼</a>
-                                                                        </th>
-                                                                        <th>
-                                                                            <a a href="#" class="sort-button"
-                                                                                onclick="sortBy('status','asc')">▲</a>
-                                                                            Status
-                                                                            <a a href="#" class="sort-button"
-                                                                                onclick="sortBy('status','desc')">▼</a>
-                                                                        </th>
-                                                                        <th>
-                                                                            <a a href="#" class="sort-button"
-                                                                                onclick="sortBy('priority','asc')">▲</a>
-                                                                            Priority
-                                                                            <a a href="#" class="sort-button"
-                                                                                onclick="sortBy('priority','desc')">▼</a>
-                                                                        </th>
-                                                                        <?php if ($_SESSION['user_type'] == "A"): ?>
-                                                                            <th>Edit</th>
-                                                                            <th>Delete</th>
-                                                                        <?php endif; ?>
-                                                                    </tr>
-                                                                </thead>
-                                                                <?php
-                                                                //   $defaultImage = "https://bootdey.com/img/Content/avatar/avatar7.png";
-                                                                $storage = "/storage/uploads/";
-                                                                $defaultImage = "/storage/uploads/download.png";
-                                                                // $url = "http://192.168.1.30/storage/uploads/";   
-                                                                $profileImage = !empty($t['image']) ? $storage . $t['storage_filename'] : $defaultImage;
-                                                                ?>
-                                                                <tbody>
-                                                                    <?php foreach ($viewproject as $p) {
+                                                                    <th>
+                                                                        <a a href="#" class="sort-button"
+                                                                            onclick="sortBy('name','asc')">▲</a>
+                                                                        Task Name
+                                                                        <a a href="#" class="sort-button"
+                                                                            onclick="sortBy('name','desc')">▼</a>
+                                                                    </th>
+                                                                    <th>
+                                                                        <a href="#" class="sort-button"
+                                                                            onclick="sortBy('task_member_name','asc')">
+                                                                            ▲</a>
+                                                                        Assigned to
+                                                                        <a a href="#" class="sort-button"
+                                                                            onclick="sortBy('task_member_name','desc')">▼</a>
+                                                                    </th>
+                                                                    <th>
+                                                                        <a a href="#" class="sort-button"
+                                                                            onclick="sortBy('task_tags_name','asc')">▲</a>
+                                                                        Tags
+                                                                        <a a href="#" class="sort-button"
+                                                                            onclick="sortBy('task_tags_name','desc')">▼</a>
+                                                                    </th>
+                                                                    <th>
+                                                                        <a a href="#" class="sort-button"
+                                                                            onclick="sortBy('start_date','asc')">▲</a>
+                                                                        Start Date
+                                                                        <a a href="#" class="sort-button"
+                                                                            onclick="sortBy('start_date','desc')">▼</a>
+                                                                    </th>
+                                                                    <th>
+                                                                        <a a href="#" class="sort-button"
+                                                                            onclick="sortBy('due_date','asc')">▲</a>
+                                                                        Due Date
+                                                                        <aa href="#" class="sort-button"
+                                                                            onclick="sortBy('due_date','desc')">
+                                                                            ▼</a>
+                                                                    </th>
+                                                                    <th>
+                                                                        <a a href="#" class="sort-button"
+                                                                            onclick="sortBy('status','asc')">▲</a>
+                                                                        Status
+                                                                        <a a href="#" class="sort-button"
+                                                                            onclick="sortBy('status','desc')">▼</a>
+                                                                    </th>
+                                                                    <th>
+                                                                        <a a href="#" class="sort-button"
+                                                                            onclick="sortBy('priority','asc')">▲</a>
+                                                                        Priority
+                                                                        <a a href="#" class="sort-button"
+                                                                            onclick="sortBy('priority','desc')">▼</a>
+                                                                    </th>
+                                                                    <?php if ($_SESSION['user_type'] == "A"): ?>
+                                                                        <th>Edit</th>
+                                                                        <th>Delete</th>
+                                                                    <?php endif; ?>
+                                                                </tr>
+                                                            </thead>
+                                                            <?php
+                                                            //   $defaultImage = "https://bootdey.com/img/Content/avatar/avatar7.png";
+                                                            $storage = "/storage/uploads/";
+                                                            $defaultImage = "/storage/uploads/download.png";
+                                                            // $url = "http://192.168.1.30/storage/uploads/";   
+                                                            $profileImage = !empty($t['image']) ? $storage . $t['storage_filename'] : $defaultImage;
+                                                            ?>
+                                                            <tbody>
+                                                                <?php foreach ($viewproject as $p) {
 
-                                                                    } ?>
-                                                                    <?php foreach ($viewtask as $t): ?>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div
-                                                                                    class="form-check form-check-muted m-0">
-                                                                                    <label class="form-check-label">
-                                                                                        <input type="checkbox"
-                                                                                            class="form-check-input"
-                                                                                            value="<?php echo $t['id']; ?>"
-                                                                                            name="ids[]">
-                                                                                    </label>
-                                                                                </div>
-                                                                            </td>
-                                                                            <!-- <td><?php //echo e($t['project']); ?></td> -->
-                                                                            <td> <?php if ($_SESSION['user_type'] == "A"): ?>
+                                                                } ?>
+                                                                <?php foreach ($viewtask as $t): ?>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div class="form-check form-check-muted m-0">
+                                                                                <label class="form-check-label">
+                                                                                    <input type="checkbox"
+                                                                                        class="form-check-input"
+                                                                                        value="<?php echo $t['id']; ?>"
+                                                                                        name="ids[]">
+                                                                                </label>
+                                                                            </div>
+                                                                        </td>
+                                                                        <!-- <td><?php //echo e($t['project']); ?></td> -->
+                                                                        <td> <?php if ($_SESSION['user_type'] == "A"): ?>
+                                                                                <a href="/admin/task/<?php echo $t['id']; ?>">
+                                                                                    <?php echo e($t['name']); ?></a><br><br><?php echo e("# " . $t['project']); ?>
+                                                                            <?php else: ?>
+                                                                                <a href="/admin/task/<?php echo $t['id']; ?>">
+                                                                                    <?php echo e($t['name']); ?></a><br><br><?php echo e("# " . $t['project']); ?>
+                                                                            <?php endif; ?>
+                                                                        </td>
+                                                                        <?php $task_member_id = explode(",", $t['task_member_id']); ?>
+                                                                        <?php $task_member_name = explode(",", $t['task_member_name']);
+                                                                        $task_members = array_combine($task_member_id, $task_member_name);
+                                                                        // dd($task_member_name); ?>
+                                                                        <td> <?php foreach ($task_members as $task_id => $task_name): ?>
+                                                                                <?php if ($_SESSION['user_type'] == "A"): ?>
                                                                                     <a
-                                                                                        href="/admin/task/<?php echo $t['id']; ?>">
-                                                                                        <?php echo e($t['name']); ?></a><br><br><?php echo e("# " . $t['project']); ?>
+                                                                                        href="/admin/profile/<?php echo $task_id; ?>">
+                                                                                        <?php echo $task_name; ?>
+                                                                                    </a>
                                                                                 <?php else: ?>
                                                                                     <a
-                                                                                        href="/admin/task/<?php echo $t['id']; ?>">
-                                                                                        <?php echo e($t['name']); ?></a><br><br><?php echo e("# " . $t['project']); ?>
+                                                                                        href="/admin/profile/<?php echo $task_id; ?>">
+                                                                                        <?php echo $task_name; ?>
+                                                                                    </a>
                                                                                 <?php endif; ?>
-                                                                            </td>
-                                                                            <?php $task_member_id = explode(",", $t['task_member_id']); ?>
-                                                                            <?php $task_member_name = explode(",", $t['task_member_name']);
-                                                                            $task_members = array_combine($task_member_id, $task_member_name);
-                                                                            // dd($task_member_name); ?>
-                                                                            <td> <?php foreach ($task_members as $task_id => $task_name): ?>
-                                                                                    <?php if ($_SESSION['user_type'] == "A"): ?>
-                                                                                        <a
-                                                                                            href="/admin/profile/<?php echo $task_id; ?>">
-                                                                                            <?php echo $task_name; ?>
-                                                                                        </a>
-                                                                                    <?php else: ?>
-                                                                                        <a
-                                                                                            href="/admin/profile/<?php echo $task_id; ?>">
-                                                                                            <?php echo $task_name; ?>
-                                                                                        </a>
-                                                                                    <?php endif; ?>
-                                                                                <?php endforeach; ?>
-                                                                            </td>
-                                                                            <td><?php echo e($t['task_tags_name']); ?>
-                                                                            </td>
-                                                                            <td><?php echo e($t['start_date']); ?></td>
-                                                                            <td><?php echo e($t['due_date']); ?></td>
-                                                                            <td><?php echo e($t['status']); ?></td>
-                                                                            <td><?php echo e($t['priority']); ?>
-                                                                            </td>
-                                                                            <?php if ($_SESSION['user_type'] == "A"): ?>
-                                                                                <td><a
-                                                                                        href="/admin/edittask/<?php echo $t['id']; ?>">
-                                                                                        <div
-                                                                                            class="badge badge-outline-success">
-                                                                                            Edit</div>
-                                                                                    </a></td>
-                                                                                <input type="hidden" name="_METHOD"
-                                                                                    value="DELETE">
-                                                                                <td><button type="button"
-                                                                                        onclick="deletetask(<?php echo $t['id']; ?>)"
-                                                                                        name="delete"
-                                                                                        class="badge badge-outline-danger"
-                                                                                        style="background-color:transparent;">Delete
-                                                                                    </button></td>
-                                                                            <?php endif; ?>
-                                                                        </tr>
-                                                                    <?php endforeach; ?>
-                                                                </tbody>
-                                                            </table>
-                                                            <?php if ($_SESSION['user_type'] == "A"): ?>
-                                                                <br>
-                                                                <a href="/admin/createtask">
-                                                                    <div class="badge badge-outline-success">Add New
-                                                                        Task</div>
-                                                                </a>
-                                                                <?php if ($viewtask): ?>
-                                                                    <input type="hidden" name="_METHOD" value="DELETE">
-                                                                    <button type="button" onclick="deleteSelectedTasks()"
-                                                                        name="deleteAll" class="badge badge-outline-danger"
-                                                                        style="background-color:transparent;">Delete
-                                                                        Selected Tasks</button>
-                                                                <?php endif; ?>
+                                                                            <?php endforeach; ?>
+                                                                        </td>
+                                                                        <td><?php echo e($t['task_tags_name']); ?>
+                                                                        </td>
+                                                                        <td><?php echo e($t['start_date']); ?></td>
+                                                                        <td><?php echo e($t['due_date']); ?></td>
+                                                                        <td><?php echo e($t['status']); ?></td>
+                                                                        <td><?php echo e($t['priority']); ?>
+                                                                        </td>
+                                                                        <?php if ($_SESSION['user_type'] == "A"): ?>
+                                                                            <td><a
+                                                                                    href="/admin/edittask/<?php echo $t['id']; ?>">
+                                                                                    <div class="badge badge-outline-success">
+                                                                                        Edit</div>
+                                                                                </a></td>
+                                                                            <input type="hidden" name="_METHOD" value="DELETE">
+                                                                            <td><button type="button"
+                                                                                    onclick="deletetask(<?php echo $t['id']; ?>)"
+                                                                                    name="delete"
+                                                                                    class="badge badge-outline-danger"
+                                                                                    style="background-color:transparent;">Delete
+                                                                                </button></td>
+                                                                        <?php endif; ?>
+                                                                    </tr>
+                                                                <?php endforeach; ?>
+                                                            </tbody>
+                                                        </table>
+                                                        <?php if ($_SESSION['user_type'] == "A"): ?>
+                                                            <br>
+                                                            <a href="/admin/createtask">
+                                                                <div class="badge badge-outline-success">Add New
+                                                                    Task</div>
+                                                            </a>
+                                                            <?php if ($viewtask): ?>
+                                                                <input type="hidden" name="_METHOD" value="DELETE">
+                                                                <button type="button" onclick="deleteSelectedTasks()"
+                                                                    name="deleteAll" class="badge badge-outline-danger"
+                                                                    style="background-color:transparent;">Delete
+                                                                    Selected Tasks</button>
                                                             <?php endif; ?>
-                                                            <br /><br />
+                                                        <?php endif; ?>
+                                                        <br /><br />
 
-                                                            <?php include $this->resolve("partials/_pagination.php") ?>
+                                                        <?php include $this->resolve("partials/_pagination.php") ?>
 
-                                                        </form>
+                                                    </form>
 
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -359,13 +341,13 @@
                         </div>
                     </div>
                 </div>
-
-                <?php include $this->resolve("partials/_footer.php"); ?>
-
             </div>
+
+            <?php include $this->resolve("partials/_footer.php"); ?>
+
         </div>
     </div>
-</body>
+</div>
 <style>
     .sort-button {
         background: transparent;
@@ -519,9 +501,4 @@
             form.submit();
         }
     }
-
-
-
 </script>
-
-</html>
