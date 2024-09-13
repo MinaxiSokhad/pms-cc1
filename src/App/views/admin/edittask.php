@@ -4,7 +4,6 @@
         color: red;
     }
 </style>
-<body>
     <div class="container-scroller">
         <!-- partial:partials/_sidebar.html -->
         <?php include $this->resolve("partials/_sidebar.php"); ?>
@@ -264,11 +263,7 @@
         </div>
         <!-- page-body-wrapper ends -->
     </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script src="/assets/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
+ 
     <script src="/assets/vendors/select2/select2.min.js"></script>
     <script src="/assets/vendors/typeahead.js/typeahead.bundle.min.js"></script>
     <!-- End plugin js for this page -->
@@ -283,21 +278,7 @@
     <script src="/assets/js/file-upload.js"></script>
     <script src="/assets/js/typeahead.js"></script>
     <script src="/assets/js/select2.js"></script>
-    <!-- End custom js for this page -->
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <script src="/assets/vendors/js/vendor.bundle.base.js"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-
-    <!-- End plugin js for this page -->
-    
-    <!-- Custom js for this page -->
-    <script src="/assets/js/dashboard.js"></script>
-    <!-- End custom js for this page -->
-</body>
-
-</html>
+   
 <script>
     document.getElementById("edittask").reset();
 </script>
